@@ -1,0 +1,353 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Project "Steply API" {
+  database_type: 'PostgreSQL'
+  Note: ''
+}
+
+Table genders {
+  id Int [pk]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
+  description String [not null]
+  lang String [not null]
+  users users [not null]
+}
+
+Table user_goals {
+  id Int [pk, increment]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  lang String [not null]
+  users users [not null]
+}
+
+Table user_main_goal_levels {
+  id Int [pk, increment]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
+  description String [not null]
+  lang String [not null]
+  users users [not null]
+}
+
+Table countries {
+  id Int [pk, increment]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  abbreviation String [not null]
+  active Boolean [not null]
+  phoneCode Int [unique, not null]
+  users users [not null]
+  organizations organizations [not null]
+}
+
+Table organizations {
+  id Int [pk, increment]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  cnpj String [unique, not null]
+  street String [not null]
+  state String [not null]
+  city String [not null]
+  neighborhood String [not null]
+  addressNumber String [not null]
+  postalCode String [not null]
+  countryId Int [not null]
+  ownerId Int [unique, not null]
+  country countries [not null]
+  users users [not null]
+  challenges challenges [not null]
+  owner users [not null]
+}
+
+Table users {
+  id Int [pk, increment]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  email String [unique, not null]
+  phone String [not null]
+  street String [not null]
+  city String [not null]
+  state String [not null]
+  neighborhood String [not null]
+  addressNumber String [not null]
+  postalCode String [not null]
+  pictureUrl String
+  bio String
+  acceptsCommunication Boolean [not null]
+  wantsAccountPersonalization Boolean [not null, default: false]
+  genderId Int [default: 0]
+  goalId Int
+  mainGoalLevelId Int
+  nextRegistrationStep Int [not null, default: 0]
+  organizationId Int
+  countryId Int [not null]
+  country countries [not null]
+  organization organizations
+  ownedOrganization organizations
+  gender genders
+  goal user_goals
+  mainGoalLevel user_main_goal_levels
+  userChallenges user_challenges [not null]
+  generalInterests user_interests_general [not null]
+  activityInterests user_interests_activity [not null]
+  badges user_badges [not null]
+}
+
+Table challenges {
+  id Int [pk, increment]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  title String [unique, not null]
+  description String [not null]
+  startAt DateTime [not null]
+  endAt DateTime [not null]
+  bannerUrl String
+  isPublic Boolean [not null]
+  joinMethod JoinMethod [not null]
+  interactionIncrement Int [not null, default: 1]
+  organizationId Int [not null]
+  organization organizations [not null]
+  usersChallenges user_challenges [not null]
+  rankTypes rank_types [not null]
+  activities activities [not null]
+  reward rewards
+}
+
+Table user_challenges {
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  interactionCount Int [not null]
+  userId Int [not null]
+  challengeId Int [not null]
+  user users [not null]
+  challenge challenges [not null]
+  interactions users_challenges_interactions [not null]
+
+  indexes {
+    (userId, challengeId) [pk]
+    (userId, challengeId) [unique]
+  }
+}
+
+Table users_challenges_interactions {
+  id Int [pk, increment]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  videoUrl String
+  imageUrl String
+  text String
+  location String
+  userId Int [not null]
+  challengeId Int [not null]
+  userChallenge user_challenges [not null]
+}
+
+Table rewards {
+  id Int [pk, increment]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  rewardTypeId Int [not null]
+  deliveryDetails String
+  name String [not null]
+  description String
+  challengeId Int [unique, not null]
+  rewardType rewards_types [not null]
+  challenge challenges [not null]
+}
+
+Table rewards_types {
+  id Int [pk, increment]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  title String [not null]
+  description String
+  active Boolean [not null]
+  recommended Boolean [not null]
+  lang String [not null]
+  rewards rewards [not null]
+
+  indexes {
+    (title, lang) [unique]
+  }
+}
+
+Table activities {
+  id Int [pk, increment]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  title String [not null]
+  description String
+  startAt DateTime [not null]
+  endAt DateTime [not null]
+  challengeId Int [not null]
+  challenge challenges [not null]
+}
+
+Table rank_types {
+  id Int [pk, increment]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  title String [not null]
+  minInteractions Int [not null]
+  rank Int [not null]
+  description String
+  challengeId Int [not null]
+  challenge challenges [not null]
+
+  indexes {
+    (challengeId, title) [unique]
+  }
+}
+
+Table suggested_activities {
+  id Int [pk, increment]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  title String [not null]
+  description String
+  active Boolean [not null]
+  lang String [not null]
+
+  indexes {
+    (title, lang) [unique]
+  }
+}
+
+Table suggested_rank_types {
+  id Int [pk, increment]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  title String [not null]
+  description String
+  active Boolean [not null]
+  rank Int [not null]
+  lang String [not null]
+
+  indexes {
+    (title, lang) [unique]
+  }
+}
+
+Table interests_general {
+  id Int [pk, increment]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  lang String [not null]
+  interestedUser user_interests_general [not null]
+}
+
+Table user_interests_general {
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  userId Int [not null]
+  interestGeneralId Int [not null]
+  user users [not null]
+  interestGeneral interests_general [not null]
+
+  indexes {
+    (userId, interestGeneralId) [pk]
+  }
+}
+
+Table interests_activities {
+  id Int [pk, increment]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  lang String [not null]
+  interestedUsers user_interests_activity [not null]
+}
+
+Table user_interests_activity {
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  userId Int [not null]
+  interestActivityId Int [not null]
+  user users [not null]
+  interestActivity interests_activities [not null]
+
+  indexes {
+    (userId, interestActivityId) [pk]
+  }
+}
+
+Table badges {
+  id Int [pk, increment]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  lang String [not null]
+  users user_badges [not null]
+}
+
+Table user_badges {
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  userId Int [not null]
+  badgeId Int [not null]
+  user users [not null]
+  badge badges [not null]
+
+  indexes {
+    (userId, badgeId) [pk]
+  }
+}
+
+Enum JoinMethod {
+  OPEN
+  INVITE
+  APPROVAL
+}
+
+Ref: organizations.countryId > countries.id
+
+Ref: organizations.ownerId - users.id
+
+Ref: users.countryId > countries.id
+
+Ref: users.organizationId > organizations.id
+
+Ref: users.genderId > genders.id
+
+Ref: users.goalId > user_goals.id
+
+Ref: users.mainGoalLevelId > user_main_goal_levels.id
+
+Ref: challenges.organizationId > organizations.id
+
+Ref: user_challenges.userId > users.id
+
+Ref: user_challenges.challengeId > challenges.id
+
+Ref: users_challenges_interactions.(userId, challengeId) > user_challenges.(userId, challengeId)
+
+Ref: rewards.rewardTypeId > rewards_types.id
+
+Ref: rewards.challengeId - challenges.id
+
+Ref: activities.challengeId > challenges.id
+
+Ref: rank_types.challengeId > challenges.id
+
+Ref: user_interests_general.userId > users.id
+
+Ref: user_interests_general.interestGeneralId > interests_general.id
+
+Ref: user_interests_activity.userId > users.id
+
+Ref: user_interests_activity.interestActivityId > interests_activities.id
+
+Ref: user_badges.userId > users.id
+
+Ref: user_badges.badgeId > badges.id

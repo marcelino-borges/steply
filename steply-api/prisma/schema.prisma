@@ -1,0 +1,371 @@
+generator client {
+  provider      = "prisma-client-js"
+  output        = "../node_modules/.prisma/client"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator dbml {
+  provider            = "prisma-dbml-generator"
+  output              = "./dbml"
+  outputName          = "steply.dbml"
+  projectName         = "Steply API"
+  projectDatabaseType = "PostgreSQL"
+  projectNote         = ""
+}
+
+model Gender {
+  id          Int      @id
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  name        String   @unique
+  description String
+  lang        String
+
+  users User[]
+
+  @@map("genders")
+}
+
+model UserGoal {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String
+  lang      String
+
+  users User[]
+
+  @@map("user_goals")
+}
+
+model UserMainGoalLevel {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  name        String   @unique
+  description String
+  lang        String
+
+  users User[]
+
+  @@map("user_main_goal_levels")
+}
+
+model Country {
+  id           Int      @id @default(autoincrement())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  name         String
+  abbreviation String
+  active       Boolean
+  phoneCode    Int      @unique
+
+  users         User[]
+  organizations Organization[]
+
+  @@map("countries")
+}
+
+model Organization {
+  id            Int      @id @default(autoincrement())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  name          String
+  cnpj          String   @unique
+  street        String
+  state         String
+  city          String
+  neighborhood  String
+  addressNumber String
+  postalCode    String
+
+  countryId Int
+  ownerId   Int @unique
+
+  country    Country     @relation(fields: [countryId], references: [id])
+  users      User[]
+  challenges Challenge[]
+  owner      User        @relation("OrganizationOwner", fields: [ownerId], references: [id])
+
+  @@map("organizations")
+}
+
+model User {
+  id                          Int      @id @default(autoincrement())
+  createdAt                   DateTime @default(now())
+  updatedAt                   DateTime @updatedAt
+  name                        String
+  email                       String   @unique
+  phone                       String
+  street                      String
+  city                        String
+  state                       String
+  neighborhood                String
+  addressNumber               String
+  postalCode                  String
+  pictureUrl                  String?
+  bio                         String?
+  acceptsCommunication        Boolean
+  wantsAccountPersonalization Boolean  @default(false)
+  genderId                    Int?     @default(0)
+  goalId                      Int?
+  mainGoalLevelId             Int?
+  nextRegistrationStep        Int      @default(0)
+
+  organizationId Int?
+  countryId      Int
+
+  country           Country                @relation(fields: [countryId], references: [id])
+  organization      Organization?          @relation(fields: [organizationId], references: [id])
+  ownedOrganization Organization?          @relation("OrganizationOwner")
+  gender            Gender?                @relation(fields: [genderId], references: [id])
+  goal              UserGoal?              @relation(fields: [goalId], references: [id])
+  mainGoalLevel     UserMainGoalLevel?     @relation(fields: [mainGoalLevelId], references: [id])
+  userChallenges    UserChallenge[]
+  generalInterests  UserInterestGeneral[]
+  activityInterests UserInterestActivity[]
+  badges            UserBadge[]
+
+  @@map("users")
+}
+
+model Challenge {
+  id                   Int        @id @default(autoincrement())
+  createdAt            DateTime   @default(now())
+  updatedAt            DateTime   @updatedAt
+  title                String     @unique
+  description          String
+  startAt              DateTime
+  endAt                DateTime
+  bannerUrl            String?
+  isPublic             Boolean
+  joinMethod           JoinMethod
+  interactionIncrement Int        @default(1)
+
+  organizationId Int
+
+  organization    Organization    @relation(fields: [organizationId], references: [id])
+  usersChallenges UserChallenge[]
+  rankTypes       RankType[]
+  activities      Activity[]
+  reward          Reward?
+
+  @@map("challenges")
+}
+
+model UserChallenge {
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  interactionCount Int
+
+  userId      Int
+  challengeId Int
+
+  user         User                       @relation(fields: [userId], references: [id])
+  challenge    Challenge                  @relation(fields: [challengeId], references: [id])
+  interactions UserChallengeInteraction[]
+
+  @@id([userId, challengeId])
+  @@unique([userId, challengeId])
+  @@map("user_challenges")
+}
+
+model UserChallengeInteraction {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  videoUrl String?
+  imageUrl String?
+  text     String?
+  location String?
+
+  userId      Int
+  challengeId Int
+
+  userChallenge UserChallenge @relation(fields: [userId, challengeId], references: [userId, challengeId])
+
+  @@map("users_challenges_interactions")
+}
+
+model Reward {
+  id              Int      @id @default(autoincrement())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  rewardTypeId    Int
+  deliveryDetails String?
+  name            String
+  description     String?
+
+  challengeId Int @unique
+
+  rewardType RewardType @relation(fields: [rewardTypeId], references: [id])
+  challenge  Challenge  @relation(fields: [challengeId], references: [id])
+
+  @@map("rewards")
+}
+
+model RewardType {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  title       String
+  description String?
+  active      Boolean
+  recommended Boolean
+  lang        String
+
+  rewards Reward[]
+
+  @@unique([title, lang])
+  @@map("rewards_types")
+}
+
+model Activity {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  title       String
+  description String?
+  startAt     DateTime
+  endAt       DateTime
+
+  challengeId Int
+
+  challenge Challenge @relation(fields: [challengeId], references: [id])
+
+  @@map("activities")
+}
+
+model RankType {
+  id              Int      @id @default(autoincrement())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  title           String
+  minInteractions Int
+  rank            Int
+  description     String?
+
+  challengeId Int
+
+  challenge Challenge @relation(fields: [challengeId], references: [id])
+
+  @@unique([challengeId, title])
+  @@map("rank_types")
+}
+
+model SuggestedActivity {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  title       String
+  description String?
+  active      Boolean
+  lang        String
+
+  @@unique([title, lang])
+  @@map("suggested_activities")
+}
+
+model SuggestedRankType {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  title       String
+  description String?
+  active      Boolean
+  rank        Int
+  lang        String
+
+  @@unique([title, lang])
+  @@map("suggested_rank_types")
+}
+
+model InterestGeneral {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name           String
+  lang           String
+  interestedUser UserInterestGeneral[]
+
+  @@map("interests_general")
+}
+
+model UserInterestGeneral {
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId            Int
+  interestGeneralId Int
+
+  user            User            @relation(fields: [userId], references: [id])
+  interestGeneral InterestGeneral @relation(fields: [interestGeneralId], references: [id])
+
+  @@id([userId, interestGeneralId])
+  @@map("user_interests_general")
+}
+
+model InterestActivity {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name            String
+  lang            String
+  interestedUsers UserInterestActivity[]
+
+  @@map("interests_activities")
+}
+
+model UserInterestActivity {
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId             Int
+  interestActivityId Int
+
+  user             User             @relation(fields: [userId], references: [id])
+  interestActivity InterestActivity @relation(fields: [interestActivityId], references: [id])
+
+  @@id([userId, interestActivityId])
+  @@map("user_interests_activity")
+}
+
+model Badge {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name  String
+  lang  String
+  users UserBadge[]
+
+  @@map("badges")
+}
+
+model UserBadge {
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId  Int
+  badgeId Int
+
+  user  User  @relation(fields: [userId], references: [id])
+  badge Badge @relation(fields: [badgeId], references: [id])
+
+  @@id([userId, badgeId])
+  @@map("user_badges")
+}
+
+enum JoinMethod {
+  OPEN
+  INVITE
+  APPROVAL
+}

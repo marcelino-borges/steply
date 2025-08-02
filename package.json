@@ -1,0 +1,41 @@
+{
+  "name": "steply-monorepo",
+  "version": "1.0.0",
+  "description": "Steply monorepo containing API (NestJS) and App (React Native)",
+  "private": true,
+  "workspaces": [
+    "steply-api",
+    "steply-app"
+  ],
+  "scripts": {
+    "dev": "pnpm --parallel --filter steply-api --filter steply-app dev",
+    "build": "pnpm --recursive build",
+    "test": "pnpm --recursive test",
+    "lint": "pnpm --recursive lint",
+    "format": "pnpm --recursive format",
+    "clean": "pnpm --recursive exec -- rm -rf node_modules && rm -rf node_modules",
+    "install-all": "pnpm install",
+    "api:dev": "pnpm --filter steply-api dev",
+    "api:build": "pnpm --filter steply-api build",
+    "api:test": "pnpm --filter steply-api test",
+    "api:lint": "pnpm --filter steply-api lint",
+    "api:prisma:migrate": "pnpm --filter steply-api prisma:migrate",
+    "api:prisma:generate": "pnpm --filter steply-api prisma:generate",
+    "api:prisma:seed": "pnpm --filter steply-api prisma:seed",
+    "api:prisma:studio": "pnpm --filter steply-api prisma:studio",
+    "api:psql:local": "pnpm --filter steply-api psql:local",
+    "app:start": "pnpm --filter steply-app start",
+    "app:android": "pnpm --filter steply-app android",
+    "app:ios": "pnpm --filter steply-app ios",
+    "app:web": "pnpm --filter steply-app web",
+    "app:test": "pnpm --filter steply-app test"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "packageManager": "pnpm@8.15.0"
+}

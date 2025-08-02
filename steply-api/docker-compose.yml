@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  steply_db:
+    image: postgres:15
+    container_name: steply-db
+    restart: unless-stopped
+    ports:
+      - "5431:5432"
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: steply_db
+      PGDATA: /var/lib/postgresql/custom-data
+    volumes:
+      - db_data:/var/lib/postgresql/custom-data
+      - ./docker/psql/pg_hba.conf:/etc/postgresql/pg_hba.conf
+      - ./docker/psql/postgresql.conf:/etc/postgresql/postgresql.conf
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf
+
+volumes:
+  db_data:

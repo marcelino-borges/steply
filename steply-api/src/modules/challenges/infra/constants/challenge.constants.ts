@@ -1,0 +1,18 @@
+export const CHALLENGE_INCLUDES = {
+  organization: {
+    select: {
+      id: true,
+      name: true,
+    },
+  },
+  reward: {
+    include: {
+      rewardType: true,
+    },
+  },
+  rankTypes: true,
+  activities: true,
+};
+
+export const DEFAULT_PAGE_NUMBER = 1;
+export const DEFAULT_PAGE_SIZE = 10;
