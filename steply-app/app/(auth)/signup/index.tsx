@@ -1,11 +1,5 @@
 import * as React from "react";
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, View } from "react-native";
 import { useSignUp } from "@clerk/clerk-expo";
 import { Link, useRouter } from "expo-router";
 import Feather from "@expo/vector-icons/Feather";
@@ -21,17 +15,27 @@ import { FONT_SIZE, FONT_WEIGHT } from "@/constants/fonts";
 import { SPACING } from "@/constants/spacings";
 import { useTranslation } from "react-i18next";
 import { phoneMask } from "@/utils/string-masks";
+import PasswordRequirements from "@/components/password-requirements";
+import OTPInput from "@/components/inputs/otp";
+import { useCreateUser } from "@/hooks/users/create";
+import { useUpdateUser } from "@/hooks/users/update";
+import { UserRegistrationStep } from "@/types/api/user";
 
 export default function SignUpScreen() {
   const { isLoaded, signUp, setActive } = useSignUp();
   const router = useRouter();
   const { t } = useTranslation();
+  const { mutateAsync: createUser, isPending: isCreatingUser } =
+    useCreateUser();
+  const { mutateAsync: updateUser, isPending: isUpdatingUser } =
+    useUpdateUser();
 
   const {
     control,
     handleSubmit,
     formState: { errors },
-    setValue,
+    watch,
+    setError,
   } = useForm({
     resolver: zodResolver(signUpSchema(t)),
     defaultValues: {
@@ -42,12 +46,18 @@ export default function SignUpScreen() {
     },
   });
 
-  const [emailAddress, setEmailAddress] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [pendingVerification, setPendingVerification] = React.useState(false);
-  const [code, setCode] = React.useState("");
+  const currentPassword = watch("password");
+  const currentEmail = watch("email");
 
-  const onSignUpPress = async ({
+  const [pendingVerification, setPendingVerification] = React.useState(false);
+
+  const sendOtp = async () => {
+    if (!signUp) return;
+
+    await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
+  };
+
+  const onPressSignUp = async ({
     email,
     password,
     confirmPassword,
@@ -55,15 +65,23 @@ export default function SignUpScreen() {
   }: SignUpForm) => {
     if (!isLoaded) return;
 
-    console.log(emailAddress, password);
+    if (password !== confirmPassword) {
+      setError("confirmPassword", {
+        message: t("forms.passwordNoMatch"),
+        type: "validate",
+      });
+      return;
+    }
+
+    console.log(email, password);
 
     try {
       await signUp.create({
-        emailAddress,
+        emailAddress: email,
         password,
       });
 
-      await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
+      await sendOtp();
 
       // Set 'pendingVerification' to true to display second form
       // and capture OTP code
@@ -76,7 +94,7 @@ export default function SignUpScreen() {
   };
 
   // Handle submission of verification form
-  const onVerifyPress = async () => {
+  const onPressVerify = async (code: string) => {
     if (!isLoaded) return;
 
     try {
@@ -89,6 +107,30 @@ export default function SignUpScreen() {
       // and redirect the user
       if (signUpAttempt.status === "complete") {
         await setActive({ session: signUpAttempt.createdSessionId });
+        
+        // Get form data to create user in our API
+        const formData = watch();
+        
+        // Create user in our API
+        const createdUser = await createUser({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          countryId: parseInt(formData.countryCode), // Using countryCode as countryId for now
+          acceptsCommunication: true, // Default to true, can be made configurable
+        });
+
+        // Update user's registration step
+        await updateUser({
+          id: createdUser.id,
+          name: createdUser.name,
+          email: createdUser.email,
+          phone: createdUser.phone,
+          countryId: createdUser.countryId,
+          acceptsCommunication: createdUser.acceptsCommunication,
+          nextRegistrationStep: UserRegistrationStep.INFORM_WANTS_PERSONALIZATION,
+        });
+
         router.replace("/home");
       } else {
         // If the status is not complete, check why. User may need to
@@ -104,17 +146,12 @@ export default function SignUpScreen() {
 
   if (pendingVerification) {
     return (
-      <>
-        <Text style={authStyles.verificationText}>Verify your email</Text>
-        <TextInput
-          value={code}
-          placeholder="Enter your verification code"
-          onChangeText={(code) => setCode(code)}
-        />
-        <TouchableOpacity onPress={onVerifyPress}>
-          <Text style={authStyles.verificationText}>Verify</Text>
-        </TouchableOpacity>
-      </>
+      <OTPInput 
+        email={currentEmail} 
+        onSubmit={onPressVerify} 
+        retry={sendOtp}
+        isLoading={isCreatingUser || isUpdatingUser}
+      />
     );
   }
 
@@ -122,7 +159,9 @@ export default function SignUpScreen() {
     <View style={authStyles.screenContainer}>
       <Feather name="arrow-left" size={24} onPress={() => router.back()} />
       <View style={authStyles.contentContainer}>
-        <Text style={authStyles.titleSignup}>Criar conta</Text>
+        <Typography size="2xl" weight="bold">
+          Criar conta
+        </Typography>
         <View style={authStyles.inputsContainer}>
           <TextfieldFormControlled
             fullWidth
@@ -186,6 +225,10 @@ export default function SignUpScreen() {
             error={errors.password?.message}
           />
 
+          {!!currentPassword.length && (
+            <PasswordRequirements password={currentPassword} />
+          )}
+
           <TextfieldFormControlled
             fullWidth
             required
@@ -197,7 +240,7 @@ export default function SignUpScreen() {
           />
         </View>
 
-        <Button fullWidth onPress={handleSubmit(onSignUpPress)}>
+        <Button fullWidth onPress={handleSubmit(onPressSignUp)}>
           Criar conta
         </Button>
 

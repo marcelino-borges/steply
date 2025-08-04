@@ -6,7 +6,9 @@
     "days_zero": "dia",
     "days_one": "dia",
     "days_other": "dias",
-    "next": "Próximo"
+    "next": "Próximo",
+    "sendAnother": "Enviar novamente",
+    "verify": "Verificar"
   },
   "forms": {
     "fieldRequired": "Campo obrigatório",
@@ -16,8 +18,18 @@
     "countryRequired": "País obrigatório",
     "passwordRequired": "Senha obrigatória",
     "passwordInvalid": "Senha inválida",
+    "passwordNoMatch": "Senhas precisam ser iguais",
     "passShow": "Mostrar",
-    "passHide": "Esconder"
+    "passHide": "Esconder",
+    "passwordRequirements": {
+      "minLength": "Pelo menos 8 caracteres",
+      "upperLowerCase": "Letras maiúsculas e minúsculas",
+      "specialChar": "Um caractere especial (~#@%&$!*_-?.)",
+      "number": "Um número"
+    },
+    "verifyYourEmail": "Verifique seu e-mail",
+    "emailOtpExplanation": "Enviamos um código de 4 dígitos para o e-mail {{email}}",
+    "didNotReceiveOtp": "Não recebeu o código?"
   },
   "errors": {
     "clerk": {
@@ -47,5 +59,11 @@
     "invalidFile": "Arquivo inválido",
     "uploadError": "Erro ao enviar arquivo",
     "deleteError": "Erro ao remover arquivo"
+  },
+  "auth": {
+    "signupError": "Erro ao criar conta"
+  },
+  "user": {
+    "updateError": "Erro ao atualizar usuário"
   }
 }

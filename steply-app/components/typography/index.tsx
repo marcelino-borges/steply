@@ -13,6 +13,8 @@ interface TypographyProps {
   letterSpacing?: number;
   italic?: boolean;
   align?: "auto" | "left" | "right" | "center" | "justify";
+  underline?: boolean;
+  onPress?: VoidFunction;
 }
 
 const Typography: React.FC<PropsWithChildren<TypographyProps>> = ({
@@ -23,6 +25,8 @@ const Typography: React.FC<PropsWithChildren<TypographyProps>> = ({
   letterSpacing = SPACING["1/8"],
   italic = false,
   align,
+  underline = false,
+  onPress,
   children,
 }) => {
   return (
@@ -35,7 +39,9 @@ const Typography: React.FC<PropsWithChildren<TypographyProps>> = ({
         { color },
         { fontStyle: italic ? "italic" : "normal" },
         { textAlign: align },
+        { textDecorationLine: underline ? "underline" : "none" },
       ]}
+      onPress={onPress}
     >
       {children}
     </Text>

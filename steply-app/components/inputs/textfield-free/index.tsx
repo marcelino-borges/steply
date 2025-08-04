@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, FC, ReactNode } from "react";
+import React, { useState, useRef, useEffect, FC, ReactNode } from "react";
 import {
   TextInput,
   TextInputProps,
@@ -28,133 +28,141 @@ export interface TextfieldFreeProps
   mask?: Mask;
 }
 
-const TextfieldFree: FC<TextfieldFreeProps> = ({
-  required,
-  disabled = false,
-  placeholder,
-  fullWidth,
-  error,
-  value,
-  onFocus,
-  onBlur,
-  rightElement,
-  type = "text",
-  mask,
-  onChangeText,
-  ...props
-}) => {
-  const { t } = useTranslation();
-  const [isFocused, setIsFocused] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const animatedValue = useRef(new Animated.Value(0)).current;
-  const hasValue = value && value.length;
-  const shouldShrinkPlaceholder = hasValue || isFocused;
+const TextfieldFree = React.forwardRef<TextInput, TextfieldFreeProps>(
+  (
+    {
+      required,
+      disabled = false,
+      placeholder,
+      fullWidth,
+      error,
+      value,
+      onFocus,
+      onBlur,
+      rightElement,
+      type = "text",
+      mask,
+      onChangeText,
+      style,
+      ...props
+    },
+    ref
+  ) => {
+    const { t } = useTranslation();
+    const [isFocused, setIsFocused] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+    const animatedValue = useRef(new Animated.Value(0)).current;
+    const hasValue = value && value.length;
+    const shouldShrinkPlaceholder = hasValue || isFocused;
 
-  useEffect(() => {
-    Animated.timing(animatedValue, {
-      toValue: shouldShrinkPlaceholder ? 1 : 0,
-      duration: 200,
-      useNativeDriver: true,
-    }).start();
-  }, [shouldShrinkPlaceholder]);
+    useEffect(() => {
+      Animated.timing(animatedValue, {
+        toValue: shouldShrinkPlaceholder ? 1 : 0,
+        duration: 200,
+        useNativeDriver: true,
+      }).start();
+    }, [shouldShrinkPlaceholder]);
 
-  const handleFocus = (e: any) => {
-    setIsFocused(true);
-    onFocus?.(e);
-  };
+    const handleFocus = (e: any) => {
+      setIsFocused(true);
+      onFocus?.(e);
+    };
 
-  const handleBlur = (e: any) => {
-    setIsFocused(false);
-    onBlur?.(e);
-  };
+    const handleBlur = (e: any) => {
+      setIsFocused(false);
+      onBlur?.(e);
+    };
 
-  const translateY = animatedValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0, -(SPACING.md - SPACING["1/4"])],
-  });
+    const translateY = animatedValue.interpolate({
+      inputRange: [0, 1],
+      outputRange: [0, -(SPACING.md - SPACING["1/4"])],
+    });
 
-  const scale = animatedValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: [1, 0.75],
-  });
+    const scale = animatedValue.interpolate({
+      inputRange: [0, 1],
+      outputRange: [1, 0.75],
+    });
 
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
+    const togglePasswordVisibility = () => {
+      setShowPassword(!showPassword);
+    };
 
-  const isPasswordField = type === "password";
-  const passwordToggleElement = isPasswordField ? (
-    <TouchableOpacity onPress={togglePasswordVisibility}>
-      <Typography color={COLORS.gray} size="sm" weight="bold">
-        {showPassword ? t("forms.passHide") : t("forms.passShow")}
-      </Typography>
-    </TouchableOpacity>
-  ) : null;
-
-  return (
-    <View style={[textfieldStyles.container, fullWidth && { width: "100%" }]}>
-      {rightElement}
-      <TextInput
-        {...props}
-        value={value}
-        secureTextEntry={isPasswordField ? !showPassword : false}
-        style={[
-          textfieldStyles.input,
-          fullWidth && { width: "100%" },
-          !!error?.length && textfieldStyles.errorBorder,
-          disabled && {
-            color: COLORS.muted,
-          },
-          isFocused && { borderColor: COLORS.primary },
-        ]}
-        editable={!disabled}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-        onChangeText={(text: string) => {
-          if (!onChangeText) return;
-
-          if (mask) {
-            onChangeText(mask.format(text));
-            return;
-          }
-
-          onChangeText(text);
-        }}
-      />
-      <Animated.View
-        style={[
-          textfieldStyles.placeholderBase,
-          {
-            transform: [{ translateY }, { scale }],
-          },
-        ]}
-      >
-        <Typography
-          color={!disabled ? COLORS.gray : COLORS.mutedForeground}
-          size={shouldShrinkPlaceholder ? "xs" : "base"}
-        >
-          {placeholder}
+    const isPasswordField = type === "password";
+    const passwordToggleElement = isPasswordField ? (
+      <TouchableOpacity onPress={togglePasswordVisibility}>
+        <Typography color={COLORS.gray} size="sm" weight="bold">
+          {showPassword ? t("forms.passHide") : t("forms.passShow")}
         </Typography>
-        {required && (
+      </TouchableOpacity>
+    ) : null;
+
+    return (
+      <View style={[textfieldStyles.container, fullWidth && { width: "100%" }]}>
+        {rightElement}
+        <TextInput
+          {...props}
+          ref={ref}
+          value={value}
+          secureTextEntry={isPasswordField ? !showPassword : false}
+          style={[
+            textfieldStyles.input,
+            fullWidth && { width: "100%" },
+            !!error?.length && textfieldStyles.errorBorder,
+            disabled && {
+              color: COLORS.muted,
+            },
+            isFocused && { borderColor: COLORS.primary },
+            style,
+          ]}
+          editable={!disabled}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          onChangeText={(text: string) => {
+            if (!onChangeText) return;
+
+            if (mask) {
+              onChangeText(mask.format(text));
+              return;
+            }
+
+            onChangeText(text);
+          }}
+        />
+        <Animated.View
+          style={[
+            textfieldStyles.placeholderBase,
+            {
+              transform: [{ translateY }, { scale }],
+            },
+          ]}
+        >
           <Typography
-            color={!disabled ? COLORS.error : COLORS.mutedForeground}
-            size={shouldShrinkPlaceholder ? "xs" : "sm"}
+            color={!disabled ? COLORS.gray : COLORS.mutedForeground}
+            size={shouldShrinkPlaceholder ? "xs" : "base"}
           >
-            *
+            {placeholder}
           </Typography>
+          {required && (
+            <Typography
+              color={!disabled ? COLORS.error : COLORS.mutedForeground}
+              size={shouldShrinkPlaceholder ? "xs" : "sm"}
+            >
+              *
+            </Typography>
+          )}
+        </Animated.View>
+        {(rightElement || passwordToggleElement) && (
+          <View style={textfieldStyles.rightElement}>
+            {!isPasswordField && rightElement}
+            {passwordToggleElement}
+          </View>
         )}
-      </Animated.View>
-      {(rightElement || passwordToggleElement) && (
-        <View style={textfieldStyles.rightElement}>
-          {!isPasswordField && rightElement}
-          {passwordToggleElement}
-        </View>
-      )}
-      {!!error?.length && (
-        <Text style={textfieldStyles.errorFont}>{error}</Text>
-      )}
-    </View>
-  );
-};
+        {!!error?.length && (
+          <Text style={textfieldStyles.errorFont}>{error}</Text>
+        )}
+      </View>
+    );
+  }
+);
 
 export default TextfieldFree;
