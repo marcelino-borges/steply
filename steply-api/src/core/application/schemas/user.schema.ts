@@ -15,7 +15,7 @@ export const createUserBodySchema = (lang: Lang) =>
     street: stringSchema(lang).optional(),
     city: stringSchema(lang).optional(),
     state: stringSchema(lang).optional(),
-    bio: stringSchema(lang),
+    bio: stringSchema(lang).nullish().default(null),
     neighborhood: stringSchema(lang).optional(),
     addressNumber: stringSchema(lang).optional(),
     postalCode: stringSchema(lang).optional(),

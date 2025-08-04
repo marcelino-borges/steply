@@ -1,0 +1,51 @@
+{
+  "common": {
+    "creating": "Criando...",
+    "unknownError": "Erro desconhecido",
+    "dontShowScreenAgain": "Não exibir novamente esta tela",
+    "days_zero": "dia",
+    "days_one": "dia",
+    "days_other": "dias",
+    "next": "Próximo"
+  },
+  "forms": {
+    "fieldRequired": "Campo obrigatório",
+    "emailRequired": "E-mail obrigatório",
+    "emailInvalid": "E-mail inválido",
+    "nameRequired": "Nome obrigatório",
+    "countryRequired": "País obrigatório",
+    "passwordRequired": "Senha obrigatória",
+    "passwordInvalid": "Senha inválida",
+    "passShow": "Mostrar",
+    "passHide": "Esconder"
+  },
+  "errors": {
+    "clerk": {
+      "form_identifier_not_found": "Credenciais inválidas"
+    }
+  },
+  "challenge": {
+    "details": "Detalhes",
+    "title": "Título",
+    "description": "Descrição",
+    "startAt": "Data de início",
+    "endAt": "Data de fim",
+    "bannerRemoved": "Banner removido",
+    "startDateCannotBeAfterEnd": "A data de início não pode ser maior que a data de fim",
+    "createSuccess": "Desafio criado com sucesso",
+    "createError": "Erro ao criar desafio",
+    "addBanner": "Adicionar banner",
+    "addBannerDescription": "Até 40MB · Formatos aceitos: JPG, PNG, WEBP e HEIC.",
+    "addBannerFromLibrary": "Adicionar da biblioteca",
+    "selectedBanner": "Imagem selecionada",
+    "createChallenge": "Criar desafio",
+    "createYourChallenge": "Criar seu desafio",
+    "createQuickly": "Crie seu desafio de forma rápida",
+    "challengeCreationBriefing": "Defina os detalhes, adicione atividades, defina as regras e convide participantes para realizar o desafio."
+  },
+  "files": {
+    "invalidFile": "Arquivo inválido",
+    "uploadError": "Erro ao enviar arquivo",
+    "deleteError": "Erro ao remover arquivo"
+  }
+}
