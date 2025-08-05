@@ -12,13 +12,13 @@ export const createUserBodySchema = (lang: Lang) =>
     name: stringSchema(lang),
     email: emailSchema(lang),
     phone: stringSchema(lang),
-    street: stringSchema(lang).optional(),
-    city: stringSchema(lang).optional(),
-    state: stringSchema(lang).optional(),
+    street: stringSchema(lang).nullish().default(null),
+    city: stringSchema(lang).nullish().default(null),
+    state: stringSchema(lang).nullish().default(null),
     bio: stringSchema(lang).nullish().default(null),
-    neighborhood: stringSchema(lang).optional(),
-    addressNumber: stringSchema(lang).optional(),
-    postalCode: stringSchema(lang).optional(),
+    neighborhood: stringSchema(lang).nullish().default(null),
+    addressNumber: stringSchema(lang).nullish().default(null),
+    postalCode: stringSchema(lang).nullish().default(null),
     pictureUrl: stringSchema(lang).nullish().default(""),
     organizationId: intSchema(lang).nullish().default(null),
     countryId: intSchema(lang),
@@ -44,4 +44,5 @@ export const updateUserSchema = (lang: Lang) =>
   createUserBodySchema(lang)
     .omit({ organizationId: true })
     .merge(z.object({ organizationId: intSchema(lang).nullable() }))
+    .partial()
     .merge(dbIdSchema(lang));

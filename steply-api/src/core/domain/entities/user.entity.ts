@@ -10,17 +10,17 @@ export class User {
   @ApiProperty()
   public phone: string;
   @ApiProperty()
-  public street: string;
+  public street: string | null;
   @ApiProperty()
-  public city: string;
+  public city: string | null;
   @ApiProperty()
-  public state: string;
+  public state: string | null;
   @ApiProperty()
-  public addressNumber: string;
+  public addressNumber: string | null;
   @ApiProperty()
-  public neighborhood: string;
+  public neighborhood: string | null;
   @ApiProperty()
-  public postalCode: string;
+  public postalCode: string | null;
   @ApiProperty()
   public organizationId: number | null;
   @ApiProperty()

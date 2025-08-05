@@ -96,18 +96,7 @@ export class UserController {
       lang,
     );
 
-    // TODO: Remove this when the frontend is updated to send all fields
-    const userDataWithDefaults = {
-      ...parsedBody,
-      street: parsedBody.street || "-",
-      city: parsedBody.city || "-",
-      state: parsedBody.state || "-",
-      neighborhood: parsedBody.neighborhood || "-",
-      addressNumber: parsedBody.addressNumber || "-",
-      postalCode: parsedBody.postalCode || "-",
-    };
-
-    return await this.createUserUseCase.execute(userDataWithDefaults);
+    return await this.createUserUseCase.execute(parsedBody);
   }
 
   @Patch(":userId")
@@ -136,19 +125,9 @@ export class UserController {
       lang,
     );
 
-    const userDataWithDefaults = {
-      ...parsedBody,
-      street: parsedBody.street || "-",
-      city: parsedBody.city || "-",
-      state: parsedBody.state || "-",
-      neighborhood: parsedBody.neighborhood || "-",
-      addressNumber: parsedBody.addressNumber || "-",
-      postalCode: parsedBody.postalCode || "-",
-    };
-
     return await this.updateUserUseCase.execute(
       parsedParams.userId,
-      userDataWithDefaults,
+      parsedBody,
     );
   }
 

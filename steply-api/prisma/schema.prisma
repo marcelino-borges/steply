@@ -102,12 +102,12 @@ model User {
   name                        String
   email                       String   @unique
   phone                       String
-  street                      String
-  city                        String
-  state                       String
-  neighborhood                String
-  addressNumber               String
-  postalCode                  String
+  street                      String?
+  city                        String?
+  state                       String?
+  neighborhood                String?
+  addressNumber               String?
+  postalCode                  String?
   pictureUrl                  String?
   bio                         String?
   acceptsCommunication        Boolean

@@ -75,12 +75,12 @@ Table users {
   name String [not null]
   email String [unique, not null]
   phone String [not null]
-  street String [not null]
-  city String [not null]
-  state String [not null]
-  neighborhood String [not null]
-  addressNumber String [not null]
-  postalCode String [not null]
+  street String
+  city String
+  state String
+  neighborhood String
+  addressNumber String
+  postalCode String
   pictureUrl String
   bio String
   acceptsCommunication Boolean [not null]

@@ -84,7 +84,7 @@ describe("UsersRepository", () => {
     it("should return the user found on database", async () => {
       jest
         .spyOn(prismaService.user, "findUnique")
-        .mockResolvedValue(userResponse);
+        .mockResolvedValue(userResponse as any);
 
       const result = await userRepository.findById(1);
 
@@ -96,7 +96,7 @@ describe("UsersRepository", () => {
     it("should call the user database function to create an user and return it", async () => {
       const createSpy = jest
         .spyOn(prismaService.user, "create")
-        .mockResolvedValue(userResponse);
+        .mockResolvedValue(userResponse as any);
 
       const result = await userRepository.create(userToCreate);
 
@@ -116,21 +116,22 @@ describe("UsersRepository", () => {
       };
       const updateSpy = jest
         .spyOn(prismaService.user, "update")
-        .mockResolvedValue(payload);
+        .mockResolvedValue(payload as any);
 
       await userRepository.update(userId, payload);
 
+      const { id, ...expectedData } = payload;
       expect(updateSpy).toHaveBeenCalledWith({
         where: {
           id: userId,
         },
-        data: payload,
+        data: expectedData,
         include: FULL_USER_INCLUDES,
       });
     });
 
     it("should return the user updated on database", async () => {
-      jest.spyOn(prismaService.user, "update").mockResolvedValue(userResponse);
+      jest.spyOn(prismaService.user, "update").mockResolvedValue(userResponse as any);
 
       const result = await userRepository.update(userId, {
         ...userResponse,

@@ -54,20 +54,20 @@ export interface UserDto {
   name: string;
   email: string;
   phone: string;
-  street: string;
-  city: string;
-  state: string;
-  addressNumber: string;
-  neighborhood: string;
-  postalCode: string;
+  street: string | null;
+  city: string | null;
+  state: string | null;
+  addressNumber: string | null;
+  neighborhood: string | null;
+  postalCode: string | null;
   pictureUrl?: string | null;
   bio?: string | null;
   acceptsCommunication: boolean;
-  wantsAccountPersonalization?: boolean;
+  wantsAccountPersonalization: boolean;
   genderId?: number | null;
   goalId?: number | null;
   mainGoalLevelId?: number | null;
-  nextRegistrationStep?: UserRegistrationStep;
+  nextRegistrationStep?: UserRegistrationStep | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -83,11 +83,25 @@ export interface FullUserResponseDto extends UserDto {
 }
 
 export interface SignUpRequestDto {
+  countryId: number;
+  organizationId?: number | null;
   name: string;
   email: string;
   phone: string;
-  countryId: number;
+  street?: string | null;
+  city?: string | null;
+  state?: string | null;
+  addressNumber?: string | null;
+  neighborhood?: string | null;
+  postalCode?: string | null;
+  pictureUrl?: string | null;
+  bio?: string | null;
   acceptsCommunication: boolean;
+  wantsAccountPersonalization?: boolean;
+  genderId?: number | null;
+  goalId?: number | null;
+  mainGoalLevelId?: number | null;
+  nextRegistrationStep?: number;
 }
 
 export interface UpdateUserRequestDto {

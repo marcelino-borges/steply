@@ -39,7 +39,28 @@ export class UserRepository implements BaseUserRepository {
     createUserDto: NonExistentUserDto,
   ): Promise<FullUserResponseDto> {
     const createdUser = await this.db.user.create({
-      data: createUserDto,
+      data: {
+        name: createUserDto.name,
+        email: createUserDto.email,
+        phone: createUserDto.phone,
+        street: createUserDto.street ?? null,
+        city: createUserDto.city ?? null,
+        state: createUserDto.state ?? null,
+        neighborhood: createUserDto.neighborhood ?? null,
+        addressNumber: createUserDto.addressNumber ?? null,
+        postalCode: createUserDto.postalCode ?? null,
+        pictureUrl: createUserDto.pictureUrl ?? null,
+        bio: createUserDto.bio ?? null,
+        acceptsCommunication: createUserDto.acceptsCommunication,
+        wantsAccountPersonalization:
+          createUserDto.wantsAccountPersonalization ?? false,
+        genderId: createUserDto.genderId ?? null,
+        goalId: createUserDto.goalId ?? null,
+        mainGoalLevelId: createUserDto.mainGoalLevelId ?? null,
+        nextRegistrationStep: createUserDto.nextRegistrationStep ?? 0,
+        organizationId: createUserDto.organizationId,
+        countryId: createUserDto.countryId,
+      },
       include: FULL_USER_INCLUDES,
     });
 
@@ -52,15 +73,16 @@ export class UserRepository implements BaseUserRepository {
     userId: number,
     updateUserDto: UpdateUserRequestDto,
   ): Promise<FullUserResponseDto> {
+    const { id, ...dataToUpdate } = updateUserDto;
     const updatedUser = await this.db.user.update({
       where: {
         id: userId,
       },
-      data: updateUserDto,
+      data: dataToUpdate as any,
       include: FULL_USER_INCLUDES,
     });
 
-    const adapted = this.userAdapter.fromPrismaToFullUser(updatedUser);
+    const adapted = this.userAdapter.fromPrismaToFullUser(updatedUser as any);
 
     return adapted;
   }

@@ -14,7 +14,7 @@ export const styles = StyleSheet.create({
   },
   inputsContainer: {
     flexDirection: "row",
-    gap: SPACING[3],
+    gap: SPACING[1],
     width: "100%",
   },
   inputWrapper: {

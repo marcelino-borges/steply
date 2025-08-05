@@ -3,7 +3,7 @@ import { z } from "zod";
 
 import { DatabaseRecord } from "@/core/domain/abstractions/database-record.interface";
 import { userIdParamsSchema } from "@/core/application/schemas/user.schema";
-import { dbExclusiveFieldsSchema } from "@/core/application/schemas/db-exclusive-fields.schema";
+import { dbIdSchema } from "@/core/application/schemas/db-exclusive-fields.schema";
 import { User } from "@/core/domain/entities/user.entity";
 import { ExpandableCountry } from "@/core/domain/abstractions/expandable-country.interface";
 import { CountryDto } from "@/core/application/dtos/country.dto";
@@ -25,18 +25,18 @@ export class NonExistentUserDto {
   email: string;
   @ApiProperty()
   phone: string;
-  @ApiProperty()
-  street: string;
-  @ApiProperty()
-  city: string;
-  @ApiProperty()
-  state: string;
-  @ApiProperty()
-  addressNumber: string;
-  @ApiProperty()
-  neighborhood: string;
-  @ApiProperty()
-  postalCode: string;
+  @ApiProperty({ required: false })
+  street: string | null;
+  @ApiProperty({ required: false })
+  city: string | null;
+  @ApiProperty({ required: false })
+  state: string | null;
+  @ApiProperty({ required: false })
+  addressNumber: string | null;
+  @ApiProperty({ required: false })
+  neighborhood: string | null;
+  @ApiProperty({ required: false })
+  postalCode: string | null;
   @ApiProperty({ required: false })
   pictureUrl?: string | null;
   @ApiProperty({ required: false })
@@ -89,7 +89,7 @@ export class FullUserResponseDto
   badges?: UserBadgeDto[];
 }
 
-export type UpdateUserRequestDto = NonExistentUserDto &
-  Partial<z.infer<ReturnType<typeof dbExclusiveFieldsSchema>>>;
+export type UpdateUserRequestDto = Partial<NonExistentUserDto> &
+  z.infer<ReturnType<typeof dbIdSchema>>;
 
 export type UserIdParamsDto = z.infer<ReturnType<typeof userIdParamsSchema>>;

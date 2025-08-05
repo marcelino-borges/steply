@@ -18,17 +18,20 @@ import { phoneMask } from "@/utils/string-masks";
 import PasswordRequirements from "@/components/password-requirements";
 import OTPInput from "@/components/inputs/otp";
 import { useCreateUser } from "@/hooks/users/create";
-import { useUpdateUser } from "@/hooks/users/update";
 import { UserRegistrationStep } from "@/types/api/user";
+import { Toast } from "toastify-react-native";
+import { handleClerkErrorMessage } from "@/utils/clerk-error";
+import { useUser } from "@/store/user";
+import { useState } from "react";
 
 export default function SignUpScreen() {
   const { isLoaded, signUp, setActive } = useSignUp();
+  const { setUser } = useUser();
   const router = useRouter();
   const { t } = useTranslation();
   const { mutateAsync: createUser, isPending: isCreatingUser } =
     useCreateUser();
-  const { mutateAsync: updateUser, isPending: isUpdatingUser } =
-    useUpdateUser();
+  const [isPreparingVerification, setIsPreparingVerification] = useState(false);
 
   const {
     control,
@@ -36,6 +39,7 @@ export default function SignUpScreen() {
     formState: { errors },
     watch,
     setError,
+    getValues,
   } = useForm({
     resolver: zodResolver(signUpSchema(t)),
     defaultValues: {
@@ -61,7 +65,6 @@ export default function SignUpScreen() {
     email,
     password,
     confirmPassword,
-    countryCode,
   }: SignUpForm) => {
     if (!isLoaded) return;
 
@@ -73,8 +76,6 @@ export default function SignUpScreen() {
       return;
     }
 
-    console.log(email, password);
-
     try {
       await signUp.create({
         emailAddress: email,
@@ -83,74 +84,71 @@ export default function SignUpScreen() {
 
       await sendOtp();
 
-      // Set 'pendingVerification' to true to display second form
-      // and capture OTP code
       setPendingVerification(true);
     } catch (err) {
-      // See https://clerk.com/docs/custom-flows/error-handling
-      // for more info on error handling
       console.error(JSON.stringify(err, null, 2));
+      const error = handleClerkErrorMessage(err, t);
+      Toast.error(error);
     }
   };
 
-  // Handle submission of verification form
   const onPressVerify = async (code: string) => {
     if (!isLoaded) return;
 
+    setIsPreparingVerification(true);
+
     try {
-      // Use the code the user provided to attempt verification
       const signUpAttempt = await signUp.attemptEmailAddressVerification({
         code,
       });
 
-      // If verification was completed, set the session to active
-      // and redirect the user
       if (signUpAttempt.status === "complete") {
         await setActive({ session: signUpAttempt.createdSessionId });
-        
-        // Get form data to create user in our API
-        const formData = watch();
-        
-        // Create user in our API
+
+        const formData = getValues();
+
         const createdUser = await createUser({
           name: formData.name,
           email: formData.email,
           phone: formData.phone,
-          countryId: parseInt(formData.countryCode), // Using countryCode as countryId for now
-          acceptsCommunication: true, // Default to true, can be made configurable
+          countryId: parseInt(formData.countryCode),
+          acceptsCommunication: true,
+          nextRegistrationStep:
+            UserRegistrationStep.INFORM_WANTS_PERSONALIZATION,
         });
 
-        // Update user's registration step
-        await updateUser({
-          id: createdUser.id,
-          name: createdUser.name,
-          email: createdUser.email,
-          phone: createdUser.phone,
-          countryId: createdUser.countryId,
-          acceptsCommunication: createdUser.acceptsCommunication,
-          nextRegistrationStep: UserRegistrationStep.INFORM_WANTS_PERSONALIZATION,
-        });
+        console.log(
+          "[Steply] CreatedU user",
+          JSON.stringify(createdUser, null, 2)
+        );
+
+        setUser(createdUser);
 
         router.replace("/home");
       } else {
-        // If the status is not complete, check why. User may need to
-        // complete further steps.
-        console.error(JSON.stringify(signUpAttempt, null, 2));
+        console.error(
+          "[Steply] SignUp status not complete",
+          JSON.stringify(signUpAttempt, null, 2)
+        );
+
+        Toast.error(t("errors.clerk.pendingStep"));
+        setIsPreparingVerification(false);
       }
     } catch (err) {
-      // See https://clerk.com/docs/custom-flows/error-handling
-      // for more info on error handling
-      console.error(JSON.stringify(err, null, 2));
+      console.error("[Steply] SignUp error", JSON.stringify(err, null, 2));
+      const error = handleClerkErrorMessage(err, t);
+      setIsPreparingVerification(false);
+      Toast.error(error);
     }
   };
 
   if (pendingVerification) {
     return (
-      <OTPInput 
-        email={currentEmail} 
-        onSubmit={onPressVerify} 
+      <OTPInput
+        email={currentEmail}
+        onSubmit={onPressVerify}
         retry={sendOtp}
-        isLoading={isCreatingUser || isUpdatingUser}
+        isLoading={isCreatingUser}
       />
     );
   }
@@ -240,7 +238,11 @@ export default function SignUpScreen() {
           />
         </View>
 
-        <Button fullWidth onPress={handleSubmit(onPressSignUp)}>
+        <Button
+          fullWidth
+          onPress={handleSubmit(onPressSignUp)}
+          loading={isPreparingVerification}
+        >
           Criar conta
         </Button>
 

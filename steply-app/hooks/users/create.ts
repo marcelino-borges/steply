@@ -27,7 +27,10 @@ export const useCreateUser = () => {
         const errorMessage = adaptAxiosErrorToApiErrorMessage(
           error as AxiosError
         );
-        console.log("------------- [ERROR] User signup failed", error);
+        console.log(
+          "------------- [ERROR] User signup failed",
+          JSON.stringify(error, null, 2)
+        );
 
         throw new Error(errorMessage ?? t("auth.signupError"));
       }

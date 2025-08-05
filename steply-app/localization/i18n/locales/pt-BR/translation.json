@@ -15,6 +15,7 @@
     "emailRequired": "E-mail obrigatório",
     "emailInvalid": "E-mail inválido",
     "nameRequired": "Nome obrigatório",
+    "nameMinTwoNames": "Necessário ao menos nome e sobrenome",
     "countryRequired": "País obrigatório",
     "passwordRequired": "Senha obrigatória",
     "passwordInvalid": "Senha inválida",
@@ -33,7 +34,8 @@
   },
   "errors": {
     "clerk": {
-      "form_identifier_not_found": "Credenciais inválidas"
+      "formIdentifierNotFound": "Credenciais inválidas",
+      "pendingStep": "Detectamos que há alguma pendência no seu cadastro, entre em contato com nosso suporte"
     }
   },
   "challenge": {

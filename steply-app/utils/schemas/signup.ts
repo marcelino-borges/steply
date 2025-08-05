@@ -4,7 +4,11 @@ export const signUpSchema = (t: (key: string) => string) =>
   z.object({
     name: z
       .string({ required_error: t("forms.nameRequired") })
-      .nonempty(t("forms.nameRequired")),
+      .nonempty(t("forms.nameRequired"))
+      .refine(
+        (value) => value.trim().split(/\s+/).length >= 2,
+        { message: t("forms.nameMinTwoNames") }
+      ),
     email: z
       .string({ required_error: t("forms.emailRequired") })
       .email(t("forms.emailInvalid"))

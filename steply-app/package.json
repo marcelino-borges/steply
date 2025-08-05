@@ -55,7 +55,8 @@
     "react-native-svg": "15.11.2",
     "react-native-web": "~0.20.0",
     "toastify-react-native": "^7.2.0",
-    "zod": "^3.25.34"
+    "zod": "^3.25.34",
+    "zustand": "^5.0.7"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

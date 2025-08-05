@@ -13,8 +13,13 @@ interface OTPInputProps {
   isLoading?: boolean;
 }
 
-export default function OTPInput({ onSubmit, email, retry, isLoading = false }: OTPInputProps) {
-  const [otp, setOtp] = useState<string[]>(["", "", "", ""]);
+export default function OTPInput({
+  onSubmit,
+  email,
+  retry,
+  isLoading = false,
+}: OTPInputProps) {
+  const [otp, setOtp] = useState<string[]>(["", "", "", "", "", ""]);
   const [inputHeight, setInputHeight] = useState<number>(56);
   const inputRefs = useRef<(TextInput | null)[]>([]);
 
@@ -41,7 +46,7 @@ export default function OTPInput({ onSubmit, email, retry, isLoading = false }: 
       setOtp(newOtp);
 
       // Only auto-focus next input if the current input was empty
-      if (wasEmpty && index < 3) {
+      if (wasEmpty && index < 5) {
         setTimeout(() => {
           inputRefs.current[index + 1]?.focus();
         }, 10);
@@ -51,13 +56,13 @@ export default function OTPInput({ onSubmit, email, retry, isLoading = false }: 
 
   const handleLayout = (event: any) => {
     const { width } = event.nativeEvent.layout;
-    setInputHeight(width);
+    setInputHeight(width * 1.25);
   };
 
   const handleSubmit = () => {
     const code = otp.join("");
 
-    if (code.length === 4 && onSubmit) {
+    if (code.length === 6 && onSubmit) {
       onSubmit(code);
     }
   };
@@ -96,8 +101,13 @@ export default function OTPInput({ onSubmit, email, retry, isLoading = false }: 
         <Typography>{t("forms.didNotReceiveOtp")}</Typography>{" "}
         <Typography underline>{t("common.sendAnother")}</Typography>
       </Typography>
-      <Button fullWidth onPress={handleSubmit} disabled={isSubmitDisabled} loading={isLoading}>
-        {isLoading ? t("common.creating") : t("common.verify")}
+      <Button
+        fullWidth
+        onPress={handleSubmit}
+        disabled={isSubmitDisabled}
+        loading={isLoading}
+      >
+        {t("common.verify")}
       </Button>
     </View>
   );
