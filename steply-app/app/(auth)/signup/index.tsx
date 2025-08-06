@@ -107,11 +107,14 @@ export default function SignUpScreen() {
 
         const formData = getValues();
 
+        // TODO: In future replace by data selected by the user
+        const brazilCountryId = 1;
+
         const createdUser = await createUser({
           name: formData.name,
           email: formData.email,
           phone: formData.phone,
-          countryId: parseInt(formData.countryCode),
+          countryId: brazilCountryId,
           acceptsCommunication: true,
           nextRegistrationStep:
             UserRegistrationStep.INFORM_WANTS_PERSONALIZATION,
@@ -124,7 +127,7 @@ export default function SignUpScreen() {
 
         setUser(createdUser);
 
-        router.replace("/home");
+        router.replace("/onboarding");
       } else {
         console.error(
           "[Steply] SignUp status not complete",

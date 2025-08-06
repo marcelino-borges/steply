@@ -14,6 +14,7 @@ import {
   createUserBodySchema,
   updateUserSchema,
   userIdParamsSchema,
+  userEmailParamsSchema,
 } from "@/core/application/schemas/user.schema";
 import { ZodValidationFactory } from "@/core/infra/factories/zod-validation.factory";
 import { joinChallengeSchema } from "@/core/application/schemas/user-challenge.schema";
@@ -23,11 +24,13 @@ import { challengeIdParamsSchema } from "@/core/application/schemas/challenge.sc
 import {
   UpdateUserRequestDto,
   UserIdParamsDto,
+  UserEmailParamsDto,
   FullUserResponseDto,
   NonExistentUserDto,
 } from "@/modules/users/application/dtos/user.dto";
 import { CreateUserUseCase } from "@/modules/users/application/use-cases/create-user.use-case";
 import { FindUserByIdUseCase } from "@/modules/users/application/use-cases/find-by-id.use-case";
+import { FindUserByEmailUseCase } from "@/modules/users/application/use-cases/find-by-email.use-case";
 import { UpdateUserUseCase } from "@/modules/users/application/use-cases/update-user.use-case";
 import { JoinChallengeUseCase } from "@/modules/users/application/use-cases/join-challenge.use-case";
 import {
@@ -42,6 +45,7 @@ export class UserController {
     private readonly createUserUseCase: CreateUserUseCase,
     private readonly updateUserUseCase: UpdateUserUseCase,
     private readonly findUserByIdUseCase: FindUserByIdUseCase,
+    private readonly findUserByEmailUseCase: FindUserByEmailUseCase,
     private readonly joinChallengeUseCase: JoinChallengeUseCase,
   ) {}
 
@@ -67,6 +71,37 @@ export class UserController {
 
     const userFound = await this.findUserByIdUseCase.execute(
       parsedParams.userId,
+    );
+
+    if (!userFound) {
+      throw new BadRequestException(t(lang as Lang).user.notFound);
+    }
+
+    return userFound;
+  }
+
+  @Get("email/:email")
+  @EndpointDoc({
+    operation: {
+      summary: "Get a user by email",
+    },
+    response: {
+      status: HttpStatus.OK,
+      type: FullUserResponseDto,
+    },
+  })
+  async findByEmail(
+    @Param() params: UserEmailParamsDto,
+    @Headers("lang") lang: Lang = "en",
+  ) {
+    const { data: parsedParams } = ZodValidationFactory.parseOrThrow(
+      userEmailParamsSchema,
+      params,
+      lang,
+    );
+
+    const userFound = await this.findUserByEmailUseCase.execute(
+      parsedParams.email,
     );
 
     if (!userFound) {

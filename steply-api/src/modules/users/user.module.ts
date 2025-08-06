@@ -8,6 +8,7 @@ import {
 } from "@/modules/users/infra/repositories/user.repository";
 import { CreateUserUseCase } from "@/modules/users/application/use-cases/create-user.use-case";
 import { FindUserByIdUseCase } from "@/modules/users/application/use-cases/find-by-id.use-case";
+import { FindUserByEmailUseCase } from "@/modules/users/application/use-cases/find-by-email.use-case";
 import { UpdateUserUseCase } from "@/modules/users/application/use-cases/update-user.use-case";
 import { JoinChallengeUseCase } from "@/modules/users/application/use-cases/join-challenge.use-case";
 import {
@@ -32,6 +33,7 @@ import { FindAllUserChallengesUseCase } from "./application/use-cases/find-all-c
     CreateUserUseCase,
     FindAllUserChallengesUseCase,
     FindUserByIdUseCase,
+    FindUserByEmailUseCase,
     JoinChallengeUseCase,
     UpdateUserUseCase,
   ],

@@ -93,6 +93,33 @@ describe("UsersRepository", () => {
     });
   });
 
+  describe("findByEmail", () => {
+    const userEmail = "test@example.com";
+
+    it("should call the user database function 'findUnique' to get the user by email", async () => {
+      const findUniqueSpy = jest.spyOn(prismaService.user, "findUnique");
+
+      await userRepository.findByEmail(userEmail);
+
+      expect(findUniqueSpy).toHaveBeenCalledWith({
+        where: {
+          email: userEmail,
+        },
+        include: FULL_USER_INCLUDES,
+      });
+    });
+
+    it("should return the user found on database", async () => {
+      jest
+        .spyOn(prismaService.user, "findUnique")
+        .mockResolvedValue(userResponse as any);
+
+      const result = await userRepository.findByEmail(userEmail);
+
+      expect(result).toEqual(userResponse);
+    });
+  });
+
   describe("create", () => {
     it("should call the user database function to create an user and return it", async () => {
       const createSpy = jest

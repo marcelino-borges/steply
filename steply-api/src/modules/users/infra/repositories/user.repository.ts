@@ -35,6 +35,21 @@ export class UserRepository implements BaseUserRepository {
     return adapted;
   }
 
+  async findByEmail(email: string): Promise<FullUserResponseDto | null> {
+    const userFound = await this.db.user.findUnique({
+      where: {
+        email,
+      },
+      include: FULL_USER_INCLUDES,
+    });
+
+    const adapted = userFound
+      ? this.userAdapter.fromPrismaToFullUser(userFound)
+      : null;
+
+    return adapted;
+  }
+
   async create(
     createUserDto: NonExistentUserDto,
   ): Promise<FullUserResponseDto> {

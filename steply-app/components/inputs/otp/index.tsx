@@ -29,15 +29,12 @@ export default function OTPInput({
     const newOtp = [...otp];
 
     if (text === "") {
-      // Handle deletion
       newOtp[index] = "";
       setOtp(newOtp);
-      // Keep focus on current input after deletion
       setTimeout(() => {
         inputRefs.current[index]?.focus();
       }, 10);
     } else {
-      // Handle input
       const digit = text.slice(-1);
       if (/\D/.test(digit)) return;
 
@@ -45,7 +42,6 @@ export default function OTPInput({
       newOtp[index] = digit;
       setOtp(newOtp);
 
-      // Only auto-focus next input if the current input was empty
       if (wasEmpty && index < 5) {
         setTimeout(() => {
           inputRefs.current[index + 1]?.focus();

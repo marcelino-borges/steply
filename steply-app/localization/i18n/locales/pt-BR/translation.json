@@ -8,7 +8,8 @@
     "days_other": "dias",
     "next": "Próximo",
     "sendAnother": "Enviar novamente",
-    "verify": "Verificar"
+    "verify": "Verificar",
+    "loading": "Carregando"
   },
   "forms": {
     "fieldRequired": "Campo obrigatório",

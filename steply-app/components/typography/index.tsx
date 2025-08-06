@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from "react";
-import { Text } from "react-native";
+import { Text, TextStyle } from "react-native";
 
 import { FONT_SIZE, FONT_WEIGHT } from "@/constants/fonts";
 import { COLORS } from "@/constants/colors";
@@ -15,6 +15,7 @@ interface TypographyProps {
   align?: "auto" | "left" | "right" | "center" | "justify";
   underline?: boolean;
   onPress?: VoidFunction;
+  style?: TextStyle;
 }
 
 const Typography: React.FC<PropsWithChildren<TypographyProps>> = ({
@@ -27,6 +28,7 @@ const Typography: React.FC<PropsWithChildren<TypographyProps>> = ({
   align,
   underline = false,
   onPress,
+  style,
   children,
 }) => {
   return (
@@ -40,6 +42,7 @@ const Typography: React.FC<PropsWithChildren<TypographyProps>> = ({
         { fontStyle: italic ? "italic" : "normal" },
         { textAlign: align },
         { textDecorationLine: underline ? "underline" : "none" },
+        style,
       ]}
       onPress={onPress}
     >

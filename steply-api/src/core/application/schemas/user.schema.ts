@@ -40,6 +40,11 @@ export const userIdParamsSchema = (lang: Lang) =>
       .int(t(lang).validations.invalidField),
   });
 
+export const userEmailParamsSchema = (lang: Lang) =>
+  z.object({
+    email: emailSchema(lang),
+  });
+
 export const updateUserSchema = (lang: Lang) =>
   createUserBodySchema(lang)
     .omit({ organizationId: true })

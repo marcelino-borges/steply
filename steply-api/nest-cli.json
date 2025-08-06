@@ -5,6 +5,9 @@
   "compilerOptions": {
     "deleteOutDir": true,
     "plugins": ["@nestjs/swagger"],
-    "assets": [{ "include": "i18n/**/*", "watchAssets": true }]
+    "assets": [
+      { "include": "i18n/**/*", "watchAssets": true },
+      { "include": "../prisma/client/**/*", "outDir": "dist/prisma" }
+    ]
   }
 }

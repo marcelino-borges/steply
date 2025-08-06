@@ -52,6 +52,7 @@ export const EXISTING_FULL_USER: FullUserResponseDto = {
 
 export const USER_REPO_MOCK = {
   findById: jest.fn(),
+  findByEmail: jest.fn(),
   create: jest.fn(),
   update: jest.fn(),
   joinChallenge: jest.fn(),

@@ -4,6 +4,7 @@ import { UserController } from "./user.controller";
 import { CreateUserUseCase } from "../../application/use-cases/create-user.use-case";
 import { UpdateUserUseCase } from "../../application/use-cases/update-user.use-case";
 import { FindUserByIdUseCase } from "../../application/use-cases/find-by-id.use-case";
+import { FindUserByEmailUseCase } from "../../application/use-cases/find-by-email.use-case";
 import { JoinChallengeUseCase } from "../../application/use-cases/join-challenge.use-case";
 import { Test, TestingModule } from "@nestjs/testing";
 import {
@@ -19,6 +20,7 @@ describe("UserController", () => {
   let createUseCase: CreateUserUseCase;
   let updateUseCase: UpdateUserUseCase;
   let findByIdUseCase: FindUserByIdUseCase;
+  let findByEmailUseCase: FindUserByEmailUseCase;
   let joinMethodUseCase: JoinChallengeUseCase;
 
   const CreateUserUseCaseMock = {
@@ -30,6 +32,10 @@ describe("UserController", () => {
   };
 
   const FindUserByIdUseCaseMock = {
+    execute: jest.fn(),
+  };
+
+  const FindUserByEmailUseCaseMock = {
     execute: jest.fn(),
   };
 
@@ -54,6 +60,10 @@ describe("UserController", () => {
           useValue: FindUserByIdUseCaseMock,
         },
         {
+          provide: FindUserByEmailUseCase,
+          useValue: FindUserByEmailUseCaseMock,
+        },
+        {
           provide: JoinChallengeUseCase,
           useValue: JoinChallengeUseCaseMock,
         },
@@ -64,6 +74,7 @@ describe("UserController", () => {
     createUseCase = module.get(CreateUserUseCase);
     updateUseCase = module.get(UpdateUserUseCase);
     findByIdUseCase = module.get(FindUserByIdUseCase);
+    findByEmailUseCase = module.get(FindUserByEmailUseCase);
     joinMethodUseCase = module.get(JoinChallengeUseCase);
   });
 
@@ -106,6 +117,45 @@ describe("UserController", () => {
         expect(error).toBeInstanceOf(BadRequestException);
         expect((error as BadRequestException).message).toBe(
           "userId: Invalid field",
+        );
+      }
+    });
+  });
+
+  describe("findByEmail", () => {
+    const userEmail = "test@example.com";
+
+    it("should call the execute method from FindUserByEmailUseCase instance and return the user found", async () => {
+      jest
+        .spyOn(findByEmailUseCase, "execute")
+        .mockResolvedValue(EXISTING_FULL_USER);
+      const userFound = await controller.findByEmail({ email: userEmail });
+
+      expect(findByEmailUseCase.execute).toHaveBeenCalledWith(userEmail);
+      expect(userFound).toStrictEqual(EXISTING_FULL_USER);
+    });
+
+    it("should throw a BadRequestException when no user is found by the FindUserByEmailUseCase", async () => {
+      jest.spyOn(findByEmailUseCase, "execute").mockResolvedValue(null);
+      const expectedErrorMsg = t("en").user.notFound;
+
+      try {
+        await controller.findByEmail({ email: userEmail });
+      } catch (error) {
+        expect(error).toBeInstanceOf(BadRequestException);
+        expect((error as BadRequestException).message).toBe(expectedErrorMsg);
+      }
+    });
+
+    it("should throw a BadRequestException if the email passed in params is not valid", async () => {
+      try {
+        await controller.findByEmail({
+          email: "invalid-email",
+        } as any);
+      } catch (error) {
+        expect(error).toBeInstanceOf(BadRequestException);
+        expect((error as BadRequestException).message).toBe(
+          "email: Invalid field",
         );
       }
     });
