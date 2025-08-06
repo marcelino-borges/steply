@@ -7,7 +7,7 @@ import { PRISMA_MOCK } from "@/test/__mocks__/prisma.mock";
 import { UserChallengeRepository } from "./user-challenge.repository";
 import { FULL_USER_CHALLENGE_INCLUDES } from "../constants/full-user-challenge-includes.constant";
 
-jest.mock("@prisma/client");
+jest.mock("prisma/client");
 
 describe("UserChallengeRepository", () => {
   let prismaService: PrismaService;

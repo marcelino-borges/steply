@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Prisma } from "prisma/client";
 import { PrismaError } from "./prisma.error";
 import { t } from "@/core/application/locales";
 

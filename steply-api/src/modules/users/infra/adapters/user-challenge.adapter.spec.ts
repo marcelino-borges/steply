@@ -1,4 +1,4 @@
-import { JoinMethod as PrismaJoinMethod } from "@prisma/client";
+import { JoinMethod as PrismaJoinMethod } from "prisma/client";
 import { UserChallengeResponseDto } from "../../application/dtos/user-challenge.dto";
 import { PrismaUserChallenge } from "../dtos/user-challenge.dto";
 import { JoinMethod } from "@/core/domain/entities/challenge.entity";

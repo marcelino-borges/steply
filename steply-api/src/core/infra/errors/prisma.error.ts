@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Prisma } from "prisma/client";
 
 import {
   MODEL_NAME_PLACEHOLDER,

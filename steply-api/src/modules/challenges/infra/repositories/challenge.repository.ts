@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { Challenge } from "@prisma/client";
+import { Challenge } from "prisma/client";
 
 import { PrismaService } from "@/core/infra/services/prisma/prisma.service";
 import { JoinMethodAdapter } from "@/core/application/adapters/join-method.adapter";

@@ -5,7 +5,7 @@ import { PrismaService } from "@/core/infra/services/prisma/prisma.service";
 import { PRISMA_MOCK } from "@/test/__mocks__/prisma.mock";
 import { FULL_USER_INCLUDES } from "../constants/full-user-includes.constant";
 
-jest.mock("@prisma/client");
+jest.mock("prisma/client");
 
 describe("UsersRepository", () => {
   let prismaService: PrismaService;
@@ -30,6 +30,7 @@ describe("UsersRepository", () => {
     goalId: null,
     mainGoalLevelId: null,
     nextRegistrationStep: 0,
+    pictureUrl: null,
   };
   const userResponse: FullUserResponseDto = {
     ...userToCreate,
@@ -131,7 +132,9 @@ describe("UsersRepository", () => {
     });
 
     it("should return the user updated on database", async () => {
-      jest.spyOn(prismaService.user, "update").mockResolvedValue(userResponse as any);
+      jest
+        .spyOn(prismaService.user, "update")
+        .mockResolvedValue(userResponse as any);
 
       const result = await userRepository.update(userId, {
         ...userResponse,

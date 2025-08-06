@@ -1,5 +1,5 @@
 import { ArgumentsHost } from "@nestjs/common";
-import { Prisma } from "@prisma/client";
+import { Prisma } from "prisma/client";
 
 import { DatabaseErrorsFilter } from "./database-errors.filter";
 import { BaseErrorFilter } from "./base-error.filter";

@@ -1,4 +1,4 @@
-import { JoinMethod as ORMEnum } from "@prisma/client";
+import { JoinMethod as ORMEnum } from "prisma/client";
 import { JoinMethod as DomainEnum } from "@/core/domain/entities/challenge.entity";
 
 export class JoinMethodAdapter {

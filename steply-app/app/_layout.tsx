@@ -36,6 +36,11 @@ import { queryClient } from "@/config/react-query";
 import { StatusBar } from "react-native";
 import { COLORS } from "@/constants/colors";
 
+SplashScreen.setOptions({
+  duration: 1000,
+  fade: true,
+});
+
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {

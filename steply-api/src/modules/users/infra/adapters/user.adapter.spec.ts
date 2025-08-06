@@ -1,4 +1,4 @@
-import { JoinMethod as ORMJoinMethod } from "@prisma/client";
+import { JoinMethod as ORMJoinMethod } from "prisma/client";
 import { PrismaFullUser } from "../dtos/user.dto";
 import { PrismaFullUserAdapter } from "./user.adapter";
 import { FullUserResponseDto } from "../../application/dtos/user.dto";

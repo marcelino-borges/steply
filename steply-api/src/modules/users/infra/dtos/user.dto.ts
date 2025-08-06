@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Prisma } from "prisma/client";
 
 import { FULL_USER_INCLUDES } from "@/modules/users/infra/constants/full-user-includes.constant";
 

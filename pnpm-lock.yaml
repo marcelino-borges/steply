@@ -199,7 +199,7 @@ importers:
         specifier: ^14.2.3
         version: 14.2.3(expo@53.0.20)
       expo-splash-screen:
-        specifier: ~0.30.8
+        specifier: ~0.30.10
         version: 0.30.10(expo@53.0.20)
       expo-status-bar:
         specifier: ~2.2.3

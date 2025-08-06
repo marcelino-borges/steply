@@ -1,5 +1,5 @@
 import { UserGender } from "@/core/domain/entities/user-gender";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "prisma/client";
 
 const prisma = new PrismaClient();
 
