@@ -16,16 +16,7 @@ export default function TabLayout() {
   useEffect(() => {
     if (!isSignedIn || !user) {
       if (!user) signOut();
-      router.replace("/signin");
-      return;
-    }
-
-    if (
-      user.nextRegistrationStep ===
-        UserRegistrationStep.INFORM_WANTS_PERSONALIZATION ||
-      user.wantsAccountPersonalization
-    ) {
-      router.push("../(out-of-tabs)/onboarding");
+      router.replace("/(auth)/signin");
       return;
     }
   }, [isSignedIn, user]);

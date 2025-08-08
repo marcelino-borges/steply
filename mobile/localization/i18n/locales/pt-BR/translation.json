@@ -11,7 +11,8 @@
     "verify": "Verificar",
     "loading": "Carregando",
     "you": "você",
-    "continue": "Continuar"
+    "continue": "Continuar",
+    "notNow": "Agora não"
   },
   "forms": {
     "fieldRequired": "Campo obrigatório",
@@ -82,6 +83,11 @@
     "whatIsYourCurrentLevelInActivities": "Qual seu nível atual nessa(s) atividade(s)?",
     "whatActivitiesInterestYou": "Quais atividades te interessam?",
     "selectUpTo": "Selecione até {{count}}",
-    "createAccount": "Criar conta"
+    "createAccount": "Criar conta",
+    "addActivitiesError": "Erro ao adicionar atividades"
+  },
+  "biometric": {
+    "signInWithFaceId": "Entrar com reconhecimento facial",
+    "signInWithFingerprint": "Entrar com impressão digital"
   }
 }

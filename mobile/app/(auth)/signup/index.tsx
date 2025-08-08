@@ -127,7 +127,7 @@ export default function SignUpScreen() {
 
         setUser(createdUser);
 
-        router.replace("/home");
+        router.replace("/(private)/(tabs)/home");
       } else {
         console.error(
           "[Steply] SignUp status not complete",

@@ -6,16 +6,16 @@ import React, { useEffect } from "react";
 
 const STEPS_PATHS: Record<UserRegistrationStep, Href> = {
   [UserRegistrationStep.INFORM_WANTS_PERSONALIZATION]:
-    "./onboarding/1-personalization",
-  [UserRegistrationStep.GENDER]: "./onboarding/2-gender",
-  [UserRegistrationStep.MAIN_GOAL]: "./onboarding/3-main-goal",
+    "/(private)/(out-of-tabs)/onboarding/1-personalization" as Href,
+  [UserRegistrationStep.GENDER]: "/(private)/(out-of-tabs)/onboarding/2-gender" as Href,
+  [UserRegistrationStep.MAIN_GOAL]: "/(private)/(out-of-tabs)/onboarding/3-main-goal" as Href,
   [UserRegistrationStep.MAIN_GOAL_CURRENT_LEVEL]:
-    "./onboarding/4-main-goal-level",
+    "/(private)/(out-of-tabs)/onboarding/4-main-goal-level" as Href,
   [UserRegistrationStep.INTEREST_ACTIVITIES]:
-    "/onboarding/5-interest-activities",
-  [UserRegistrationStep.FINGERPRINT_ACCESS]: "./onboarding/fingerprint-access",
-  [UserRegistrationStep.PERSONAL_DATA]: "/signup",
-  [UserRegistrationStep.NONE]: "/home",
+    "/(private)/(out-of-tabs)/onboarding/5-interest-activities" as Href,
+  [UserRegistrationStep.ONBOARDING_COMPLETE]: "/(private)/(tabs)/home" as Href,
+  [UserRegistrationStep.PERSONAL_DATA]: "/(auth)/signup" as Href,
+  [UserRegistrationStep.NONE]: "/(private)/(tabs)/home" as Href,
 };
 
 export default function OnboardingScreen() {

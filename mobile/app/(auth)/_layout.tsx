@@ -7,6 +7,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { SPACING } from "@/constants/spacings";
 import { COLORS } from "@/constants/colors";
 import { useUser } from "@/store/user";
+import { UserRegistrationStep } from "@/types/api/user";
 
 export default function AuthRoutesLayout() {
   const { isSignedIn } = useAuth();
@@ -19,7 +20,14 @@ export default function AuthRoutesLayout() {
       " user: ",
       user
     );
-    return <Redirect href="/home" />;
+    
+    if (
+      user.nextRegistrationStep === UserRegistrationStep.INFORM_WANTS_PERSONALIZATION ||
+      user.wantsAccountPersonalization
+    ) {
+      return <Redirect href="/(private)/(out-of-tabs)/onboarding" />;
+    }
+    return <Redirect href="/(private)/(tabs)/home" />;
   }
 
   return (

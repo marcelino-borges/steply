@@ -148,7 +148,7 @@ const CreateChallenge1: React.FC = () => {
         bannerUrl,
       });
       Toast.success(t("challenge.createSuccess"));
-      router.replace("/home");
+      router.replace("/(private)/(tabs)/home");
     } catch (error) {
       deleteFile(bannerUrl)
         .then(() => {

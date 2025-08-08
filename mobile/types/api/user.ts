@@ -8,7 +8,7 @@ export enum UserRegistrationStep {
   MAIN_GOAL = 3,
   MAIN_GOAL_CURRENT_LEVEL = 4,
   INTEREST_ACTIVITIES = 5,
-  FINGERPRINT_ACCESS = 6,
+  ONBOARDING_COMPLETE = 6,
   NONE = 7,
 }
 

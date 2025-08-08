@@ -15,13 +15,14 @@ export default function TabHomeScreen() {
   const handleSignOut = async () => {
     clearUser();
     await signOut();
+    router.replace("/(auth)/signin");
   };
 
   return (
     <View style={styles.container}>
       <Button
         onPress={() => {
-          router.push("/challenges/create/0");
+          router.push("/(private)/(out-of-tabs)/challenges/create/0");
         }}
         fullWidth
       >

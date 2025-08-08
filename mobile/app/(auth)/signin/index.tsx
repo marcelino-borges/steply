@@ -18,9 +18,13 @@ import { useTranslation } from "react-i18next";
 import AppIcon from "@/components/app-icon";
 import { fetchUser } from "@/services/user";
 import { useUser } from "@/store/user";
+import { useLocalCredentials } from "@clerk/clerk-expo/local-credentials";
 
 export default function SignInScreen() {
   const { signIn, setActive, isLoaded } = useSignIn();
+  const { hasCredentials, setCredentials, authenticate, biometricType } =
+    useLocalCredentials();
+
   const router = useRouter();
   const [isSigningIn, setIsSigningIn] = useState(false);
   const { t } = useTranslation();
@@ -38,16 +42,22 @@ export default function SignInScreen() {
     },
   });
 
-  const onSignInPress = async ({ email, password }: SigninForm) => {
+  const onSignInPress = async (
+    { email, password }: SigninForm,
+    useLocal: boolean
+  ) => {
     if (!isLoaded) return;
 
     setIsSigningIn(true);
 
     try {
-      const signInAttempt = await signIn.create({
-        identifier: email,
-        password,
-      });
+      const signInAttempt =
+        hasCredentials && useLocal
+          ? await authenticate()
+          : await signIn.create({
+              identifier: email,
+              password,
+            });
 
       if (signInAttempt.status === "complete") {
         try {
@@ -59,7 +69,14 @@ export default function SignInScreen() {
         }
 
         await setActive({ session: signInAttempt.createdSessionId });
-        router.replace("/home");
+
+        if (!useLocal) {
+          await setCredentials({
+            identifier: email,
+            password,
+          });
+        }
+        router.replace("/(private)/(tabs)/home");
       } else {
         console.error(JSON.stringify(signInAttempt, null, 2));
         Toast.error(t("errors.clerk.signupMissingSteps"));
@@ -101,13 +118,25 @@ export default function SignInScreen() {
             error={errors.password?.message}
           />
         </View>
-        <Button
-          fullWidth
-          onPress={handleSubmit(onSignInPress)}
-          loading={isSigningIn}
-        >
-          Entrar
-        </Button>
+        <View style={authStyles.buttonsView}>
+          <Button
+            fullWidth
+            onPress={handleSubmit((data) => onSignInPress(data, false))}
+            loading={isSigningIn}
+          >
+            Entrar
+          </Button>
+          <Button
+            fullWidth
+            onPress={handleSubmit((data) => onSignInPress(data, true))}
+            loading={isSigningIn}
+            variant="outlined"
+          >
+            {biometricType === "face-recognition"
+              ? t("biometric.signInWithFaceId")
+              : t("biometric.signInWithFingerprint")}
+          </Button>
+        </View>
 
         <View style={authStyles.bottomRedirect}>
           <Typography>Não possui conta?</Typography>
@@ -142,8 +171,12 @@ const authStyles = StyleSheet.create({
   bottomRedirect: {
     display: "flex",
     flexDirection: "row",
-    gap: 3,
+    gap: SPACING[1],
     marginTop: 16,
     justifyContent: "center",
+  },
+  buttonsView: {
+    gap: SPACING[4],
+    width: "100%",
   },
 });

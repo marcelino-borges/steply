@@ -20,7 +20,7 @@ const buttonStyles = StyleSheet.create({
   },
   outlined: {
     borderWidth: SPACING["1/4"],
-    borderColor: COLORS.contentBlack,
+    borderColor: COLORS.primary,
   },
   ghost: {
     color: COLORS.contentBlack,

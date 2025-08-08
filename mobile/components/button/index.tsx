@@ -46,7 +46,13 @@ const Button: React.FC<ButtonProps> = ({
           ? { backgroundColor: "transparent" }
           : { backgroundColor: buttonStyles[color].backgroundColor },
         fullWidth && { width: "100%" },
-        (disabled || loading) && { backgroundColor: COLORS.muted },
+        (disabled || loading) &&
+          (variant === "outlined"
+            ? {
+                backgroundColor: COLORS.muted,
+                borderColor: "transparent",
+              }
+            : { backgroundColor: COLORS.muted }),
         customStyle
           ? {
               borderColor: customStyle?.borderColor,
@@ -65,7 +71,9 @@ const Button: React.FC<ButtonProps> = ({
               ? COLORS.mutedForeground
               : customStyle?.color
                 ? COLORS[customStyle.color]
-                : buttonStyles[color].color
+                : variant === "outlined"
+                  ? COLORS.primary
+                  : buttonStyles[color].color
           }
           letterSpacing={0.1}
           lineHeight={SPACING[5]}

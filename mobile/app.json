@@ -64,6 +64,19 @@
           "backgroundColor": "#ffffff",
           "image": "./assets/splash-icon.png"
         }
+      ],
+      [
+        "expo-local-authentication",
+        {
+          "faceIDPermission": "Permitir $(PRODUCT_NAME) usar seu Face ID."
+        }
+      ],
+      [
+        "expo-secure-store",
+        {
+          "configureAndroidBackup": true,
+          "faceIDPermission": "Permitir $(PRODUCT_NAME) acessar seus dadios biométricos do Face ID."
+        }
       ]
     ],
     "experiments": {

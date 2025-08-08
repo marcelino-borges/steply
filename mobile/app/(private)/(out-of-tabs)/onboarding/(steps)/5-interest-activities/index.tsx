@@ -81,11 +81,11 @@ export default function InterestActivities() {
         genderId: user.genderId,
         goalId: user.goalId,
         mainGoalLevelId: user.mainGoalLevelId,
-        nextRegistrationStep: UserRegistrationStep.FINGERPRINT_ACCESS,
+        nextRegistrationStep: UserRegistrationStep.ONBOARDING_COMPLETE,
       });
 
       setUser(updatedUser);
-      router.replace("/(private)/(out-of-tabs)/onboarding/6-fingerprint-access");
+      // router.replace("/(private)/(out-of-tabs)/onboarding/6-fingerprint-access");
     } catch (error) {
       Toast.error((error as Error).message);
       console.error("Error updating activity interests:", error);
