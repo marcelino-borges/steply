@@ -51,7 +51,7 @@ export default function MainGoalLevel() {
       });
 
       setUser(updatedUser);
-      router.replace("/onboarding/5-interest-activities");
+      router.replace("/(private)/(out-of-tabs)/onboarding/5-interest-activities");
     } catch (error) {
       Toast.error(t("user.updateError"));
       console.error("Error updating main goal level:", error);

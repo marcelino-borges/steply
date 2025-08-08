@@ -16,7 +16,7 @@ import { SPACING } from "@/constants/spacings";
 import { handleClerkErrorMessage } from "@/utils/clerk-error";
 import { useTranslation } from "react-i18next";
 import AppIcon from "@/components/app-icon";
-import { fetchUser } from "@/app/services/user";
+import { fetchUser } from "@/services/user";
 import { useUser } from "@/store/user";
 
 export default function SignInScreen() {

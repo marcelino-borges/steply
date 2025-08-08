@@ -86,7 +86,7 @@ export default function SignUpScreen() {
 
       setPendingVerification(true);
     } catch (err) {
-      console.error(JSON.stringify(err, null, 2));
+      console.log(JSON.stringify(err, null, 2));
       const error = handleClerkErrorMessage(err, t);
       Toast.error(error);
     }
@@ -138,7 +138,7 @@ export default function SignUpScreen() {
         setIsPreparingVerification(false);
       }
     } catch (err) {
-      console.error("[Steply] SignUp error", JSON.stringify(err, null, 2));
+      console.log("[Steply] SignUp error", JSON.stringify(err, null, 2));
       const error = handleClerkErrorMessage(err, t);
       setIsPreparingVerification(false);
       Toast.error(error);

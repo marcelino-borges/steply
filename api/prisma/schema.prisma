@@ -152,7 +152,7 @@ model Challenge {
   organization    Organization    @relation(fields: [organizationId], references: [id])
   usersChallenges UserChallenge[]
   rankTypes       RankType[]
-  activities      Activity[]
+  activities      ChallengeActivity[]
   reward          Reward?
 
   @@map("challenges")
@@ -226,7 +226,7 @@ model RewardType {
   @@map("rewards_types")
 }
 
-model Activity {
+model ChallengeActivity {
   id          Int      @id @default(autoincrement())
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -239,7 +239,7 @@ model Activity {
 
   challenge Challenge @relation(fields: [challengeId], references: [id])
 
-  @@map("activities")
+  @@map("challenges_activities")
 }
 
 model RankType {

@@ -93,7 +93,13 @@ export default function RootLayout() {
         >
           <Stack screenOptions={{ headerShown: false }}>
             <Stack.Screen
-              name="(private)/(tabs)"
+              name="(private)"
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="(auth)"
               options={{
                 headerShown: false,
               }}

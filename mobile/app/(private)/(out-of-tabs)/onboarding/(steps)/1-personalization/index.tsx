@@ -15,7 +15,7 @@ import { useTranslation } from "react-i18next";
 enum LoadingAction {
   NONE = 0,
   ACCEPT = 1,
-  REJECT = 1,
+  REJECT = 2,
 }
 
 export default function PersonalizationPreference() {
@@ -33,8 +33,6 @@ export default function PersonalizationPreference() {
       setLoadingAction(LoadingAction.NONE);
       return;
     }
-
-    console.log("---------Updating user", JSON.stringify(user, null, 2));
 
     try {
       const nextStep = wantsPersonalization
@@ -55,9 +53,9 @@ export default function PersonalizationPreference() {
       setUser(updatedUser);
 
       if (wantsPersonalization) {
-        router.push("/onboarding/2-gender");
+        router.replace("/(private)/(out-of-tabs)/onboarding/2-gender");
       } else {
-        router.replace("/home");
+        router.replace("/(private)/(tabs)/home");
       }
     } catch (error) {
       Toast.error("Erro ao atualizar preferências");

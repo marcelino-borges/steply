@@ -119,7 +119,7 @@ Table challenges {
   organization organizations [not null]
   usersChallenges user_challenges [not null]
   rankTypes rank_types [not null]
-  activities activities [not null]
+  activities challenges_activities [not null]
   reward rewards
 }
 
@@ -181,7 +181,7 @@ Table rewards_types {
   }
 }
 
-Table activities {
+Table challenges_activities {
   id Int [pk, increment]
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
@@ -336,7 +336,7 @@ Ref: rewards.rewardTypeId > rewards_types.id
 
 Ref: rewards.challengeId - challenges.id
 
-Ref: activities.challengeId > challenges.id
+Ref: challenges_activities.challengeId > challenges.id
 
 Ref: rank_types.challengeId > challenges.id
 

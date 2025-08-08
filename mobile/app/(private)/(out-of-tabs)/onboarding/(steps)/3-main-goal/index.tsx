@@ -5,53 +5,31 @@ import { useRouter } from "expo-router";
 import { Toast } from "toastify-react-native";
 
 import Button from "@/components/button";
-import CheckboxGroup from "@/components/checkbox-group";
+import RadioGroup from "@/components/radio-group";
 import Typography from "@/components/typography";
 import { COLORS } from "@/constants/colors";
 import { SPACING } from "@/constants/spacings";
 import { useUser } from "@/store/user";
 import { UserRegistrationStep } from "@/types/api/user";
-import { useGetSuggestedActivities } from "@/hooks/suggestions/get-activities";
+import { useGetUserGoalsList } from "@/hooks/user-goals/get-list";
 import { useUpdateUser } from "@/hooks/users/update";
 
-export default function InterestActivities() {
+export default function MainGoal() {
   const { user, setUser } = useUser();
   const { t } = useTranslation();
   const router = useRouter();
   const updateUser = useUpdateUser();
-  const {
-    data: suggestedActivities,
-    isLoading: isLoadingActivities,
-    error,
-  } = useGetSuggestedActivities();
-  const [selectedActivities, setSelectedActivities] = useState<string[]>([]);
-  const maxSelections = 3;
-
-  console.log("------ suggestedActivities", suggestedActivities);
-  console.log("------ isLoadingActivities", isLoadingActivities);
-  console.log("------ error", error);
+  const { data: userGoals, isLoading: isLoadingGoals } = useGetUserGoalsList();
+  const [selectedGoal, setSelectedGoal] = useState("");
 
   useEffect(() => {
-    if (user?.activityInterests && suggestedActivities) {
-      const selectedIds = user.activityInterests.map((interest) =>
-        interest.id.toString()
-      );
-      setSelectedActivities(selectedIds);
+    if (user?.goalId && userGoals) {
+      setSelectedGoal(user.goalId.toString());
     }
-  }, [user, suggestedActivities]);
-
-  const handleToggle = (value: string) => {
-    setSelectedActivities((prev) => {
-      if (prev.includes(value)) {
-        return prev.filter((id) => id !== value);
-      } else {
-        return [...prev, value];
-      }
-    });
-  };
+  }, [user, userGoals]);
 
   const handleContinue = async () => {
-    if (!user) return;
+    if (!selectedGoal || !user) return;
 
     try {
       const updatedUser = await updateUser.mutateAsync({
@@ -63,16 +41,15 @@ export default function InterestActivities() {
         acceptsCommunication: user.acceptsCommunication,
         wantsAccountPersonalization: user.wantsAccountPersonalization,
         genderId: user.genderId,
-        goalId: user.goalId,
-        mainGoalLevelId: user.mainGoalLevelId,
-        nextRegistrationStep: UserRegistrationStep.FINGERPRINT_ACCESS,
+        goalId: parseInt(selectedGoal),
+        nextRegistrationStep: UserRegistrationStep.MAIN_GOAL_CURRENT_LEVEL,
       });
 
       setUser(updatedUser);
-      router.push("/onboarding/6-fingerprint-access");
+      router.replace("/(private)/(out-of-tabs)/onboarding/4-main-goal-level");
     } catch (error) {
       Toast.error(t("user.updateError"));
-      console.error("Error updating activity interests:", error);
+      console.error("Error updating main goal:", error);
     }
   };
 
@@ -85,38 +62,27 @@ export default function InterestActivities() {
           lineHeight={SPACING[10]}
           align="center"
           style={{
-            marginBottom: SPACING[2],
+            marginBottom: SPACING[4],
           }}
         >
-          {t("user.whatActivitiesInterestYou")}
+          {t("user.whatIsYourMainGoal")}
         </Typography>
-        <Typography
-          color={COLORS.gray}
-          align="center"
-          style={{
-            marginBottom: SPACING[6],
-          }}
-        >
-          {t("user.selectUpTo", { count: maxSelections })}
-        </Typography>
-        {isLoadingActivities ? (
+        {isLoadingGoals ? (
           <ActivityIndicator
             size="large"
             color={COLORS.primary}
             style={{ marginTop: SPACING[8] }}
           />
         ) : (
-          <CheckboxGroup
+          <RadioGroup
             items={
-              suggestedActivities?.map((activity) => ({
-                label: activity.title,
-                subLabel: activity.description || undefined,
-                value: activity.id.toString(),
+              userGoals?.map((goal) => ({
+                label: goal.name,
+                value: goal.id.toString(),
               })) || []
             }
-            onToggle={handleToggle}
-            selectedValues={selectedActivities}
-            maxSelections={maxSelections}
+            onSelect={(value) => setSelectedGoal(value)}
+            selectedValue={selectedGoal}
             fullWidth
             variant="outline"
           />
@@ -126,9 +92,9 @@ export default function InterestActivities() {
         <Button
           onPress={handleContinue}
           loading={updateUser.isPending}
-          disabled={updateUser.isPending}
+          disabled={!selectedGoal || updateUser.isPending}
         >
-          {t("user.createAccount")}
+          {t("common.continue")}
         </Button>
       </View>
     </View>
@@ -146,7 +112,6 @@ const styles = StyleSheet.create({
   },
   bottomView: {
     paddingBottom: SPACING[14],
-    marginTop: SPACING[8],
     gap: SPACING[4],
   },
 });

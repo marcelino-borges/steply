@@ -1,10 +1,12 @@
-import React, { useState, useRef } from "react";
-import { View, TextInput } from "react-native";
+import React, { useState, useRef, useEffect, useMemo, useCallback } from "react";
+import { View, TextInput, Pressable } from "react-native";
 import Button from "@/components/button";
 import TextfieldFree from "../textfield-free";
 import { styles } from "./styles";
 import Typography from "@/components/typography";
 import { useTranslation } from "react-i18next";
+import { SPACING } from "@/constants/spacings";
+import { COLORS } from "@/constants/colors";
 
 interface OTPInputProps {
   onSubmit: (code: string) => void;
@@ -20,10 +22,38 @@ export default function OTPInput({
   isLoading = false,
 }: OTPInputProps) {
   const [otp, setOtp] = useState<string[]>(["", "", "", "", "", ""]);
-  const [inputHeight, setInputHeight] = useState<number>(56);
+  const [inputHeight, setInputHeight] = useState(56);
+  const [retryCountdown, setRetryCountdown] = useState(0);
   const inputRefs = useRef<(TextInput | null)[]>([]);
 
   const { t } = useTranslation();
+
+  useEffect(() => {
+    let interval: number;
+
+    if (retryCountdown > 0) {
+      interval = setInterval(() => {
+        setRetryCountdown((prev) => {
+          if (prev <= 1) {
+            clearInterval(interval);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [retryCountdown]);
+
+  const handleRetry = useCallback(() => {
+    retry();
+    setRetryCountdown(60);
+  }, [retry]);
 
   const handleChangeText = (text: string, index: number) => {
     const newOtp = [...otp];
@@ -65,6 +95,31 @@ export default function OTPInput({
 
   const isSubmitDisabled = otp.some((digit) => digit === "") || isLoading;
 
+  const retrySection = useMemo(() => (
+    <View
+      style={{
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "baseline",
+        gap: SPACING[1],
+        flexWrap: "wrap",
+      }}
+    >
+      <Typography>{t("forms.didNotReceiveOtp")}</Typography>
+      <Pressable onPress={handleRetry} disabled={retryCountdown > 0}>
+        <Typography
+          underline={retryCountdown === 0}
+          color={retryCountdown > 0 ? COLORS.gray : undefined}
+        >
+          {retryCountdown > 0
+            ? `Envie novamente em ${retryCountdown}s`
+            : t("common.sendAnother")}
+        </Typography>
+      </Pressable>
+    </View>
+  ), [retryCountdown, handleRetry, t]);
+
   return (
     <View style={styles.container}>
       <Typography size="2xl" weight="bold">
@@ -74,7 +129,7 @@ export default function OTPInput({
       <View style={styles.inputsContainer}>
         {otp.map((digit, index) => (
           <View
-            key={Math.round(Math.random() * 100000)}
+            key={`otp-input-${index}`}
             style={[styles.inputWrapper, { height: inputHeight }]}
             onLayout={index === 0 ? handleLayout : undefined}
           >
@@ -93,10 +148,7 @@ export default function OTPInput({
           </View>
         ))}
       </View>
-      <Typography>
-        <Typography>{t("forms.didNotReceiveOtp")}</Typography>{" "}
-        <Typography underline>{t("common.sendAnother")}</Typography>
-      </Typography>
+      {retrySection}
       <Button
         fullWidth
         onPress={handleSubmit}

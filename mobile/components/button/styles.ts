@@ -43,6 +43,10 @@ const buttonStyles = StyleSheet.create({
     borderColor: COLORS.secondary,
     backgroundColor: COLORS.secondary,
   },
+  white: {
+    color: COLORS.primary,
+    backgroundColor: "white",
+  },
 });
 
 export default buttonStyles;

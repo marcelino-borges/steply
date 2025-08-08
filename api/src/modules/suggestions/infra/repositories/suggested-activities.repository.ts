@@ -16,7 +16,6 @@ export class ActivitiesSuggestionsRepository
   constructor(private readonly db: PrismaService) {}
 
   async findAll(lang: Lang): Promise<SuggestedActivityDto[]> {
-    console.log("==== Repository searching with lang:", lang);
     const result = await this.db.suggestedActivity.findMany({
       where: {
         active: true,
@@ -24,7 +23,6 @@ export class ActivitiesSuggestionsRepository
       },
     });
 
-    console.log("==== Repository found", result.length, "activities");
     return result;
   }
 }

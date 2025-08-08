@@ -39,7 +39,9 @@
     "clerk": {
       "formIdentifierNotFound": "Credenciais inválidas",
       "pendingStep": "Detectamos que há alguma pendência no seu cadastro, entre em contato com nosso suporte",
-      "signupMissingSteps": "Existe alguma pendência no seu cadastro, por favor entre em contato com nosso suporte"
+      "signupMissingSteps": "Existe alguma pendência no seu cadastro, por favor entre em contato com nosso suporte",
+      "form_code_incorrect": "Código incorreto",
+      "form_indentifier_exists": "Você já possui conta"
     }
   },
   "challenge": {

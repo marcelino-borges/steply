@@ -6,14 +6,14 @@ import React, { useEffect } from "react";
 
 const STEPS_PATHS: Record<UserRegistrationStep, Href> = {
   [UserRegistrationStep.INFORM_WANTS_PERSONALIZATION]:
-    "/onboarding/1-personalization",
-  [UserRegistrationStep.GENDER]: "/onboarding/2-gender",
-  [UserRegistrationStep.MAIN_GOAL]: "/onboarding/3-main-goal",
+    "./onboarding/1-personalization",
+  [UserRegistrationStep.GENDER]: "./onboarding/2-gender",
+  [UserRegistrationStep.MAIN_GOAL]: "./onboarding/3-main-goal",
   [UserRegistrationStep.MAIN_GOAL_CURRENT_LEVEL]:
-    "/onboarding/4-main-goal-level",
+    "./onboarding/4-main-goal-level",
   [UserRegistrationStep.INTEREST_ACTIVITIES]:
     "/onboarding/5-interest-activities",
-  [UserRegistrationStep.FINGERPRINT_ACCESS]: "/onboarding/6-fingerprint-access",
+  [UserRegistrationStep.FINGERPRINT_ACCESS]: "./onboarding/fingerprint-access",
   [UserRegistrationStep.PERSONAL_DATA]: "/signup",
   [UserRegistrationStep.NONE]: "/home",
 };

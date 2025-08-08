@@ -9,4 +9,5 @@ export const COLORS = {
   error: "#D73241",
   success: "#2A7938",
   inputBorder: "#3e51b13b",
+  white: "#FFFFFF",
 };

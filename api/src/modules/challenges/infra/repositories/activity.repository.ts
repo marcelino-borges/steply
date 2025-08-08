@@ -32,13 +32,13 @@ export class ActivityRepository implements BaseActivityRepository {
       params?.pageSize,
     );
 
-    const findPromise = this.db.activity.findMany({
+    const findPromise = this.db.challengesActivity.findMany({
       where,
       skip: pageSize * pageNumber,
       take: pageSize,
     });
 
-    const countPromise = this.db.activity.count({
+    const countPromise = this.db.challengesActivity.count({
       where,
     });
 
@@ -61,7 +61,7 @@ export class ActivityRepository implements BaseActivityRepository {
     activityId: number,
     challengeId: number,
   ): Promise<ActivityDto | null> {
-    const result = await this.db.activity.findUnique({
+    const result = await this.db.challengesActivity.findUnique({
       where: {
         id: activityId,
         challengeId,
@@ -75,7 +75,7 @@ export class ActivityRepository implements BaseActivityRepository {
     activity: NonExistingActivityDto,
     challengeId: number,
   ): Promise<ActivityDto> {
-    const created = await this.db.activity.create({
+    const created = await this.db.challengesActivity.create({
       data: { ...activity, challengeId },
     });
 
@@ -86,7 +86,7 @@ export class ActivityRepository implements BaseActivityRepository {
     activity: ActivityDto,
     challengeId: number,
   ): Promise<ActivityDto> {
-    const updated = await this.db.activity.update({
+    const updated = await this.db.challengesActivity.update({
       where: { id: activity.id, challengeId },
       data: activity,
     });
@@ -95,7 +95,7 @@ export class ActivityRepository implements BaseActivityRepository {
   }
 
   async delete(activityId: number, challengeId: number): Promise<void> {
-    await this.db.activity.delete({
+    await this.db.challengesActivity.delete({
       where: { id: activityId, challengeId },
     });
   }

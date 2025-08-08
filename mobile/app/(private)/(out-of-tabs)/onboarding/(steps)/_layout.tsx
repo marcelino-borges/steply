@@ -1,4 +1,5 @@
 import { COLORS } from "@/constants/colors";
+import { SPACING } from "@/constants/spacings";
 import { Slot } from "expo-router";
 import React from "react";
 import { SafeAreaView, ScrollView, StyleSheet } from "react-native";
@@ -26,5 +27,7 @@ const onboardingStyles = StyleSheet.create({
   },
   scrollViewContent: {
     flexGrow: 1,
+    paddingHorizontal: SPACING.md,
+    paddingBottom: SPACING[8],
   },
 });

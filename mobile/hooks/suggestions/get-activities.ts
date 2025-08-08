@@ -8,8 +8,6 @@ import { SuggestedActivityDto } from "@/types/api/suggested-activity";
 export const useGetSuggestedActivities = () => {
   const lang = getLocales()[0].languageCode;
 
-  console.log("----------- useGetSuggestedActivities lang", lang);
-
   return useQuery<SuggestedActivityDto[], AxiosError>({
     queryKey: ["suggested-activities"],
     queryFn: async () => {
