@@ -4,8 +4,8 @@
   "description": "Steply monorepo containing API (NestJS) and App (React Native)",
   "private": true,
   "workspaces": [
-    "steply-api",
-    "steply-app"
+    "api",
+    "mobiles"
   ],
   "scripts": {
     "dev": "pnpm --parallel --filter steply-api --filter steply-app dev",
