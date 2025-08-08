@@ -29,7 +29,8 @@ export class PrismaFullUserAdapter {
     fullUser.organizationId = prismaUser.organizationId;
     fullUser.ownedOrganization = prismaUser.ownedOrganization;
     fullUser.acceptsCommunication = prismaUser.acceptsCommunication;
-    fullUser.wantsAccountPersonalization = prismaUser.wantsAccountPersonalization;
+    fullUser.wantsAccountPersonalization =
+      prismaUser.wantsAccountPersonalization;
     fullUser.genderId = prismaUser.genderId;
     fullUser.goalId = prismaUser.goalId;
     fullUser.mainGoalLevelId = prismaUser.mainGoalLevelId;

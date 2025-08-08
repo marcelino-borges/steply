@@ -14,8 +14,8 @@ export abstract class ZodValidationFactory {
     const result = schema.safeParse(data);
 
     if (!result.success) {
-      const messages = result.error.errors.map(
-        (e) => `${e.path.join(".")}: ${e.message}`.trim(),
+      const messages = result.error.errors.map((e) =>
+        `${e.path.join(".")}: ${e.message}`.trim(),
       );
       throw new BadRequestException(messages.join("; "), {
         description: "ZodValidationFactory",

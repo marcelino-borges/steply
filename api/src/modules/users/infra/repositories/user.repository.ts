@@ -100,4 +100,45 @@ export class UserRepository implements BaseUserRepository {
 
     return adapted;
   }
+
+  async addActivities(userId: number, activityIds: number[]): Promise<void> {
+    const existingActivities = await this.db.userInterestActivity.findMany({
+      where: {
+        userId,
+        interestActivityId: {
+          in: activityIds,
+        },
+      },
+      select: {
+        interestActivityId: true,
+      },
+    });
+
+    const existingActivityIds = existingActivities.map(
+      (activity) => activity.interestActivityId,
+    );
+    const newActivityIds = activityIds.filter(
+      (id) => !existingActivityIds.includes(id),
+    );
+
+    if (newActivityIds.length > 0) {
+      await this.db.userInterestActivity.createMany({
+        data: newActivityIds.map((activityId) => ({
+          userId,
+          interestActivityId: activityId,
+        })),
+      });
+    }
+  }
+
+  async removeActivities(userId: number, activityIds: number[]): Promise<void> {
+    await this.db.userInterestActivity.deleteMany({
+      where: {
+        userId,
+        interestActivityId: {
+          in: activityIds,
+        },
+      },
+    });
+  }
 }

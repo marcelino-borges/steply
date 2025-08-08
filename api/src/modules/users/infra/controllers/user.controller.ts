@@ -3,6 +3,7 @@ import {
   Get,
   Post,
   Patch,
+  Delete,
   HttpStatus,
   BadRequestException,
   Param,
@@ -18,6 +19,10 @@ import {
 } from "@/core/application/schemas/user.schema";
 import { ZodValidationFactory } from "@/core/infra/factories/zod-validation.factory";
 import { joinChallengeSchema } from "@/core/application/schemas/user-challenge.schema";
+import {
+  userActivitiesBodySchema,
+  userActivityParamsSchema,
+} from "@/core/application/schemas/user-activities.schema";
 import { Lang, t } from "@/core/application/locales";
 import { EndpointDoc } from "@/core/infra/decorators/swagger-endpoint-doc.decorator";
 import { challengeIdParamsSchema } from "@/core/application/schemas/challenge.schema";
@@ -33,10 +38,16 @@ import { FindUserByIdUseCase } from "@/modules/users/application/use-cases/find-
 import { FindUserByEmailUseCase } from "@/modules/users/application/use-cases/find-by-email.use-case";
 import { UpdateUserUseCase } from "@/modules/users/application/use-cases/update-user.use-case";
 import { JoinChallengeUseCase } from "@/modules/users/application/use-cases/join-challenge.use-case";
+import { AddUserActivitiesUseCase } from "@/modules/users/application/use-cases/add-user-activities.use-case";
+import { RemoveUserActivitiesUseCase } from "@/modules/users/application/use-cases/remove-user-activities.use-case";
 import {
   JoinChallengeDto,
   UserChallengeResponseDto,
 } from "@/modules/users/application/dtos/user-challenge.dto";
+import {
+  UserActivitiesDto,
+  UserActivityParamsDto,
+} from "@/modules/users/application/dtos/user-activities.dto";
 import { ChallengeIdParamsDto } from "@/modules/challenges/application/dtos/challenge.dto";
 
 @Controller("users")
@@ -47,6 +58,8 @@ export class UserController {
     private readonly findUserByIdUseCase: FindUserByIdUseCase,
     private readonly findUserByEmailUseCase: FindUserByEmailUseCase,
     private readonly joinChallengeUseCase: JoinChallengeUseCase,
+    private readonly addUserActivitiesUseCase: AddUserActivitiesUseCase,
+    private readonly removeUserActivitiesUseCase: RemoveUserActivitiesUseCase,
   ) {}
 
   @Get(":userId")
@@ -195,6 +208,68 @@ export class UserController {
     return await this.joinChallengeUseCase.execute(
       parsedBody,
       parsedParams.challengeId,
+    );
+  }
+
+  @Post(":userId/activities")
+  @EndpointDoc({
+    operation: {
+      summary: "Add activities to user interests",
+    },
+    response: {
+      status: HttpStatus.NO_CONTENT,
+    },
+  })
+  async addUserActivities(
+    @Body() body: UserActivitiesDto,
+    @Param() params: UserActivityParamsDto,
+    @Headers("lang") lang: Lang = "en",
+  ) {
+    const { data: parsedBody } = ZodValidationFactory.parseOrThrow(
+      userActivitiesBodySchema,
+      body,
+      lang,
+    );
+    const { data: parsedParams } = ZodValidationFactory.parseOrThrow(
+      userActivityParamsSchema,
+      params,
+      lang,
+    );
+
+    await this.addUserActivitiesUseCase.execute(
+      parsedParams.userId,
+      parsedBody.activityIds,
+    );
+  }
+
+  @Delete(":userId/activities")
+  @EndpointDoc({
+    operation: {
+      summary: "Remove activities from user interests",
+    },
+    response: {
+      status: HttpStatus.NO_CONTENT,
+    },
+  })
+  async removeUserActivities(
+    @Body() body: UserActivitiesDto,
+    @Param() params: UserActivityParamsDto,
+    @Headers("lang") lang: Lang = "en",
+  ) {
+    const { data: parsedBody } = ZodValidationFactory.parseOrThrow(
+      userActivitiesBodySchema,
+      body,
+      lang,
+    );
+    const { data: parsedParams } = ZodValidationFactory.parseOrThrow(
+      userActivityParamsSchema,
+      params,
+      lang,
+    );
+
+    await this.removeUserActivitiesUseCase.execute(
+      parsedParams.userId,
+      parsedBody.activityIds,
     );
   }
 }

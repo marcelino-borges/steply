@@ -65,4 +65,9 @@ export const PRISMA_MOCK = {
   userMainGoalLevel: {
     findMany: jest.fn(),
   },
+  userInterestActivity: {
+    findMany: jest.fn(),
+    createMany: jest.fn(),
+    deleteMany: jest.fn(),
+  },
 };

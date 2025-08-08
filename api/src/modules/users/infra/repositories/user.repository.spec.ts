@@ -68,6 +68,10 @@ describe("UsersRepository", () => {
     userRepository = module.get(UserRepository);
   });
 
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   describe("findById", () => {
     it("should call the user database function 'findUnique' to get the user by id", async () => {
       const findUniqueSpy = jest.spyOn(prismaService.user, "findUnique");
@@ -168,6 +172,158 @@ describe("UsersRepository", () => {
       });
 
       expect(result).toEqual(userResponse);
+    });
+  });
+
+  describe("addActivities", () => {
+    const activityIds = [1, 2, 3];
+
+    it("should check for existing activities before adding", async () => {
+      const findManySpy = jest
+        .spyOn(prismaService.userInterestActivity, "findMany")
+        .mockResolvedValue([]);
+      const createManySpy = jest
+        .spyOn(prismaService.userInterestActivity, "createMany")
+        .mockResolvedValue({ count: 3 } as any);
+
+      await userRepository.addActivities(userId, activityIds);
+
+      expect(findManySpy).toHaveBeenCalledWith({
+        where: {
+          userId,
+          interestActivityId: {
+            in: activityIds,
+          },
+        },
+        select: {
+          interestActivityId: true,
+        },
+      });
+
+      expect(createManySpy).toHaveBeenCalledWith({
+        data: activityIds.map((activityId) => ({
+          userId,
+          interestActivityId: activityId,
+        })),
+      });
+    });
+
+    it("should not create activities that already exist", async () => {
+      const existingActivities = [
+        { interestActivityId: 1 },
+        { interestActivityId: 2 },
+      ];
+      jest
+        .spyOn(prismaService.userInterestActivity, "findMany")
+        .mockResolvedValue(existingActivities as any);
+      const createManySpy = jest
+        .spyOn(prismaService.userInterestActivity, "createMany")
+        .mockResolvedValue({ count: 1 } as any);
+
+      await userRepository.addActivities(userId, activityIds);
+
+      expect(createManySpy).toHaveBeenCalledWith({
+        data: [{ userId, interestActivityId: 3 }],
+      });
+    });
+
+    it("should not call createMany if all activities already exist", async () => {
+      const existingActivities = activityIds.map((id) => ({
+        interestActivityId: id,
+      }));
+      jest
+        .spyOn(prismaService.userInterestActivity, "findMany")
+        .mockResolvedValue(existingActivities as any);
+      const createManySpy = jest.spyOn(
+        prismaService.userInterestActivity,
+        "createMany",
+      );
+
+      await userRepository.addActivities(userId, activityIds);
+
+      expect(createManySpy).not.toHaveBeenCalled();
+    });
+
+    it("should handle empty activity array", async () => {
+      const findManySpy = jest
+        .spyOn(prismaService.userInterestActivity, "findMany")
+        .mockResolvedValue([]);
+      const createManySpy = jest.spyOn(
+        prismaService.userInterestActivity,
+        "createMany",
+      );
+
+      await userRepository.addActivities(userId, []);
+
+      expect(findManySpy).toHaveBeenCalledWith({
+        where: {
+          userId,
+          interestActivityId: {
+            in: [],
+          },
+        },
+        select: {
+          interestActivityId: true,
+        },
+      });
+
+      expect(createManySpy).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("removeActivities", () => {
+    const activityIds = [1, 2, 3];
+
+    it("should call deleteMany with correct parameters", async () => {
+      const deleteManySpy = jest
+        .spyOn(prismaService.userInterestActivity, "deleteMany")
+        .mockResolvedValue({ count: 3 } as any);
+
+      await userRepository.removeActivities(userId, activityIds);
+
+      expect(deleteManySpy).toHaveBeenCalledWith({
+        where: {
+          userId,
+          interestActivityId: {
+            in: activityIds,
+          },
+        },
+      });
+    });
+
+    it("should handle empty activity array", async () => {
+      const deleteManySpy = jest
+        .spyOn(prismaService.userInterestActivity, "deleteMany")
+        .mockResolvedValue({ count: 0 } as any);
+
+      await userRepository.removeActivities(userId, []);
+
+      expect(deleteManySpy).toHaveBeenCalledWith({
+        where: {
+          userId,
+          interestActivityId: {
+            in: [],
+          },
+        },
+      });
+    });
+
+    it("should handle single activity removal", async () => {
+      const singleActivityId = [5];
+      const deleteManySpy = jest
+        .spyOn(prismaService.userInterestActivity, "deleteMany")
+        .mockResolvedValue({ count: 1 } as any);
+
+      await userRepository.removeActivities(userId, singleActivityId);
+
+      expect(deleteManySpy).toHaveBeenCalledWith({
+        where: {
+          userId,
+          interestActivityId: {
+            in: singleActivityId,
+          },
+        },
+      });
     });
   });
 });

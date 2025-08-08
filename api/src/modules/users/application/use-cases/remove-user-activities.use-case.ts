@@ -1,14 +1,13 @@
 import { Inject, Injectable } from "@nestjs/common";
 
 import { UseCase } from "@/core/domain/abstractions/use-case.abstract";
-import { FullUserResponseDto } from "@/modules/users/application/dtos/user.dto";
 import { USER_REPOSITORY_TOKEN } from "@/modules/users/infra/repositories/user.repository";
 import { BaseUserRepository } from "@/modules/users/infra/abstractions/user-repository.interface";
 
 @Injectable()
-export class FindUserByEmailUseCase extends UseCase<
-  [string],
-  FullUserResponseDto | null
+export class RemoveUserActivitiesUseCase extends UseCase<
+  [number, number[]],
+  void
 > {
   constructor(
     @Inject(USER_REPOSITORY_TOKEN)
@@ -17,9 +16,7 @@ export class FindUserByEmailUseCase extends UseCase<
     super();
   }
 
-  async execute(email: string): Promise<FullUserResponseDto | null> {
-    const userFound = await this.userRepository.findByEmail!(email);
-
-    return userFound;
+  async execute(userId: number, activityIds: number[]): Promise<void> {
+    await this.userRepository.removeActivities!(userId, activityIds);
   }
 }

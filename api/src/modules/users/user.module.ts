@@ -11,6 +11,8 @@ import { FindUserByIdUseCase } from "@/modules/users/application/use-cases/find-
 import { FindUserByEmailUseCase } from "@/modules/users/application/use-cases/find-by-email.use-case";
 import { UpdateUserUseCase } from "@/modules/users/application/use-cases/update-user.use-case";
 import { JoinChallengeUseCase } from "@/modules/users/application/use-cases/join-challenge.use-case";
+import { AddUserActivitiesUseCase } from "@/modules/users/application/use-cases/add-user-activities.use-case";
+import { RemoveUserActivitiesUseCase } from "@/modules/users/application/use-cases/remove-user-activities.use-case";
 import {
   USER_CHALLENGE_REPOSITORY_TOKEN,
   UserChallengeRepository,
@@ -36,6 +38,8 @@ import { FindAllUserChallengesUseCase } from "./application/use-cases/find-all-c
     FindUserByEmailUseCase,
     JoinChallengeUseCase,
     UpdateUserUseCase,
+    AddUserActivitiesUseCase,
+    RemoveUserActivitiesUseCase,
   ],
 })
 export class UserModule {}

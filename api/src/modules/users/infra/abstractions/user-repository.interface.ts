@@ -3,4 +3,6 @@ import { FullUserResponseDto } from "@/modules/users/application/dtos/user.dto";
 
 export interface BaseUserRepository extends Repository<FullUserResponseDto> {
   findByEmail?(email: string): Promise<FullUserResponseDto | null>;
+  addActivities?(userId: number, activityIds: number[]): Promise<void>;
+  removeActivities?(userId: number, activityIds: number[]): Promise<void>;
 }

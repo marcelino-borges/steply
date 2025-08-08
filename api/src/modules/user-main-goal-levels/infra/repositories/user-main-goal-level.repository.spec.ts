@@ -19,7 +19,9 @@ describe("UserMainGoalLevelRepository", () => {
       ],
     }).compile();
 
-    repository = module.get<UserMainGoalLevelRepository>(UserMainGoalLevelRepository);
+    repository = module.get<UserMainGoalLevelRepository>(
+      UserMainGoalLevelRepository,
+    );
     prismaService = module.get<PrismaService>(PrismaService);
   });
 
@@ -30,7 +32,10 @@ describe("UserMainGoalLevelRepository", () => {
 
   describe("findAll", () => {
     it("should call prisma userMainGoalLevel findMany with correct parameters", async () => {
-      const findManySpy = jest.spyOn(prismaService.userMainGoalLevel, "findMany");
+      const findManySpy = jest.spyOn(
+        prismaService.userMainGoalLevel,
+        "findMany",
+      );
 
       await repository.findAll();
 

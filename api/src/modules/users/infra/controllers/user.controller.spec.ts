@@ -6,6 +6,8 @@ import { UpdateUserUseCase } from "../../application/use-cases/update-user.use-c
 import { FindUserByIdUseCase } from "../../application/use-cases/find-by-id.use-case";
 import { FindUserByEmailUseCase } from "../../application/use-cases/find-by-email.use-case";
 import { JoinChallengeUseCase } from "../../application/use-cases/join-challenge.use-case";
+import { AddUserActivitiesUseCase } from "../../application/use-cases/add-user-activities.use-case";
+import { RemoveUserActivitiesUseCase } from "../../application/use-cases/remove-user-activities.use-case";
 import { Test, TestingModule } from "@nestjs/testing";
 import {
   EXISTING_FULL_USER,
@@ -22,6 +24,8 @@ describe("UserController", () => {
   let findByIdUseCase: FindUserByIdUseCase;
   let findByEmailUseCase: FindUserByEmailUseCase;
   let joinMethodUseCase: JoinChallengeUseCase;
+  let addUserActivitiesUseCase: AddUserActivitiesUseCase;
+  let removeUserActivitiesUseCase: RemoveUserActivitiesUseCase;
 
   const CreateUserUseCaseMock = {
     execute: jest.fn(),
@@ -40,6 +44,14 @@ describe("UserController", () => {
   };
 
   const JoinChallengeUseCaseMock = {
+    execute: jest.fn(),
+  };
+
+  const AddUserActivitiesUseCaseMock = {
+    execute: jest.fn(),
+  };
+
+  const RemoveUserActivitiesUseCaseMock = {
     execute: jest.fn(),
   };
 
@@ -67,6 +79,14 @@ describe("UserController", () => {
           provide: JoinChallengeUseCase,
           useValue: JoinChallengeUseCaseMock,
         },
+        {
+          provide: AddUserActivitiesUseCase,
+          useValue: AddUserActivitiesUseCaseMock,
+        },
+        {
+          provide: RemoveUserActivitiesUseCase,
+          useValue: RemoveUserActivitiesUseCaseMock,
+        },
       ],
     }).compile();
 
@@ -76,6 +96,8 @@ describe("UserController", () => {
     findByIdUseCase = module.get(FindUserByIdUseCase);
     findByEmailUseCase = module.get(FindUserByEmailUseCase);
     joinMethodUseCase = module.get(JoinChallengeUseCase);
+    addUserActivitiesUseCase = module.get(AddUserActivitiesUseCase);
+    removeUserActivitiesUseCase = module.get(RemoveUserActivitiesUseCase);
   });
 
   afterEach(() => {
@@ -217,7 +239,7 @@ describe("UserController", () => {
         .mockResolvedValue(EXISTING_FULL_USER);
 
       const { id, createdAt, updatedAt, ...userUpdateData } = EXISTING_USER;
-      
+
       const result = await controller.update(userUpdateData, {
         userId: EXISTING_USER.id,
       });
@@ -286,6 +308,140 @@ describe("UserController", () => {
           );
         }
       });
+    });
+  });
+
+  describe("addUserActivities", () => {
+    const activityIds = [1, 2, 3];
+
+    it("should call the execute method from AddUserActivitiesUseCase instance", async () => {
+      jest.spyOn(addUserActivitiesUseCase, "execute").mockResolvedValue();
+
+      await controller.addUserActivities({ activityIds }, { userId });
+
+      expect(addUserActivitiesUseCase.execute).toHaveBeenCalledWith(
+        userId,
+        activityIds,
+      );
+    });
+
+    it("should handle empty activity array", async () => {
+      jest.spyOn(addUserActivitiesUseCase, "execute").mockResolvedValue();
+
+      await controller.addUserActivities({ activityIds: [] }, { userId });
+
+      expect(addUserActivitiesUseCase.execute).toHaveBeenCalledWith(userId, []);
+    });
+
+    it("should throw a BadRequestException if activityIds is not an array", async () => {
+      try {
+        await controller.addUserActivities(
+          { activityIds: "not-an-array" } as any,
+          { userId },
+        );
+      } catch (error) {
+        expect(error).toBeInstanceOf(BadRequestException);
+        expect((error as BadRequestException).message).toMatch(/activityIds/i);
+      }
+    });
+
+    it("should throw a BadRequestException if activityIds contains non-numeric values", async () => {
+      try {
+        await controller.addUserActivities(
+          { activityIds: [1, "two", 3] } as any,
+          { userId },
+        );
+      } catch (error) {
+        expect(error).toBeInstanceOf(BadRequestException);
+        expect((error as BadRequestException).message).toMatch(/activityIds/i);
+      }
+    });
+
+    it("should throw a BadRequestException if userId is invalid", async () => {
+      try {
+        await controller.addUserActivities({ activityIds }, {
+          userId: "invalid",
+        } as any);
+      } catch (error) {
+        expect(error).toBeInstanceOf(BadRequestException);
+        expect((error as BadRequestException).message).toMatch(/userId/i);
+      }
+    });
+  });
+
+  describe("removeUserActivities", () => {
+    const activityIds = [1, 2, 3];
+
+    it("should call the execute method from RemoveUserActivitiesUseCase instance", async () => {
+      jest.spyOn(removeUserActivitiesUseCase, "execute").mockResolvedValue();
+
+      await controller.removeUserActivities({ activityIds }, { userId });
+
+      expect(removeUserActivitiesUseCase.execute).toHaveBeenCalledWith(
+        userId,
+        activityIds,
+      );
+    });
+
+    it("should handle empty activity array", async () => {
+      jest.spyOn(removeUserActivitiesUseCase, "execute").mockResolvedValue();
+
+      await controller.removeUserActivities({ activityIds: [] }, { userId });
+
+      expect(removeUserActivitiesUseCase.execute).toHaveBeenCalledWith(
+        userId,
+        [],
+      );
+    });
+
+    it("should handle single activity removal", async () => {
+      jest.spyOn(removeUserActivitiesUseCase, "execute").mockResolvedValue();
+      const singleActivity = [5];
+
+      await controller.removeUserActivities(
+        { activityIds: singleActivity },
+        { userId },
+      );
+
+      expect(removeUserActivitiesUseCase.execute).toHaveBeenCalledWith(
+        userId,
+        singleActivity,
+      );
+    });
+
+    it("should throw a BadRequestException if activityIds is not an array", async () => {
+      try {
+        await controller.removeUserActivities(
+          { activityIds: "not-an-array" } as any,
+          { userId },
+        );
+      } catch (error) {
+        expect(error).toBeInstanceOf(BadRequestException);
+        expect((error as BadRequestException).message).toMatch(/activityIds/i);
+      }
+    });
+
+    it("should throw a BadRequestException if activityIds contains non-numeric values", async () => {
+      try {
+        await controller.removeUserActivities(
+          { activityIds: [1, "two", 3] } as any,
+          { userId },
+        );
+      } catch (error) {
+        expect(error).toBeInstanceOf(BadRequestException);
+        expect((error as BadRequestException).message).toMatch(/activityIds/i);
+      }
+    });
+
+    it("should throw a BadRequestException if userId is invalid", async () => {
+      try {
+        await controller.removeUserActivities({ activityIds }, {
+          userId: "invalid",
+        } as any);
+      } catch (error) {
+        expect(error).toBeInstanceOf(BadRequestException);
+        expect((error as BadRequestException).message).toMatch(/userId/i);
+      }
     });
   });
 });

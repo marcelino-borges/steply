@@ -22,8 +22,13 @@ describe("UserMainGoalLevelController", () => {
       ],
     }).compile();
 
-    controller = module.get<UserMainGoalLevelController>(UserMainGoalLevelController);
-    findAllUserMainGoalLevelsUseCase = module.get<FindAllUserMainGoalLevelsUseCase>(FindAllUserMainGoalLevelsUseCase);
+    controller = module.get<UserMainGoalLevelController>(
+      UserMainGoalLevelController,
+    );
+    findAllUserMainGoalLevelsUseCase =
+      module.get<FindAllUserMainGoalLevelsUseCase>(
+        FindAllUserMainGoalLevelsUseCase,
+      );
   });
 
   afterEach(() => {

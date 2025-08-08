@@ -2,7 +2,10 @@ import { ApiProperty } from "@nestjs/swagger";
 import { z } from "zod";
 
 import { DatabaseRecord } from "@/core/domain/abstractions/database-record.interface";
-import { userIdParamsSchema, userEmailParamsSchema } from "@/core/application/schemas/user.schema";
+import {
+  userIdParamsSchema,
+  userEmailParamsSchema,
+} from "@/core/application/schemas/user.schema";
 import { User } from "@/core/domain/entities/user.entity";
 import { ExpandableCountry } from "@/core/domain/abstractions/expandable-country.interface";
 import { CountryDto } from "@/core/application/dtos/country.dto";
@@ -92,4 +95,6 @@ export type UpdateUserRequestDto = Partial<NonExistentUserDto>;
 
 export type UserIdParamsDto = z.infer<ReturnType<typeof userIdParamsSchema>>;
 
-export type UserEmailParamsDto = z.infer<ReturnType<typeof userEmailParamsSchema>>;
+export type UserEmailParamsDto = z.infer<
+  ReturnType<typeof userEmailParamsSchema>
+>;
