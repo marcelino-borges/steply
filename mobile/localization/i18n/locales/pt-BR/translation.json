@@ -37,6 +37,7 @@
     "didNotReceiveOtp": "Não recebeu o código?"
   },
   "errors": {
+    "generic": "Ocorreu um erro. Por favor, tente novamente.",
     "clerk": {
       "formIdentifierNotFound": "Credenciais inválidas",
       "pendingStep": "Detectamos que há alguma pendência no seu cadastro, entre em contato com nosso suporte",
@@ -70,7 +71,25 @@
     "deleteError": "Erro ao remover arquivo"
   },
   "auth": {
-    "signupError": "Erro ao criar conta"
+    "signupError": "Erro ao criar conta",
+    "email": "E-mail",
+    "forgotPassword": {
+      "link": "Esqueceu sua senha?",
+      "title": "Recuperar senha",
+      "resetPasswordTitle": "Redefinir senha",
+      "subtitle": "Digite seu e-mail para receber um código de verificação",
+      "enterCodeAndNewPassword": "Digite o código recebido e sua nova senha",
+      "enterNewPassword": "Digite sua nova senha",
+      "sendResetEmail": "Enviar código",
+      "verificationCode": "Código de verificação",
+      "newPassword": "Nova senha",
+      "resetPassword": "Redefinir senha",
+      "resendCode": "Reenviar código",
+      "rememberPassword": "Lembrou sua senha?",
+      "backToSignIn": "Voltar ao login",
+      "codeSent": "Código enviado com sucesso!",
+      "passwordResetSuccess": "Senha redefinida com sucesso!"
+    }
   },
   "user": {
     "updateError": "Erro ao atualizar usuário",

@@ -4,7 +4,6 @@ import { useAuth } from "@clerk/clerk-expo";
 
 import { COLORS } from "@/constants/colors";
 import { useUser } from "@/store/user";
-import { UserRegistrationStep } from "@/types/api/user";
 import TabBarLabel from "@/components/tab-bar";
 import Feather from "@expo/vector-icons/Feather";
 

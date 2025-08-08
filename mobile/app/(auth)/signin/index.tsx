@@ -108,15 +108,29 @@ export default function SignInScreen() {
             placeholder="E-mail"
             error={errors.email?.message}
           />
-          <TextfieldFormControlled
-            fullWidth
-            required
-            control={control}
-            placeholder="Senha"
-            type="password"
-            name="password"
-            error={errors.password?.message}
-          />
+          <View>
+            <TextfieldFormControlled
+              fullWidth
+              required
+              control={control}
+              placeholder="Senha"
+              type="password"
+              name="password"
+              error={errors.password?.message}
+            />
+            <Link
+              href="/(auth)/forgot-password"
+              style={authStyles.forgotPasswordLink}
+            >
+              <Typography
+                color={COLORS.primary}
+                weight={FONT_WEIGHT[500]}
+                size="sm"
+              >
+                {t("auth.forgotPassword.link")}
+              </Typography>
+            </Link>
+          </View>
         </View>
         <View style={authStyles.buttonsView}>
           <Button
@@ -139,9 +153,13 @@ export default function SignInScreen() {
         </View>
 
         <View style={authStyles.bottomRedirect}>
-          <Typography>Não possui conta?</Typography>
+          <Typography size="sm">Não possui conta?</Typography>
           <Link href="/signup">
-            <Typography color={COLORS.primary} weight={FONT_WEIGHT[600]}>
+            <Typography
+              color={COLORS.primary}
+              weight={FONT_WEIGHT[600]}
+              size="sm"
+            >
               Cadastre-se
             </Typography>
           </Link>
@@ -178,5 +196,9 @@ const authStyles = StyleSheet.create({
   buttonsView: {
     gap: SPACING[4],
     width: "100%",
+  },
+  forgotPasswordLink: {
+    alignSelf: "flex-end",
+    marginTop: SPACING[2],
   },
 });
