@@ -140,7 +140,7 @@ export default function ForgotPasswordScreen() {
             {t("auth.forgotPassword.resetPasswordTitle")}
           </Typography>
 
-          <Typography color={COLORS.contentGray} style={styles.subtitle}>
+          <Typography color={COLORS.gray} style={styles.subtitle}>
             {t("auth.forgotPassword.enterNewPassword")}
           </Typography>
 
@@ -194,7 +194,7 @@ export default function ForgotPasswordScreen() {
           {t("auth.forgotPassword.title")}
         </Typography>
 
-        <Typography color={COLORS.contentGray} style={styles.subtitle}>
+        <Typography color={COLORS.gray} style={styles.subtitle}>
           {t("auth.forgotPassword.subtitle")}
         </Typography>
 
