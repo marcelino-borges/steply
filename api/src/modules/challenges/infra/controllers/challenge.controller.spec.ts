@@ -213,8 +213,17 @@ describe("ChallengeController", () => {
         } as any);
       } catch (error) {
         expect(error).toBeInstanceOf(BadRequestException);
-        expect((error as BadRequestException).message).toBe(
+        expect((error as BadRequestException).message).toContain(
           "joinMethod: Required field",
+        );
+        expect((error as BadRequestException).message).toContain(
+          "checkInEndOfDay: Required field",
+        );
+        expect((error as BadRequestException).message).toContain(
+          "multipleCheckIns: Required field",
+        );
+        expect((error as BadRequestException).message).toContain(
+          "checkInTypeCode: Invalid field",
         );
       }
     });
@@ -265,8 +274,17 @@ describe("ChallengeController", () => {
         } as any);
       } catch (error) {
         expect(error).toBeInstanceOf(BadRequestException);
-        expect((error as BadRequestException).message).toBe(
+        expect((error as BadRequestException).message).toContain(
           "joinMethod: Required field",
+        );
+        expect((error as BadRequestException).message).toContain(
+          "checkInEndOfDay: Required field",
+        );
+        expect((error as BadRequestException).message).toContain(
+          "multipleCheckIns: Required field",
+        );
+        expect((error as BadRequestException).message).toContain(
+          "checkInTypeCode: Invalid field",
         );
       }
     });

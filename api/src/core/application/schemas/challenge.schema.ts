@@ -22,6 +22,9 @@ export const createChallengeSchema = (lang: Lang) =>
     rewardId: intSchema(lang).optional(),
     interactionIncrement: intSchema(lang).optional().default(1),
     tags: z.array(stringSchema(lang)).default([]),
+    checkInEndOfDay: booleanSchema(lang),
+    multipleCheckIns: booleanSchema(lang),
+    checkInTypeCode: intSchema(lang),
   });
 
 export const updateChallengeSchema = (lang: Lang) =>

@@ -12,6 +12,7 @@ export const CHALLENGE_INCLUDES = {
   },
   rankTypes: true,
   activities: true,
+  checkInType: true,
 };
 
 export const DEFAULT_PAGE_NUMBER = 1;

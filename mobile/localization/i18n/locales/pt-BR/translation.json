@@ -65,7 +65,9 @@
     "createChallenge": "Criar desafio",
     "createYourChallenge": "Criar seu desafio",
     "createQuickly": "Crie seu desafio de forma rápida",
-    "challengeCreationBriefing": "Defina os detalhes, adicione atividades, defina as regras e convide participantes para realizar o desafio."
+    "challengeCreationBriefing": "Defina os detalhes, adicione atividades, defina as regras e convide participantes para realizar o desafio.",
+    "howActivitiesWillBeDistributed": "Como as atividades serão distribuídas?",
+    "howCheckInWillBeValidated": "Como o check-in será validado?"
   },
   "files": {
     "invalidFile": "Arquivo inválido",

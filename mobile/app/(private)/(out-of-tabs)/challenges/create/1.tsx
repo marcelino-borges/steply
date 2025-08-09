@@ -38,20 +38,11 @@ const CreateChallenge1: React.FC = () => {
 
   const [openStartDatePicker, setOpenStartDatePicker] = useState(false);
   const [openEndDatePicker, setOpenEndDatePicker] = useState(false);
-  const [tags, setTags] = useState<string[]>([]);
 
-  const {
-    setChallenge,
-    challenge,
-    isPending: isCreatingChallange,
-    banner,
-    setBanner,
-  } = useCreateChallenge();
+  const { setChallenge, challenge, banner, setBanner } = useCreateChallenge();
 
   const hasFilledForm =
-    challenge.title.length > 4 && challenge.description.length > 10;
-
-  const isLoadingScreen = isCreatingChallange;
+    challenge.title.length > 4 && challenge.description.length > 4;
 
   const DaysBox = useCallback(() => {
     const daysDiff = differenceInCalendarDays(
@@ -124,13 +115,21 @@ const CreateChallenge1: React.FC = () => {
   };
 
   const handleAddTag = (tag: string) => {
-    const updatedTags = [...tags, tag];
-    setTags(updatedTags);
+    const updatedTags = [...challenge.tags, tag];
+    setChallenge({
+      ...challenge,
+      tags: updatedTags,
+    });
   };
 
   const handleRemoveTag = (tag: string) => {
-    const updatedTags = tags.filter((existingTag) => existingTag !== tag);
-    setTags(updatedTags);
+    const updatedTags = challenge.tags.filter(
+      (existingTag) => existingTag !== tag
+    );
+    setChallenge({
+      ...challenge,
+      tags: updatedTags,
+    });
   };
 
   return (
@@ -146,7 +145,6 @@ const CreateChallenge1: React.FC = () => {
           <TextfieldFree
             fullWidth
             required
-            disabled={isLoadingScreen}
             placeholder={t("challenge.title")}
             value={challenge.title}
             onChangeText={(title: string) =>
@@ -156,7 +154,6 @@ const CreateChallenge1: React.FC = () => {
           <TextfieldFree
             fullWidth
             required
-            disabled={isLoadingScreen}
             placeholder={t("challenge.description")}
             value={challenge.description}
             onChangeText={(description: string) =>
@@ -164,7 +161,7 @@ const CreateChallenge1: React.FC = () => {
             }
           />
           <TagsField
-            tags={tags}
+            tags={challenge.tags}
             onAddTag={handleAddTag}
             onRemoveTag={handleRemoveTag}
             placeholder="Hashtags"
@@ -172,13 +169,12 @@ const CreateChallenge1: React.FC = () => {
           <View
             style={styles.datePickerInput}
             onTouchEnd={() => {
-              if (!isCreatingChallange) setOpenStartDatePicker(true);
+              setOpenStartDatePicker(true);
             }}
           >
             <TextfieldFree
               required
               readOnly
-              disabled={isLoadingScreen}
               placeholder={t("challenge.startAt")}
               value={formatDateByLocale(
                 getLocales()[0].languageCode ?? "en",
@@ -199,13 +195,12 @@ const CreateChallenge1: React.FC = () => {
           <View
             style={styles.datePickerInput}
             onTouchEnd={() => {
-              if (!isCreatingChallange) setOpenEndDatePicker(true);
+              setOpenEndDatePicker(true);
             }}
           >
             <TextfieldFree
               required
               readOnly
-              disabled={isLoadingScreen}
               placeholder={t("challenge.endAt")}
               value={formatDateByLocale(
                 getLocales()[0].languageCode ?? "en",
@@ -233,7 +228,6 @@ const CreateChallenge1: React.FC = () => {
             </Typography>
             {!banner?.uri.length ? (
               <AttachButton
-                disabled={isLoadingScreen}
                 leftIcon={<Feather name="upload" size={24} />}
                 onPress={pickBanner}
               >
@@ -250,14 +244,8 @@ const CreateChallenge1: React.FC = () => {
                     {t("challenge.selectedBanner")}
                   </Typography>
                 </View>
-                <Pressable onPress={removeBanner} disabled={isLoadingScreen}>
-                  <Feather
-                    name="trash-2"
-                    size={24}
-                    color={
-                      isLoadingScreen ? COLORS.mutedForeground : COLORS.error
-                    }
-                  />
+                <Pressable onPress={removeBanner}>
+                  <Feather name="trash-2" size={24} color={COLORS.error} />
                 </Pressable>
               </View>
             )}
@@ -265,11 +253,7 @@ const CreateChallenge1: React.FC = () => {
         </View>
       </ScrollView>
       <View style={styles.buttonView}>
-        <Button
-          loading={isLoadingScreen}
-          disabled={!hasFilledForm}
-          onPress={handleContinue}
-        >
+        <Button disabled={!hasFilledForm} onPress={handleContinue}>
           {t("common.next")}
         </Button>
       </View>

@@ -147,16 +147,35 @@ model Challenge {
   joinMethod           JoinMethod
   interactionIncrement Int        @default(1)
   tags                 String[]   @default([])
+  checkInEndOfDay      Boolean
+  multipleCheckIns     Boolean
 
-  organizationId Int
+  organizationId  Int
+  checkInTypeCode Int
 
-  organization    Organization        @relation(fields: [organizationId], references: [id])
+  organization    Organization         @relation(fields: [organizationId], references: [id])
+  checkInType     ChallengeCheckInType @relation(fields: [checkInTypeCode], references: [code])
   usersChallenges UserChallenge[]
   rankTypes       RankType[]
   activities      ChallengeActivity[]
   reward          Reward?
 
   @@map("challenges")
+}
+
+model ChallengeCheckInType {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  lang        String
+  name        String
+  description String
+  code        Int    @unique
+
+  challenges Challenge[]
+
+  @@map("challenges_checkin_types")
 }
 
 model UserChallenge {

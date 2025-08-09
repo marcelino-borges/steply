@@ -8,6 +8,7 @@ import { RankTypeDto } from "@/modules/challenges/application/dtos/rank-type.dto
 import { ActivityDto } from "@/modules/challenges/application/dtos/activity.dto";
 import { UserChallengeInteraction } from "@/core/domain/entities/user-challenge-interaction.entity";
 import { DatabaseId } from "@/core/domain/abstractions/database-id.interface";
+import { ChallengeCheckInTypeDto } from "@/modules/challenges/application/dtos/challenge-checkin-type.dto";
 
 export class NonExistingChallengeDto {
   @ApiProperty()
@@ -32,6 +33,12 @@ export class NonExistingChallengeDto {
   interactionIncrement: number;
   @ApiProperty({ type: [String] })
   tags: string[];
+  @ApiProperty()
+  checkInEndOfDay: boolean;
+  @ApiProperty()
+  multipleCheckIns: boolean;
+  @ApiProperty()
+  checkInTypeCode: number;
 }
 
 interface ChallengeExpandableFieldsDto {
@@ -39,6 +46,7 @@ interface ChallengeExpandableFieldsDto {
   reward: RewardDto | null;
   rankTypes: RankTypeDto[];
   activities: ActivityDto[];
+  checkInType: ChallengeCheckInTypeDto | null;
 }
 
 export class ChallengeDto extends Challenge implements DatabaseRecord {
@@ -67,6 +75,8 @@ export class FullChallengeDto
   rankTypes: RankTypeDto[];
   @ApiProperty()
   activities: ActivityDto[];
+  @ApiProperty()
+  checkInType: ChallengeCheckInTypeDto | null;
 }
 
 export class ChallengeIdParamsDto {

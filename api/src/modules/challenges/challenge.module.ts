@@ -38,6 +38,12 @@ import { DeleteRewardUseCase } from "@/modules/challenges/application/use-cases/
 import { FindAllRewardsUseCase } from "@/modules/challenges/application/use-cases/reward/find-all-rewards.use-case";
 import { UpdateRewardUseCase } from "@/modules/challenges/application/use-cases/reward/update-reward.use-case";
 import { UserInteractChallengeUseCase } from "@/modules/challenges/application/use-cases/challenge/user-interact-challenge.use-case";
+import {
+  CHALLENGE_CHECKIN_TYPE_REPOSITORY_TOKEN,
+  ChallengeCheckInTypeRepository,
+} from "@/modules/challenges/infra/repositories/challenge-checkin-type.repository";
+import { ChallengeCheckInTypeController } from "@/modules/challenges/infra/controllers/challenge-checkin-type.controller";
+import { FindAllChallengeCheckInTypesUseCase } from "@/modules/challenges/application/use-cases/challenge-checkin-type/find-all-challenge-checkin-types.use-case";
 
 @Module({
   imports: [DatabaseModule],
@@ -58,6 +64,10 @@ import { UserInteractChallengeUseCase } from "@/modules/challenges/application/u
     {
       provide: ACTIVITY_REPOSITORY_TOKEN,
       useClass: ActivityRepository,
+    },
+    {
+      provide: CHALLENGE_CHECKIN_TYPE_REPOSITORY_TOKEN,
+      useClass: ChallengeCheckInTypeRepository,
     },
     // #endregion
 
@@ -82,6 +92,8 @@ import { UserInteractChallengeUseCase } from "@/modules/challenges/application/u
     DeleteRewardUseCase,
     FindAllRewardsUseCase,
     UpdateRewardUseCase,
+
+    FindAllChallengeCheckInTypesUseCase,
     // #endregion
   ],
   controllers: [
@@ -89,6 +101,7 @@ import { UserInteractChallengeUseCase } from "@/modules/challenges/application/u
     ActivityController,
     RankTypeController,
     RewardController,
+    ChallengeCheckInTypeController,
   ],
 })
 export class ChallengeModule {}

@@ -48,10 +48,14 @@ export default function RadioButton({
       onPress={onSelect}
       activeOpacity={0.5}
     >
-      <View>
-        <Typography>{label}</Typography>
+      <View style={radioButtonStyles.textContainer}>
+        <Typography numberOfLines={0} weight="medium">
+          {label}
+        </Typography>
         {!!subLabel?.length && (
-          <Typography color={COLORS.gray}>{subLabel}</Typography>
+          <Typography color={COLORS.gray} numberOfLines={0}>
+            {subLabel}
+          </Typography>
         )}
       </View>
       <View

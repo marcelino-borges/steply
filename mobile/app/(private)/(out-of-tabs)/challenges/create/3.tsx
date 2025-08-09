@@ -42,10 +42,10 @@ const CreateChallenge3: React.FC = () => {
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <SteppedHeader
-          title={t("challenge.details")}
+          title={t("challenge.activities")}
           foreground={COLORS.contentBlack}
           totalSteps={6}
-          step={1}
+          step={3}
         />
         <View style={styles.content}></View>
       </ScrollView>

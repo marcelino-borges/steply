@@ -1,0 +1,8 @@
+No tests found, exiting with code 1
+Run with `--passWithNoTests` to exit with code 0
+In /home/marcelino-borges/Projects/Personal/steply/api
+  700 files checked.
+  testMatch:  - 0 matches
+  testPathIgnorePatterns: /node_modules/, /dist/, /build/, /test/helpers/, /__mocks__/, /locales/, /src/main.ts, /.*\.dto\.ts$, /.*\.entity\.ts$, /.*\.schema\.ts$, /.*\.abstract\.ts$, /.*\.module\.ts$, /constants/, /prisma/, /coverage/, /.postman/, /docker/, /test/, jest.config.ts - 176 matches
+  testRegex: .*\.spec\.ts$ - 74 matches
+Pattern: 2 - 0 matches

@@ -95,6 +95,9 @@ describe("PrismaFullUserAdapter", () => {
           joinMethod: ORMJoinMethod.APPROVAL,
           organizationId: 1,
           tags: ["test", "user-adapter"] as string[],
+          checkInEndOfDay: false,
+          multipleCheckIns: false,
+          checkInTypeCode: 1,
           reward: {
             challengeId: 1,
             createdAt: new Date(),

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { View, StyleSheet, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
@@ -10,6 +10,10 @@ import { COLORS } from "@/constants/colors";
 import { SPACING } from "@/constants/spacings";
 import Button from "@/components/button";
 import { useCreateChallenge } from "@/hooks/challenges/create";
+import { useGetChallengeCheckInTypes } from "@/hooks/challenges";
+import Typography from "@/components/typography";
+import RadioGroup from "@/components/radio-group";
+import Switch from "@/components/switch";
 
 const CreateChallenge2: React.FC = () => {
   const router = useRouter();
@@ -20,11 +24,7 @@ const CreateChallenge2: React.FC = () => {
     challenge,
     isPending: isCreatingChallange,
   } = useCreateChallenge();
-
-  const hasFilledForm =
-    challenge.title.length > 4 && challenge.description.length > 10;
-
-  const isLoadingScreen = isCreatingChallange;
+  const { data: checkInTypes } = useGetChallengeCheckInTypes();
 
   const handleContinue = async () => {
     if (challenge.startAt.getTime() > challenge.endAt.getTime()) {
@@ -38,25 +38,66 @@ const CreateChallenge2: React.FC = () => {
     router.push("/(private)/(out-of-tabs)/challenges/create/3");
   };
 
+  const checkInTypesOptions = useMemo(
+    () =>
+      checkInTypes?.map((type) => ({
+        value: type.code.toString(),
+        label: type.name,
+        subLabel: type.description,
+      })) ?? [],
+    [checkInTypes]
+  );
+  console.log("----- checkInTypesOptions", checkInTypesOptions);
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <SteppedHeader
-          title={t("challenge.details")}
+          title={t("challenge.checkinFormat")}
           foreground={COLORS.contentBlack}
           totalSteps={6}
-          step={1}
+          step={2}
         />
-        <View style={styles.content}></View>
+        <View style={styles.content}>
+          <Typography>
+            <Typography>
+              {t("challenge.howActivitiesWillBeDistributed")}
+            </Typography>
+            <Typography color={COLORS.error}>*</Typography>
+          </Typography>
+          <RadioGroup
+            items={checkInTypesOptions}
+            onSelect={(value: string) => {
+              setChallenge({
+                ...challenge,
+                checkInTypeCode: Number(value),
+              });
+            }}
+            selectedValue={challenge.checkInTypeCode.toString()}
+            fullWidth
+            variant="outline"
+          />
+          <Typography>
+            <Typography>{t("challenge.howCheckInWillBeValidated")}</Typography>
+            <Typography color={COLORS.error}>*</Typography>
+          </Typography>
+          <Switch
+            checked={challenge.checkInEndOfDay}
+            onChange={(newState: boolean) => {
+              setChallenge({
+                ...challenge,
+                checkInEndOfDay: newState,
+              });
+            }}
+            label={"Para completar o dia"}
+            subLabel={
+              "Os participantes precisão concluir todas as atividades do dia para fazer o check-in. Se desmarcado, completar uma atividade já será suficiente para o check-in."
+            }
+          />
+        </View>
       </ScrollView>
       <View style={styles.buttonView}>
-        <Button
-          loading={isLoadingScreen}
-          disabled={!hasFilledForm}
-          onPress={handleContinue}
-        >
-          {t("common.next")}
-        </Button>
+        <Button onPress={handleContinue}>{t("common.next")}</Button>
       </View>
     </SafeAreaView>
   );
@@ -72,7 +113,7 @@ const styles = StyleSheet.create({
   content: {
     display: "flex",
     flexDirection: "column",
-    gap: SPACING[10],
+    gap: SPACING[8],
     paddingHorizontal: SPACING.md,
     paddingTop: SPACING[10],
   },

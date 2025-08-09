@@ -10,6 +10,12 @@ export const radioButtonStyles = StyleSheet.create({
     alignItems: "center",
     width: "auto",
     alignSelf: "flex-start",
+    maxWidth: "100%",
+  },
+  textContainer: {
+    flex: 1,
+    flexGrow: 1,
+    maxWidth: "90%",
   },
   outerCircle: {
     borderRadius: 9999,
@@ -19,6 +25,7 @@ export const radioButtonStyles = StyleSheet.create({
     height: RADIO_BUTTON_SIZE,
     justifyContent: "center",
     alignItems: "center",
+    flexShrink: 1,
   },
   innerCircle: {
     backgroundColor: COLORS.primary,

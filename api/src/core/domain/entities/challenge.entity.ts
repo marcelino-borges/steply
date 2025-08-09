@@ -21,6 +21,12 @@ export class Challenge {
   public readonly interactionIncrement: number;
   @ApiProperty({ type: [String] })
   public readonly tags: string[];
+  @ApiProperty()
+  public readonly checkInEndOfDay: boolean;
+  @ApiProperty()
+  public readonly multipleCheckIns: boolean;
+  @ApiProperty()
+  public readonly checkInTypeCode: number;
 }
 
 export enum JoinMethod {

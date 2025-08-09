@@ -16,6 +16,9 @@ export const NON_EXISTING_CHALLENGE_MOCK = {
   joinMethod: JoinMethod.OPEN,
   bannerUrl: "http://url.com",
   tags: ["fitness", "health", "challenge"] as string[],
+  checkInEndOfDay: false,
+  multipleCheckIns: false,
+  checkInTypeCode: 1,
 };
 
 export const EXISTING_CHALLENGE_MOCK: ChallengeDto = {
@@ -48,6 +51,15 @@ export const EXISTING_FULL_CHALLENGE_MOCK: FullChallengeDto = {
   },
   rankTypes: [],
   activities: [],
+  checkInType: {
+    id: 1,
+    code: 1,
+    name: "Daily Check-in",
+    description: "Check-in once per day",
+    lang: "en",
+    createdAt: new Date(2005, 5, 22),
+    updatedAt: new Date(2005, 5, 22),
+  },
 };
 
 export const NON_EXISTING_CHALLENGE_INTERACTION = {

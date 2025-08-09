@@ -25,6 +25,10 @@ const defaultChallenge: NonExistingChallengeDto = {
   interactionIncrement: 1,
   isPublic: true,
   organizationId: 0,
+  tags: [],
+  checkInEndOfDay: false,
+  multipleCheckIns: false,
+  checkInTypeCode: 1,
 };
 
 interface CreateChallengeContextProps {

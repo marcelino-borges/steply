@@ -6,5 +6,6 @@ export const radioGroupStyles = StyleSheet.create({
     flexDirection: "row",
     gap: SPACING[4],
     flexWrap: "wrap",
+    width: "100%",
   },
 });
