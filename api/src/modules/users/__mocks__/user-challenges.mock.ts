@@ -14,6 +14,7 @@ export const EXISTING_USER_CHALLENGE: UserChallengeResponseDto = {
   organizationId: 1,
   interactionCount: 1,
   interactions: [],
+  tags: ["test", "mock"] as string[],
   createdAt: new Date(2020, 5, 20),
   updatedAt: new Date(2020, 5, 20),
 };

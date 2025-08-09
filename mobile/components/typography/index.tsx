@@ -16,6 +16,7 @@ interface TypographyProps {
   underline?: boolean;
   onPress?: VoidFunction;
   style?: TextStyle;
+  numberOfLines?: number;
 }
 
 const Typography: React.FC<PropsWithChildren<TypographyProps>> = ({
@@ -30,6 +31,7 @@ const Typography: React.FC<PropsWithChildren<TypographyProps>> = ({
   onPress,
   style,
   children,
+  numberOfLines,
 }) => {
   return (
     <Text
@@ -45,6 +47,7 @@ const Typography: React.FC<PropsWithChildren<TypographyProps>> = ({
         style,
       ]}
       onPress={onPress}
+      numberOfLines={numberOfLines}
     >
       {children}
     </Text>

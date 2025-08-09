@@ -15,7 +15,8 @@ export const NON_EXISTING_CHALLENGE_MOCK = {
   isPublic: false,
   joinMethod: JoinMethod.OPEN,
   bannerUrl: "http://url.com",
-} as const;
+  tags: ["fitness", "health", "challenge"] as string[],
+};
 
 export const EXISTING_CHALLENGE_MOCK: ChallengeDto = {
   ...NON_EXISTING_CHALLENGE_MOCK,

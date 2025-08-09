@@ -19,6 +19,8 @@ export class Challenge {
   public readonly bannerUrl: string | null;
   @ApiProperty()
   public readonly interactionIncrement: number;
+  @ApiProperty({ type: [String] })
+  public readonly tags: string[];
 }
 
 export enum JoinMethod {

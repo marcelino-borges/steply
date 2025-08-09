@@ -11,6 +11,8 @@ import {
 import { useTranslation } from "react-i18next";
 import { getLocales } from "expo-localization";
 import { adaptAxiosErrorToApiErrorMessage } from "@/adapters/api-error";
+import { useFileStorage } from "@/hooks/s3";
+import { Toast } from "toastify-react-native";
 
 const defaultChallenge: NonExistingChallengeDto = {
   title: "",
@@ -27,12 +29,17 @@ const defaultChallenge: NonExistingChallengeDto = {
 
 interface CreateChallengeContextProps {
   challenge: NonExistingChallengeDto;
-  setChallenge: (_newChallenge: NonExistingChallengeDto) => void;
-  createChallenge?: (
-    _newChallenge: NonExistingChallengeDto
-  ) => Promise<FullChallengeDto>;
+  setChallenge: (newChallenge: NonExistingChallengeDto) => void;
+  createChallenge?: () => Promise<FullChallengeDto>;
   isError: boolean;
   isPending: boolean;
+  banner?: BannerProps;
+  setBanner: (banner: BannerProps | undefined) => void;
+}
+
+interface BannerProps {
+  uri: string;
+  mimeType: string;
 }
 
 export const CreateChallengeContext =
@@ -42,14 +49,21 @@ export const CreateChallengeContext =
     createChallenge: undefined,
     isError: false,
     isPending: false,
+    banner: undefined,
+    setBanner: () => {},
   });
 
 export const CreateChallengeProvider: React.FC<React.PropsWithChildren> = ({
   children,
 }) => {
+  const { t } = useTranslation();
+
+  const { uploadFile, deleteFile, isUploading, isDeleting } = useFileStorage();
+
+  const [banner, setBanner] = useState<BannerProps | undefined>();
+
   const [challenge, setChallenge] =
     useState<NonExistingChallengeDto>(defaultChallenge);
-  const { t } = useTranslation();
 
   const { mutateAsync, isError, isPending } = useMutation<
     FullChallengeDto,
@@ -79,14 +93,59 @@ export const CreateChallengeProvider: React.FC<React.PropsWithChildren> = ({
     },
   });
 
+  const handleCreateChallenge = async () => {
+    let bannerUrl = "";
+
+    if (banner) {
+      const { data, error } = await uploadFile(
+        "challenges",
+        banner.uri,
+        banner.mimeType,
+        `banner_${Date.now()}`
+      );
+
+      if (error) {
+        console.log("------------- [ERROR] Upload banner failed", error);
+        Toast.error(error);
+        throw new Error(error);
+      }
+
+      if (data) {
+        bannerUrl = data;
+      }
+    }
+
+    try {
+      const challengeCreated = await mutateAsync({
+        ...challenge,
+        bannerUrl,
+      });
+      Toast.success(t("challenge.createSuccess"));
+
+      return challengeCreated;
+    } catch (error) {
+      deleteFile(bannerUrl)
+        .then(() => {
+          console.log("-------------- [DEBUG] File deleted successfuly");
+        })
+        .catch((error) => {
+          console.log("-------------- [ERROR] File deletion failed", error);
+        });
+      Toast.error(`${t("challenge.createError")}: ${(error as Error).message}`);
+      throw error;
+    }
+  };
+
   return (
     <CreateChallengeContext.Provider
       value={{
         challenge,
         setChallenge,
-        createChallenge: mutateAsync,
+        createChallenge: handleCreateChallenge,
         isError,
-        isPending,
+        isPending: isPending || isUploading || isDeleting,
+        banner,
+        setBanner,
       }}
     >
       {children}

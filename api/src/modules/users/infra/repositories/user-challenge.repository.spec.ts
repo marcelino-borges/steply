@@ -46,6 +46,7 @@ describe("UserChallengeRepository", () => {
       organizationId: 1,
       bannerUrl: null,
       rewardId: 1,
+      tags: ["test", "challenge"] as string[],
     };
 
     const challenge1Interactions = [
@@ -143,6 +144,7 @@ describe("UserChallengeRepository", () => {
       organizationId: 1,
       bannerUrl: null,
       rewardId: 1,
+      tags: ["test", "challenge"] as string[],
     };
     const existingChallenge2 = {
       createdAt: new Date(),
@@ -157,6 +159,7 @@ describe("UserChallengeRepository", () => {
       organizationId: 2,
       bannerUrl: null,
       rewardId: 2,
+      tags: ["fitness", "health"] as string[],
     };
 
     it("should call the userChallenge database function to find all challenges related to the userId passed", async () => {
@@ -219,6 +222,7 @@ describe("UserChallengeRepository", () => {
           interactions: challenge1Interactions.map((interaction) => ({
             date: interaction.createdAt,
           })),
+          tags: existingChallenge1.tags,
         },
         {
           ...existingChallenge2,
@@ -229,6 +233,7 @@ describe("UserChallengeRepository", () => {
           interactions: challenge2Interactions.map((interaction) => ({
             date: interaction.createdAt,
           })),
+          tags: existingChallenge2.tags,
         },
       ];
 

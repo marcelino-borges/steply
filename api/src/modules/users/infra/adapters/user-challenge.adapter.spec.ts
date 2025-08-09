@@ -21,6 +21,7 @@ describe("PrismaUserChallengeAdapter", () => {
           isPublic: true,
           joinMethod: PrismaJoinMethod.APPROVAL,
           organizationId: 1,
+          tags: ["test", "adapter"] as string[],
           reward: {
             challengeId: 1,
             createdAt: new Date(),

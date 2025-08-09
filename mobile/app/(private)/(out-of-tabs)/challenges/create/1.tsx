@@ -15,8 +15,8 @@ import { Toast } from "toastify-react-native";
 import RNDateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
-import { getCalendars } from "expo-localization";
-import { differenceInCalendarDays, format } from "date-fns";
+import { getCalendars, getLocales } from "expo-localization";
+import { differenceInCalendarDays } from "date-fns";
 import { useTranslation } from "react-i18next";
 
 import SteppedHeader from "@/components/stepped-header";
@@ -28,31 +28,30 @@ import TextfieldFree from "@/components/inputs/textfield-free";
 import AttachButton from "@/components/attach-button";
 import { useCreateChallenge } from "@/hooks/challenges/create";
 import { DEFAULT_TIMEZONE } from "@/constants/timezone";
-import { useFileStorage } from "@/hooks/s3";
+import TagsField from "@/components/inputs/tags";
+import { formatDateByLocale } from "@/utils/string-masks";
 
 const CreateChallenge1: React.FC = () => {
   const router = useRouter();
   const timezone = getCalendars()[0].timeZone ?? DEFAULT_TIMEZONE;
   const { t } = useTranslation();
 
-  const [banner, setBanner] = useState<
-    { uri: string; mimeType: string } | undefined
-  >();
   const [openStartDatePicker, setOpenStartDatePicker] = useState(false);
   const [openEndDatePicker, setOpenEndDatePicker] = useState(false);
+  const [tags, setTags] = useState<string[]>([]);
 
   const {
     setChallenge,
     challenge,
-    createChallenge,
     isPending: isCreatingChallange,
+    banner,
+    setBanner,
   } = useCreateChallenge();
-  const { uploadFile, deleteFile, isUploading, isDeleting } = useFileStorage();
 
   const hasFilledForm =
     challenge.title.length > 4 && challenge.description.length > 10;
 
-  const isLoadingScree = isCreatingChallange || isUploading || isDeleting;
+  const isLoadingScreen = isCreatingChallange;
 
   const DaysBox = useCallback(() => {
     const daysDiff = differenceInCalendarDays(
@@ -62,7 +61,7 @@ const CreateChallenge1: React.FC = () => {
 
     return (
       <View style={styles.daysBox}>
-        <Typography size="xs" color={COLORS.gray} weight={500}>
+        <Typography size="xs" color={COLORS.contentBlack} weight={500}>
           {`${daysDiff} ${t("common.days", {
             count: daysDiff,
           })}`}
@@ -112,7 +111,7 @@ const CreateChallenge1: React.FC = () => {
     setOpenEndDatePicker(false);
   };
 
-  const handleCreateChallenge = async () => {
+  const handleContinue = async () => {
     if (challenge.startAt.getTime() > challenge.endAt.getTime()) {
       console.log(
         "------------- [ERROR] Challenge start date cannot be after end date"
@@ -121,49 +120,22 @@ const CreateChallenge1: React.FC = () => {
       return;
     }
 
-    let bannerUrl = "";
+    router.push("/(private)/(out-of-tabs)/challenges/create/2");
+  };
 
-    if (banner) {
-      const { data, error } = await uploadFile(
-        "challenges",
-        banner.uri,
-        banner.mimeType,
-        `banner_${Date.now()}`
-      );
+  const handleAddTag = (tag: string) => {
+    const updatedTags = [...tags, tag];
+    setTags(updatedTags);
+  };
 
-      if (error) {
-        console.log("------------- [ERROR] Upload banner failed", error);
-        Toast.error(error);
-        return;
-      }
-
-      if (data) {
-        bannerUrl = data;
-      }
-    }
-
-    try {
-      await createChallenge?.({
-        ...challenge,
-        bannerUrl,
-      });
-      Toast.success(t("challenge.createSuccess"));
-      router.replace("/(private)/(tabs)/home");
-    } catch (error) {
-      deleteFile(bannerUrl)
-        .then(() => {
-          console.log("-------------- [DEBUG] File deleted successfuly");
-        })
-        .catch((error) => {
-          console.log("-------------- [ERROR] File deletion failed", error);
-        });
-      Toast.error(`${t("challenge.createError")}: ${(error as Error).message}`);
-    }
+  const handleRemoveTag = (tag: string) => {
+    const updatedTags = tags.filter((existingTag) => existingTag !== tag);
+    setTags(updatedTags);
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.scrollView}>
+      <ScrollView>
         <SteppedHeader
           title={t("challenge.details")}
           foreground={COLORS.contentBlack}
@@ -174,7 +146,7 @@ const CreateChallenge1: React.FC = () => {
           <TextfieldFree
             fullWidth
             required
-            disabled={isLoadingScree}
+            disabled={isLoadingScreen}
             placeholder={t("challenge.title")}
             value={challenge.title}
             onChangeText={(title: string) =>
@@ -184,42 +156,34 @@ const CreateChallenge1: React.FC = () => {
           <TextfieldFree
             fullWidth
             required
-            disabled={isLoadingScree}
+            disabled={isLoadingScreen}
             placeholder={t("challenge.description")}
             value={challenge.description}
             onChangeText={(description: string) =>
               setChallenge({ ...challenge, description })
             }
           />
+          <TagsField
+            tags={tags}
+            onAddTag={handleAddTag}
+            onRemoveTag={handleRemoveTag}
+            placeholder="Hashtags"
+          />
           <View
             style={styles.datePickerInput}
             onTouchEnd={() => {
-              if (!isCreatingChallange && !isUploading && !isDeleting)
-                setOpenStartDatePicker(true);
+              if (!isCreatingChallange) setOpenStartDatePicker(true);
             }}
           >
             <TextfieldFree
               required
               readOnly
-              disabled={isLoadingScree}
+              disabled={isLoadingScreen}
               placeholder={t("challenge.startAt")}
-              value={format(challenge.startAt, "dd/MM/yyyy")}
-            />
-          </View>
-          <View
-            style={styles.datePickerInput}
-            onTouchEnd={() => {
-              if (!isCreatingChallange && !isUploading && !isDeleting)
-                setOpenEndDatePicker(true);
-            }}
-          >
-            <TextfieldFree
-              required
-              readOnly
-              disabled={isLoadingScree}
-              placeholder={t("challenge.endAt")}
-              value={format(challenge.endAt, "dd/MM/yyyy")}
-              rightElement={<DaysBox />}
+              value={formatDateByLocale(
+                getLocales()[0].languageCode ?? "en",
+                challenge.startAt
+              )}
             />
             {openStartDatePicker && (
               <RNDateTimePicker
@@ -231,6 +195,24 @@ const CreateChallenge1: React.FC = () => {
                 timeZoneName={timezone}
               />
             )}
+          </View>
+          <View
+            style={styles.datePickerInput}
+            onTouchEnd={() => {
+              if (!isCreatingChallange) setOpenEndDatePicker(true);
+            }}
+          >
+            <TextfieldFree
+              required
+              readOnly
+              disabled={isLoadingScreen}
+              placeholder={t("challenge.endAt")}
+              value={formatDateByLocale(
+                getLocales()[0].languageCode ?? "en",
+                challenge.endAt
+              )}
+              rightElement={<DaysBox />}
+            />
             {openEndDatePicker && (
               <RNDateTimePicker
                 mode="date"
@@ -251,7 +233,7 @@ const CreateChallenge1: React.FC = () => {
             </Typography>
             {!banner?.uri.length ? (
               <AttachButton
-                disabled={isLoadingScree}
+                disabled={isLoadingScreen}
                 leftIcon={<Feather name="upload" size={24} />}
                 onPress={pickBanner}
               >
@@ -268,12 +250,12 @@ const CreateChallenge1: React.FC = () => {
                     {t("challenge.selectedBanner")}
                   </Typography>
                 </View>
-                <Pressable onPress={removeBanner} disabled={isLoadingScree}>
+                <Pressable onPress={removeBanner} disabled={isLoadingScreen}>
                   <Feather
                     name="trash-2"
                     size={24}
                     color={
-                      isLoadingScree ? COLORS.mutedForeground : COLORS.error
+                      isLoadingScreen ? COLORS.mutedForeground : COLORS.error
                     }
                   />
                 </Pressable>
@@ -284,11 +266,11 @@ const CreateChallenge1: React.FC = () => {
       </ScrollView>
       <View style={styles.buttonView}>
         <Button
-          loading={isLoadingScree}
+          loading={isLoadingScreen}
           disabled={!hasFilledForm}
-          onPress={handleCreateChallenge}
+          onPress={handleContinue}
         >
-          {isCreatingChallange ? t("common.creating") : t("common.next")}
+          {t("common.next")}
         </Button>
       </View>
     </SafeAreaView>
@@ -302,7 +284,6 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingBottom: SPACING[8],
   },
-  scrollView: {},
   content: {
     display: "flex",
     flexDirection: "column",
@@ -355,7 +336,7 @@ const styles = StyleSheet.create({
   },
   daysBox: {
     borderWidth: SPACING["1/4"],
-    borderColor: COLORS.muted,
+    borderColor: COLORS.inputBorder,
     borderRadius: SPACING.sm,
     paddingHorizontal: SPACING.md,
   },

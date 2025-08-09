@@ -29,7 +29,7 @@ export const PRISMA_MOCK = {
     update: jest.fn(),
     delete: jest.fn(),
   },
-  activity: {
+  challengeActivity: {
     create: jest.fn(),
     update: jest.fn(),
     findUnique: jest.fn(),

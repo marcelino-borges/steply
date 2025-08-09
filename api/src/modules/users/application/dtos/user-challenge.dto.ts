@@ -35,6 +35,8 @@ export class UserChallengeResponseDto implements DatabaseDates {
   interactions: {
     date: Date;
   }[];
+  @ApiProperty({ type: [String] })
+  tags: string[];
   @ApiProperty()
   createdAt: Date;
   @ApiProperty()

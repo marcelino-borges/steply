@@ -115,6 +115,7 @@ Table challenges {
   isPublic Boolean [not null]
   joinMethod JoinMethod [not null]
   interactionIncrement Int [not null, default: 1]
+  tags String[] [not null]
   organizationId Int [not null]
   organization organizations [not null]
   usersChallenges user_challenges [not null]

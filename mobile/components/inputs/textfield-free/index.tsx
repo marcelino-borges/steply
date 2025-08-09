@@ -40,6 +40,7 @@ const TextfieldFree = React.forwardRef<TextInput, TextfieldFreeProps>(
       onFocus,
       onBlur,
       rightElement,
+      leftElement,
       type = "text",
       mask,
       onChangeText,
@@ -98,7 +99,7 @@ const TextfieldFree = React.forwardRef<TextInput, TextfieldFreeProps>(
 
     return (
       <View style={[textfieldStyles.container, fullWidth && { width: "100%" }]}>
-        {rightElement}
+        {leftElement}
         <TextInput
           {...props}
           ref={ref}

@@ -22,6 +22,7 @@ export interface ChallengeDto {
   organizationId: number;
   bannerUrl: string | null;
   interactionIncrement: number;
+  tags: string[];
 }
 
 export interface FullChallengeDto extends ChallengeDto {

@@ -21,6 +21,7 @@ export const createChallengeSchema = (lang: Lang) =>
     bannerUrl: stringSchema(lang).optional(),
     rewardId: intSchema(lang).optional(),
     interactionIncrement: intSchema(lang).optional().default(1),
+    tags: z.array(stringSchema(lang)).default([]),
   });
 
 export const updateChallengeSchema = (lang: Lang) =>

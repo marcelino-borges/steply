@@ -34,11 +34,11 @@ describe("ActivityRepository", () => {
   describe("query", () => {
     it("should call the database function with no props, to find all activities when no params are passed, and return the result", async () => {
       const findManySpy = jest
-        .spyOn(prismaService.activity, "findMany")
+        .spyOn(prismaService.challengeActivity, "findMany")
         .mockResolvedValue([EXISTING_ACTIVITY]);
 
       const countSpy = jest
-        .spyOn(prismaService.activity, "count")
+        .spyOn(prismaService.challengeActivity, "count")
         .mockResolvedValue(1);
 
       const { pageNumber, pageSize } = getSafePagination(undefined, undefined);
@@ -95,7 +95,7 @@ describe("ActivityRepository", () => {
   describe("create", () => {
     it("should call the database function to create an activity", async () => {
       const createSpy = jest
-        .spyOn(prismaService.activity, "create")
+        .spyOn(prismaService.challengeActivity, "create")
         .mockResolvedValue(EXISTING_ACTIVITY);
 
       await repo.create(NON_EXISTING_ACTIVITY, challengeId);
@@ -110,7 +110,7 @@ describe("ActivityRepository", () => {
 
     it("should return the activity created on database", async () => {
       jest
-        .spyOn(prismaService.activity, "create")
+        .spyOn(prismaService.challengeActivity, "create")
         .mockResolvedValue(EXISTING_ACTIVITY);
 
       const result = await repo.create(
@@ -130,7 +130,7 @@ describe("ActivityRepository", () => {
 
     it("should call the database function to update an activity", async () => {
       const updateSpy = jest
-        .spyOn(prismaService.activity, "update")
+        .spyOn(prismaService.challengeActivity, "update")
         .mockResolvedValue(updatedData);
 
       await repo.update(EXISTING_ACTIVITY, challengeId);
@@ -146,7 +146,7 @@ describe("ActivityRepository", () => {
 
     it("should return the activity updated on database", async () => {
       jest
-        .spyOn(prismaService.activity, "update")
+        .spyOn(prismaService.challengeActivity, "update")
         .mockResolvedValue(updatedData);
 
       const result = await repo.update(updatedData, updatedData.challengeId);
@@ -157,7 +157,7 @@ describe("ActivityRepository", () => {
 
   describe("delete", () => {
     it("should call the database function to delete an activity by id", async () => {
-      const findByIdSpy = jest.spyOn(prismaService.activity, "delete");
+      const findByIdSpy = jest.spyOn(prismaService.challengeActivity, "delete");
 
       await repo.delete(activityId, challengeId);
 

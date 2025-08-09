@@ -30,6 +30,8 @@ export class NonExistingChallengeDto {
   rewardId?: number;
   @ApiProperty()
   interactionIncrement: number;
+  @ApiProperty({ type: [String] })
+  tags: string[];
 }
 
 interface ChallengeExpandableFieldsDto {

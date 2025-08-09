@@ -16,6 +16,7 @@ export class PrismaUserChallengeAdapter {
       interactions: prismaUserChallenge.interactions.map((interaction) => ({
         date: interaction.createdAt,
       })),
+      tags: prismaUserChallenge.challenge.tags,
     };
 
     return toResponse;

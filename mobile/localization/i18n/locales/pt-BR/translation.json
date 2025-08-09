@@ -48,6 +48,8 @@
   },
   "challenge": {
     "details": "Detalhes",
+    "checkinFormat": "Formato do check-in",
+    "activities": "Atividades",
     "title": "Título",
     "description": "Descrição",
     "startAt": "Data de início",
