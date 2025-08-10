@@ -252,7 +252,7 @@ export default function SignUpScreen() {
         <View style={{ display: "flex", flexDirection: "row", gap: 3 }}>
           <Typography>Já possui conta?</Typography>
           <Link href="/signin">
-            <Typography color={COLORS.primary} weight={FONT_WEIGHT[600]}>
+            <Typography color={COLORS.primary} weight="bold">
               Entre
             </Typography>
           </Link>

@@ -122,11 +122,7 @@ export default function SignInScreen() {
               href="/(auth)/forgot-password"
               style={authStyles.forgotPasswordLink}
             >
-              <Typography
-                color={COLORS.primary}
-                weight={FONT_WEIGHT[500]}
-                size="sm"
-              >
+              <Typography color={COLORS.primary} weight="semibold" size="sm">
                 {t("auth.forgotPassword.link")}
               </Typography>
             </Link>
@@ -155,11 +151,7 @@ export default function SignInScreen() {
         <View style={authStyles.bottomRedirect}>
           <Typography size="sm">Não possui conta?</Typography>
           <Link href="/signup">
-            <Typography
-              color={COLORS.primary}
-              weight={FONT_WEIGHT[600]}
-              size="sm"
-            >
+            <Typography color={COLORS.primary} weight="semibold" size="sm">
               Cadastre-se
             </Typography>
           </Link>

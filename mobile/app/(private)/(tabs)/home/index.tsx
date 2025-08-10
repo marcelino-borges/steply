@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { Dimensions, StyleSheet, View } from "react-native";
 import { useRouter } from "expo-router";
 
 import Button from "@/components/button";
@@ -6,6 +6,9 @@ import { COLORS } from "@/constants/colors";
 import { SPACING } from "@/constants/spacings";
 import { useAuth } from "@clerk/clerk-expo";
 import { useUser } from "@/store/user";
+import CalendarPicker from "@/components/calendar-picker";
+import { addDays } from "date-fns";
+import { useState } from "react";
 
 export default function TabHomeScreen() {
   const router = useRouter();

@@ -15,6 +15,7 @@ interface RadioGroupProps {
   justifyBetween?: boolean;
   fullWidth?: boolean;
   variant?: "outline" | "ghost";
+  disabled?: boolean;
 }
 
 export default function RadioGroup({
@@ -25,6 +26,7 @@ export default function RadioGroup({
   variant,
   onSelect,
   selectedValue,
+  disabled,
 }: RadioGroupProps) {
   return (
     <View
@@ -41,6 +43,7 @@ export default function RadioGroup({
           justifyBetween={justifyBetween}
           reverse={reverse}
           variant={variant}
+          disabled={disabled}
         />
       ))}
     </View>

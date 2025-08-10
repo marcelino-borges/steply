@@ -14,6 +14,7 @@ export interface RadioButtonProps {
   justifyBetween?: boolean;
   selected: boolean;
   fullWidth?: boolean;
+  disabled?: boolean;
   variant?: "outline" | "ghost";
 }
 
@@ -26,6 +27,7 @@ export default function RadioButton({
   variant = "ghost",
   fullWidth,
   subLabel,
+  disabled,
 }: RadioButtonProps) {
   return (
     <TouchableOpacity
@@ -35,7 +37,11 @@ export default function RadioButton({
         reverse && { flexDirection: "row-reverse" },
         variant === "outline" && {
           borderWidth: 1,
-          borderColor: selected ? COLORS.primary : COLORS.inputBorder,
+          borderColor: disabled
+            ? COLORS.muted
+            : selected
+              ? COLORS.primary
+              : COLORS.inputBorder,
           borderRadius: RADIUS.sm,
           padding: SPACING[4],
         },
@@ -45,15 +51,22 @@ export default function RadioButton({
           justifyContent: "space-between",
         },
       ]}
-      onPress={onSelect}
-      activeOpacity={0.5}
+      onPress={!disabled ? onSelect : undefined}
+      activeOpacity={!disabled ? 0.5 : 1}
     >
       <View style={radioButtonStyles.textContainer}>
-        <Typography numberOfLines={0} weight="medium">
+        <Typography
+          numberOfLines={0}
+          weight="medium"
+          color={disabled ? COLORS.muted : undefined}
+        >
           {label}
         </Typography>
         {!!subLabel?.length && (
-          <Typography color={COLORS.gray} numberOfLines={0}>
+          <Typography
+            color={disabled ? COLORS.muted : COLORS.gray}
+            numberOfLines={0}
+          >
             {subLabel}
           </Typography>
         )}
@@ -62,9 +75,17 @@ export default function RadioButton({
         style={[
           radioButtonStyles.outerCircle,
           selected && { borderColor: COLORS.primary },
+          disabled && { borderColor: COLORS.muted },
         ]}
       >
-        {selected && <View style={radioButtonStyles.innerCircle} />}
+        {selected && (
+          <View
+            style={[
+              radioButtonStyles.innerCircle,
+              disabled && { backgroundColor: COLORS.muted },
+            ]}
+          />
+        )}
       </View>
     </TouchableOpacity>
   );

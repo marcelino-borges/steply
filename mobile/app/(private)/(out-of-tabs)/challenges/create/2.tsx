@@ -19,12 +19,9 @@ const CreateChallenge2: React.FC = () => {
   const router = useRouter();
   const { t } = useTranslation();
 
-  const {
-    setChallenge,
-    challenge,
-    isPending: isCreatingChallange,
-  } = useCreateChallenge();
-  const { data: checkInTypes } = useGetChallengeCheckInTypes();
+  const { setChallenge, challenge } = useCreateChallenge();
+  const { data: checkInTypes, isFetching: isFetchingCheckInTypes } =
+    useGetChallengeCheckInTypes();
 
   const handleContinue = async () => {
     if (challenge.startAt.getTime() > challenge.endAt.getTime()) {
@@ -47,7 +44,6 @@ const CreateChallenge2: React.FC = () => {
       })) ?? [],
     [checkInTypes]
   );
-  console.log("----- checkInTypesOptions", checkInTypesOptions);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -66,6 +62,7 @@ const CreateChallenge2: React.FC = () => {
             <Typography color={COLORS.error}>*</Typography>
           </Typography>
           <RadioGroup
+            disabled={isFetchingCheckInTypes}
             items={checkInTypesOptions}
             onSelect={(value: string) => {
               setChallenge({
@@ -82,6 +79,7 @@ const CreateChallenge2: React.FC = () => {
             <Typography color={COLORS.error}>*</Typography>
           </Typography>
           <Switch
+            disabled={isFetchingCheckInTypes}
             checked={challenge.checkInEndOfDay}
             onChange={(newState: boolean) => {
               setChallenge({
@@ -97,7 +95,9 @@ const CreateChallenge2: React.FC = () => {
         </View>
       </ScrollView>
       <View style={styles.buttonView}>
-        <Button onPress={handleContinue}>{t("common.next")}</Button>
+        <Button onPress={handleContinue} disabled={isFetchingCheckInTypes}>
+          {t("common.continue")}
+        </Button>
       </View>
     </SafeAreaView>
   );

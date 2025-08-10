@@ -9,6 +9,11 @@ export enum JoinMethod {
   APPROVAL = "APPROVAL",
 }
 
+export enum ChallengeCheckInTypeCode {
+  MULTIPLE_ACTIVITIES,
+  SINGLE_ACTIVITY,
+}
+
 export interface ChallengeCheckInTypeDto {
   id: number;
   createdAt: Date;
@@ -16,7 +21,7 @@ export interface ChallengeCheckInTypeDto {
   lang: string;
   name: string;
   description: string;
-  code: number;
+  code: ChallengeCheckInTypeCode;
 }
 
 export interface ChallengeDto {
@@ -35,7 +40,7 @@ export interface ChallengeDto {
   tags: string[];
   checkInEndOfDay: boolean;
   multipleCheckIns: boolean;
-  checkInTypeCode: number;
+  checkInTypeCode: ChallengeCheckInTypeCode;
 }
 
 export interface FullChallengeDto extends ChallengeDto {

@@ -1,13 +1,14 @@
 import React, { PropsWithChildren } from "react";
 import { Text, TextStyle } from "react-native";
 
-import { FONT_SIZE, FONT_WEIGHT } from "@/constants/fonts";
+import { FONT_SIZE } from "@/constants/fonts";
 import { COLORS } from "@/constants/colors";
 import { SPACING } from "@/constants/spacings";
+import { FontSize, FontWeight } from "@/types/app";
 
 interface TypographyProps {
-  weight?: keyof typeof FONT_WEIGHT;
-  size?: keyof typeof FONT_SIZE;
+  weight?: FontWeight;
+  size?: FontSize;
   color?: string;
   lineHeight?: number;
   letterSpacing?: number;
@@ -33,17 +34,40 @@ const Typography: React.FC<PropsWithChildren<TypographyProps>> = ({
   children,
   numberOfLines,
 }) => {
+  const getFontFamily = () => {
+    let fontName = "WorkSans";
+
+    const weightStrings: Record<string, string> = {
+      thin: "_100Thin",
+      extralight: "_200ExtraLight",
+      light: "_300Light",
+      normal: "_400Regular",
+      medium: "_500Medium",
+      semibold: "_600SemiBold",
+      bold: "_700Bold",
+      extrabold: "_800ExtraBold",
+      black: "_900Black",
+    };
+
+    fontName += weightStrings[weight] ?? "_400Regular";
+
+    if (italic) {
+      fontName += "_Italic";
+    }
+
+    return fontName;
+  };
+
   return (
     <Text
       style={[
-        { fontWeight: FONT_WEIGHT[weight] },
+        { fontFamily: getFontFamily() },
         { fontSize: FONT_SIZE[size] },
         { letterSpacing },
         { lineHeight },
         { color },
-        { fontStyle: italic ? "italic" : "normal" },
         { textAlign: align },
-        { textDecorationLine: underline ? "underline" : "none" },
+        underline && { textDecorationLine: "underline" },
         style,
       ]}
       onPress={onPress}

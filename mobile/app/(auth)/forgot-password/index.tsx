@@ -171,11 +171,7 @@ export default function ForgotPasswordScreen() {
               {t("auth.forgotPassword.rememberPassword")}
             </Typography>
             <Link href="/(auth)/signin">
-              <Typography
-                color={COLORS.primary}
-                weight={FONT_WEIGHT[600]}
-                size="sm"
-              >
+              <Typography color={COLORS.primary} weight="semibold" size="sm">
                 {t("auth.forgotPassword.backToSignIn")}
               </Typography>
             </Link>
@@ -225,11 +221,7 @@ export default function ForgotPasswordScreen() {
             {t("auth.forgotPassword.rememberPassword")}
           </Typography>
           <Link href="/(auth)/signin">
-            <Typography
-              color={COLORS.primary}
-              weight={FONT_WEIGHT[600]}
-              size="sm"
-            >
+            <Typography color={COLORS.primary} weight="semibold" size="sm">
               {t("auth.forgotPassword.backToSignIn")}
             </Typography>
           </Link>

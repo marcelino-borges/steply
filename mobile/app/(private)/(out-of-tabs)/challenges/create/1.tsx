@@ -52,7 +52,7 @@ const CreateChallenge1: React.FC = () => {
 
     return (
       <View style={styles.daysBox}>
-        <Typography size="xs" color={COLORS.contentBlack} weight={500}>
+        <Typography size="xs" color={COLORS.contentBlack} weight="semibold">
           {`${daysDiff} ${t("common.days", {
             count: daysDiff,
           })}`}
@@ -254,7 +254,7 @@ const CreateChallenge1: React.FC = () => {
       </ScrollView>
       <View style={styles.buttonView}>
         <Button disabled={!hasFilledForm} onPress={handleContinue}>
-          {t("common.next")}
+          {t("common.continue")}
         </Button>
       </View>
     </SafeAreaView>

@@ -1,4 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { ChallengeCheckInTypeCode } from "./challenge-checkin-type";
 
 export class Challenge {
   @ApiProperty()
@@ -26,7 +27,7 @@ export class Challenge {
   @ApiProperty()
   public readonly multipleCheckIns: boolean;
   @ApiProperty()
-  public readonly checkInTypeCode: number;
+  public readonly checkInTypeCode: ChallengeCheckInTypeCode;
 }
 
 export enum JoinMethod {

@@ -19,10 +19,11 @@ generator dbml {
 }
 
 model Gender {
-  id          Int      @id
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  name        String   @unique
+  id        Int      @id
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name        String @unique
   description String
   lang        String
 
@@ -35,8 +36,9 @@ model UserGoal {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  name      String
-  lang      String
+
+  name String
+  lang String
 
   users User[]
 
@@ -44,10 +46,11 @@ model UserGoal {
 }
 
 model UserMainGoalLevel {
-  id          Int      @id @default(autoincrement())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  name        String   @unique
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name        String @unique
   description String
   lang        String
 
@@ -57,13 +60,14 @@ model UserMainGoalLevel {
 }
 
 model Country {
-  id           Int      @id @default(autoincrement())
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   name         String
   abbreviation String
   active       Boolean
-  phoneCode    Int      @unique
+  phoneCode    Int     @unique
 
   users         User[]
   organizations Organization[]
@@ -72,11 +76,12 @@ model Country {
 }
 
 model Organization {
-  id            Int      @id @default(autoincrement())
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   name          String
-  cnpj          String   @unique
+  cnpj          String @unique
   street        String
   state         String
   city          String
@@ -96,11 +101,12 @@ model Organization {
 }
 
 model User {
-  id                          Int      @id @default(autoincrement())
-  createdAt                   DateTime @default(now())
-  updatedAt                   DateTime @updatedAt
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   name                        String
-  email                       String   @unique
+  email                       String  @unique
   phone                       String
   street                      String?
   city                        String?
@@ -111,11 +117,11 @@ model User {
   pictureUrl                  String?
   bio                         String?
   acceptsCommunication        Boolean
-  wantsAccountPersonalization Boolean  @default(false)
-  genderId                    Int?     @default(0)
+  wantsAccountPersonalization Boolean @default(false)
+  genderId                    Int?    @default(0)
   goalId                      Int?
   mainGoalLevelId             Int?
-  nextRegistrationStep        Int      @default(0)
+  nextRegistrationStep        Int     @default(0)
 
   organizationId Int?
   countryId      Int
@@ -135,9 +141,10 @@ model User {
 }
 
 model Challenge {
-  id                   Int        @id @default(autoincrement())
-  createdAt            DateTime   @default(now())
-  updatedAt            DateTime   @updatedAt
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   title                String     @unique
   description          String
   startAt              DateTime
@@ -214,9 +221,10 @@ model UserChallengeInteraction {
 }
 
 model Reward {
-  id              Int      @id @default(autoincrement())
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   rewardTypeId    Int
   deliveryDetails String?
   name            String
@@ -231,9 +239,10 @@ model Reward {
 }
 
 model RewardType {
-  id          Int      @id @default(autoincrement())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   title       String
   description String?
   active      Boolean
@@ -247,9 +256,10 @@ model RewardType {
 }
 
 model ChallengeActivity {
-  id          Int      @id @default(autoincrement())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   title       String
   description String?
   startAt     DateTime
@@ -263,9 +273,10 @@ model ChallengeActivity {
 }
 
 model RankType {
-  id              Int      @id @default(autoincrement())
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   title           String
   minInteractions Int
   rank            Int
@@ -280,9 +291,10 @@ model RankType {
 }
 
 model SuggestedActivity {
-  id          Int      @id @default(autoincrement())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   title       String
   description String?
   active      Boolean
@@ -293,9 +305,10 @@ model SuggestedActivity {
 }
 
 model SuggestedRankType {
-  id          Int      @id @default(autoincrement())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   title       String
   description String?
   active      Boolean

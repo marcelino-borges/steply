@@ -1,21 +1,12 @@
 export const FONT_WEIGHT = {
-  100: 100,
   thin: 100,
-  200: 200,
   extralight: 200,
-  300: 300,
   light: 300,
-  400: 400,
   normal: 400,
-  500: 500,
   medium: 500,
-  600: 600,
   semibold: 600,
-  700: 700,
   bold: 700,
-  800: 800,
   extrabold: 800,
-  900: 900,
   black: 900,
 } as const;
 

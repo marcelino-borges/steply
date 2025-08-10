@@ -1,4 +1,4 @@
-export interface Activity {
+export interface ChallengeActivity {
   title: string;
   description: string | null;
   startAt: Date;
@@ -10,10 +10,10 @@ export interface NonExistingActivityDto {
   title: string;
   startAt: Date;
   endAt: Date;
-  description?: string;
+  description: string | null;
 }
 
-export interface ActivityDto extends Activity {
+export interface ActivityDto extends ChallengeActivity {
   id: number;
   createdAt: Date;
   updatedAt: Date;

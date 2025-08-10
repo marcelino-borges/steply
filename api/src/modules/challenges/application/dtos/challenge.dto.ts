@@ -9,6 +9,7 @@ import { ActivityDto } from "@/modules/challenges/application/dtos/activity.dto"
 import { UserChallengeInteraction } from "@/core/domain/entities/user-challenge-interaction.entity";
 import { DatabaseId } from "@/core/domain/abstractions/database-id.interface";
 import { ChallengeCheckInTypeDto } from "@/modules/challenges/application/dtos/challenge-checkin-type.dto";
+import { ChallengeCheckInTypeCode } from "@/core/domain/entities/challenge-checkin-type";
 
 export class NonExistingChallengeDto {
   @ApiProperty()
@@ -38,7 +39,7 @@ export class NonExistingChallengeDto {
   @ApiProperty()
   multipleCheckIns: boolean;
   @ApiProperty()
-  checkInTypeCode: number;
+  checkInTypeCode: ChallengeCheckInTypeCode;
 }
 
 interface ChallengeExpandableFieldsDto {

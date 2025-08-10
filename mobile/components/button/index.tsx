@@ -61,6 +61,7 @@ const Button: React.FC<ButtonProps> = ({
           : null,
       ]}
       onPress={onPress}
+      activeOpacity={0.7}
     >
       {loading ? (
         <ActivityIndicator size="small" color={COLORS.bgWhite} />
