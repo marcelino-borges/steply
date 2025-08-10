@@ -1,5 +1,5 @@
 import { COLORS } from "@/constants/colors";
-import { FONT_SIZE, FONT_WEIGHT } from "@/constants/fonts";
+import { FONT_SIZE } from "@/constants/fonts";
 import { Feather } from "@expo/vector-icons";
 import { addYears, isAfter, isBefore, isSameDay } from "date-fns";
 import { useMemo } from "react";
@@ -124,10 +124,10 @@ export default function CalendarPicker({
       <Typography
         style={{
           marginTop: SPACING[4],
-          marginLeft: SPACING[8],
+          marginLeft: SPACING[4],
         }}
         color={COLORS.primary}
-        weight="semibold"
+        weight="medium"
       >
         {t("common.clear")}
       </Typography>

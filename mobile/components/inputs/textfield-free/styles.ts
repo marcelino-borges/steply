@@ -17,6 +17,7 @@ const textfieldStyles = StyleSheet.create({
     paddingTop: SPACING.md,
     paddingBottom: SPACING.sm,
     fontSize: FONT_SIZE.base,
+    fontFamily: "WorkSans_400Regular",
   },
   errorFont: {
     color: COLORS.error,

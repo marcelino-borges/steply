@@ -1,82 +1,92 @@
-import { StyleSheet } from "react-native";
-import {
-  PropsWithChildren,
-  ReactNode,
-  useEffect,
-  useMemo,
-  useRef,
-} from "react";
-import BottomSheet, {
-  BottomSheetModal,
-  BottomSheetModalProvider,
-  BottomSheetScrollView,
-  BottomSheetView,
-} from "@gorhom/bottom-sheet";
-
+import type { PropsWithChildren } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { Modal, Pressable, View } from "react-native";
+import Animated, {
+  runOnJS,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 import Typography from "@/components/typography";
-import { SPACING } from "@/constants/spacings";
-import { FONT_WEIGHT } from "@/constants/fonts";
+import { styles } from "./styles";
 
-interface SheetProps extends PropsWithChildren {
-  children: ReactNode;
-  title: string;
+interface BottomSheetProps extends PropsWithChildren {
   open: boolean;
-  onClose: VoidFunction;
+  onOpenChange: (open: boolean) => void;
+  title?: string;
 }
 
-export default function Sheet({ children, title, open, onClose }: SheetProps) {
-  const sheetRef = useRef<BottomSheetModal>(null);
-  const snapPoints = useMemo(() => ["25%", "50%", "90%"], []);
+export default function BottomSheet({
+  onOpenChange,
+  open,
+  children,
+  title,
+}: BottomSheetProps) {
+  const [isVisible, setIsVisible] = useState(false);
+  const backdropOpacity = useSharedValue(0);
+  const modalTranslateY = useSharedValue(300);
+
+  const hideModal = useCallback(() => {
+    setIsVisible(false);
+  }, []);
 
   useEffect(() => {
     if (open) {
-      sheetRef.current?.present();
+      setIsVisible(true);
+      backdropOpacity.value = withTiming(1, { duration: 300 });
+      modalTranslateY.value = withTiming(0, { duration: 300 });
     } else {
-      sheetRef.current?.close();
+      backdropOpacity.value = withTiming(0, { duration: 300 });
+      modalTranslateY.value = withTiming(
+        300,
+        {
+          duration: 300,
+        },
+        () => {
+          runOnJS(hideModal)();
+        }
+      );
     }
-  }, [open]);
+  }, [open, backdropOpacity, modalTranslateY, hideModal]);
+
+  const backdropAnimatedStyle = useAnimatedStyle(() => ({
+    opacity: backdropOpacity.value,
+    backgroundColor: `rgba(0, 0, 0, ${backdropOpacity.value * 0.5})`,
+  }));
+
+  const modalAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: modalTranslateY.value }],
+  }));
 
   return (
-    // <BottomSheetModalProvider>
-    //   <BottomSheetModal
-    //     enableDynamicSizing={false}
-    //     ref={sheetRef}
-    //     style={styles.root}
-    //     snapPoints={snapPoints}
-    //     onDismiss={() => {
-    //       onClose();
-    //       sheetRef.current?.close();
-    //       console.log("----------------- in close");
-    //     }}
-    //     backgroundStyle={{ backgroundColor: "yellow" }}
-    //   >
-    //     <BottomSheetView style={styles.view}>
-    //       <Typography size="lg" weight={FONT_WEIGHT[800]}>
-    //         {title}
-    //       </Typography>
-    //       <BottomSheetScrollView>{children}</BottomSheetScrollView>
-    //     </BottomSheetView>
-    //   </BottomSheetModal>
-    // </BottomSheetModalProvider>
-    null
+    <Modal
+      animationType="none"
+      transparent={true}
+      visible={isVisible}
+      onRequestClose={() => {
+        onOpenChange(!open);
+      }}
+    >
+      <View style={styles.backdrop}>
+        <Animated.View style={[styles.backdrop, backdropAnimatedStyle]}>
+          <Pressable
+            style={{ flex: 1, width: "100%" }}
+            onPress={() => onOpenChange(false)}
+          />
+          <Animated.View
+            style={[styles.modalView, modalAnimatedStyle]}
+            onStartShouldSetResponder={() => true}
+          >
+            {!!title?.length && <Typography weight="bold">{title}</Typography>}
+
+            <View
+              style={[styles.content, !title?.length && styles.contentNoTitle]}
+            >
+              <Typography size="sm">{children}</Typography>
+            </View>
+          </Animated.View>
+        </Animated.View>
+      </View>
+    </Modal>
   );
 }
-
-const styles = StyleSheet.create({
-  root: {
-    paddingHorizontal: SPACING.md,
-    paddingBottom: SPACING.md,
-    zIndex: 100000,
-    backgroundColor: "red",
-  },
-  view: {
-    flex: 1,
-    zIndex: 100000,
-    backgroundColor: "green",
-    position: "fixed",
-  },
-  scrollView: {
-    backgroundColor: "blue",
-    zIndex: 100000,
-  },
-});

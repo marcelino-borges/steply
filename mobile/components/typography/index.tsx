@@ -18,6 +18,7 @@ interface TypographyProps {
   onPress?: VoidFunction;
   style?: TextStyle;
   numberOfLines?: number;
+  pointerEvents?: "auto" | "none" | "box-none" | "box-only";
 }
 
 const Typography: React.FC<PropsWithChildren<TypographyProps>> = ({
@@ -33,6 +34,7 @@ const Typography: React.FC<PropsWithChildren<TypographyProps>> = ({
   style,
   children,
   numberOfLines,
+  pointerEvents,
 }) => {
   const getFontFamily = () => {
     let fontName = "WorkSans";
@@ -72,6 +74,7 @@ const Typography: React.FC<PropsWithChildren<TypographyProps>> = ({
       ]}
       onPress={onPress}
       numberOfLines={numberOfLines}
+      pointerEvents={pointerEvents}
     >
       {children}
     </Text>

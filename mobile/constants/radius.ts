@@ -1,6 +1,10 @@
 export const BASE_RADIUS = 4;
 
 export const RADIUS = {
+  /** 0 pt */
+  0: 0,
+  /** 0 pt */
+  none: 0,
   /** 0.5 pt */
   "1/8": BASE_RADIUS / 8,
   /** 1 pt */

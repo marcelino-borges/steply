@@ -1,5 +1,10 @@
 import React, { useMemo } from "react";
-import { View, StyleSheet, ScrollView } from "react-native";
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  useWindowDimensions,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { Toast } from "toastify-react-native";
@@ -14,10 +19,12 @@ import { useGetChallengeCheckInTypes } from "@/hooks/challenges";
 import Typography from "@/components/typography";
 import RadioGroup from "@/components/radio-group";
 import Switch from "@/components/switch";
+import Skeleton from "@/components/base-skeleton";
 
 const CreateChallenge2: React.FC = () => {
   const router = useRouter();
   const { t } = useTranslation();
+  const { width } = useWindowDimensions();
 
   const { setChallenge, challenge } = useCreateChallenge();
   const { data: checkInTypes, isFetching: isFetchingCheckInTypes } =
@@ -61,19 +68,25 @@ const CreateChallenge2: React.FC = () => {
             </Typography>
             <Typography color={COLORS.error}>*</Typography>
           </Typography>
-          <RadioGroup
-            disabled={isFetchingCheckInTypes}
-            items={checkInTypesOptions}
-            onSelect={(value: string) => {
-              setChallenge({
-                ...challenge,
-                checkInTypeCode: Number(value),
-              });
-            }}
-            selectedValue={challenge.checkInTypeCode.toString()}
-            fullWidth
-            variant="outline"
-          />
+          {!isFetchingCheckInTypes ? (
+            <RadioGroup
+              items={checkInTypesOptions}
+              onSelect={(value: string) => {
+                setChallenge({
+                  ...challenge,
+                  checkInTypeCode: Number(value),
+                });
+              }}
+              selectedValue={challenge.checkInTypeCode.toString()}
+              fullWidth
+              variant="outline"
+            />
+          ) : (
+            <View style={{ gap: SPACING[4] }}>
+              <Skeleton width={width - SPACING[6] * 2} height={150} />
+              <Skeleton width={width - SPACING[6] * 2} height={150} />
+            </View>
+          )}
           <Typography>
             <Typography>{t("challenge.howCheckInWillBeValidated")}</Typography>
             <Typography color={COLORS.error}>*</Typography>

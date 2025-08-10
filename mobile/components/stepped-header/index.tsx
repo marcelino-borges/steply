@@ -34,6 +34,7 @@ interface SteppedHeaderProps {
    * @default true
    */
   showBackIcon?: boolean;
+  onPressBack?: VoidFunction;
 }
 
 const SteppedHeader: React.FC<SteppedHeaderProps> = ({
@@ -43,6 +44,7 @@ const SteppedHeader: React.FC<SteppedHeaderProps> = ({
   foreground = COLORS.contentBlack,
   backTo,
   showBackIcon = true,
+  onPressBack,
 }) => {
   const router = useRouter();
 
@@ -53,7 +55,10 @@ const SteppedHeader: React.FC<SteppedHeaderProps> = ({
           name="arrowleft"
           size={24}
           color={foreground}
-          onPress={() => (backTo ? router.push(backTo) : router.back())}
+          onPress={
+            onPressBack ??
+            (() => (backTo ? router.push(backTo) : router.back()))
+          }
         />
       )}
       <Typography size="base" weight="semibold" color={foreground}>

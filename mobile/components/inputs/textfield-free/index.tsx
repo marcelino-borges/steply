@@ -52,6 +52,7 @@ const TextfieldFree = React.forwardRef<TextInput, TextfieldFreeProps>(
     const { t } = useTranslation();
     const [isFocused, setIsFocused] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const inputRef = useRef<TextInput>(null);
     const animatedValue = useRef(new Animated.Value(0)).current;
     const hasValue = value && value.length;
     const shouldShrinkPlaceholder = hasValue || isFocused;
@@ -76,7 +77,7 @@ const TextfieldFree = React.forwardRef<TextInput, TextfieldFreeProps>(
 
     const translateY = animatedValue.interpolate({
       inputRange: [0, 1],
-      outputRange: [0, -(SPACING.md - SPACING["1/4"])],
+      outputRange: [0, -(SPACING.md - 4)],
     });
 
     const scale = animatedValue.interpolate({
@@ -102,7 +103,7 @@ const TextfieldFree = React.forwardRef<TextInput, TextfieldFreeProps>(
         {leftElement}
         <TextInput
           {...props}
-          ref={ref}
+          ref={ref ?? inputRef}
           value={value}
           secureTextEntry={isPasswordField ? !showPassword : false}
           style={[
@@ -136,10 +137,11 @@ const TextfieldFree = React.forwardRef<TextInput, TextfieldFreeProps>(
               transform: [{ translateY }, { scale }],
             },
           ]}
+          pointerEvents="box-none"
         >
           <Typography
             color={!disabled ? COLORS.gray : COLORS.mutedForeground}
-            size={shouldShrinkPlaceholder ? "xs" : "base"}
+            size={shouldShrinkPlaceholder ? "sm" : "base"}
           >
             {placeholder}
           </Typography>

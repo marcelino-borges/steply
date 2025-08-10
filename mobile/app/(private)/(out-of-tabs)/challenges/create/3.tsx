@@ -1,5 +1,11 @@
 import React, { useCallback, useState } from "react";
-import { View, StyleSheet, ScrollView, Platform } from "react-native";
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  Platform,
+  Pressable,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { Toast } from "toastify-react-native";
@@ -23,6 +29,9 @@ import CalendarPicker, {
 import { differenceInCalendarDays } from "date-fns";
 import Typography from "@/components/typography";
 import { NonExistingActivityDto } from "@/types/api/activity";
+import BottomSheet from "@/components/sheet";
+import { Feather } from "@expo/vector-icons";
+import TabsHeader from "@/components/tabs-header";
 
 const CreateChallenge3: React.FC = () => {
   const router = useRouter();
@@ -35,10 +44,10 @@ const CreateChallenge3: React.FC = () => {
     isPending: isCreatingChallange,
   } = useCreateChallenge();
 
-  const [openStartDatePicker, setOpenStartDatePicker] = useState(false);
-  const [openEndDatePicker, setOpenEndDatePicker] = useState(false);
-  const [start, setstart] = useState<Date | undefined>();
-  const [end, setend] = useState<Date | undefined>();
+  const [start, setStart] = useState<Date | undefined>();
+  const [end, setEnd] = useState<Date | undefined>();
+  const [openAddActivity, setOpenAddActivity] = useState(false);
+  const [addActivityTab, setAddActivityTab] = useState("1");
   const [newActivity, setNewActivity] = useState<NonExistingActivityDto>();
 
   const hasFilledForm =
@@ -79,17 +88,78 @@ const CreateChallenge3: React.FC = () => {
     if (date) {
       setChallenge({ ...challenge, startAt: date });
     }
-    setOpenStartDatePicker(false);
   };
 
   const handleEndDate = (_event: DateTimePickerEvent, date?: Date) => {
     if (date) {
       setChallenge({ ...challenge, endAt: date });
     }
-    setOpenEndDatePicker(false);
   };
 
-  const onChangeCalendarPicker = (data: Date, type: CalendarChangedDate) => {};
+  const onChangeCalendarPicker = (date: Date, type: CalendarChangedDate) => {
+    if (type === "CLEAR") {
+      setStart(undefined);
+      setEnd(undefined);
+      return;
+    }
+
+    if (type === "START_DATE") {
+      setStart(date);
+      setEnd(undefined);
+      return;
+    }
+
+    setEnd(date);
+
+    // Just for giving the user the visual of the end date being selected
+    setTimeout(() => {
+      setOpenAddActivity(true);
+    }, 250);
+  };
+
+  const clearPickedDates = () => {
+    setStart(undefined);
+    setEnd(undefined);
+  };
+
+  if (openAddActivity) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <ScrollView>
+          <SteppedHeader
+            title={t("challenge.searchActivities")}
+            foreground={COLORS.contentBlack}
+            totalSteps={6}
+            step={3}
+            onPressBack={() => {
+              clearPickedDates();
+              setOpenAddActivity(false);
+            }}
+          />
+
+          <View style={styles.content}>
+            <TabsHeader
+              tabLeft={{
+                id: "1",
+                label: "Geral",
+                onPress: () => {
+                  setAddActivityTab("1");
+                },
+              }}
+              tabRight={{
+                id: "2",
+                label: "Minhas Atividades",
+                onPress: () => {
+                  setAddActivityTab("2");
+                },
+              }}
+              selectedId={addActivityTab}
+            />
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -102,12 +172,7 @@ const CreateChallenge3: React.FC = () => {
         />
         <View style={styles.content}>
           <View style={styles.datePickersContainer}>
-            <View
-              style={styles.datePickerInput}
-              onTouchEnd={() => {
-                setOpenStartDatePicker(true);
-              }}
-            >
+            <View style={styles.datePickerInput}>
               <TextfieldFree
                 required
                 readOnly
@@ -117,24 +182,9 @@ const CreateChallenge3: React.FC = () => {
                   challenge.startAt
                 )}
               />
-              {openStartDatePicker && (
-                <RNDateTimePicker
-                  mode="date"
-                  display={Platform.OS === "ios" ? "spinner" : "calendar"}
-                  value={challenge.startAt}
-                  minimumDate={new Date()}
-                  onChange={handleStartDate}
-                  timeZoneName={timezone}
-                />
-              )}
             </View>
 
-            <View
-              style={styles.datePickerInput}
-              onTouchEnd={() => {
-                setOpenEndDatePicker(true);
-              }}
-            >
+            <View style={styles.datePickerInput}>
               <TextfieldFree
                 required
                 readOnly
@@ -144,42 +194,16 @@ const CreateChallenge3: React.FC = () => {
                   challenge.endAt
                 )}
               />
-              {openEndDatePicker && (
-                <RNDateTimePicker
-                  mode="date"
-                  display={Platform.OS === "ios" ? "spinner" : "calendar"}
-                  value={challenge.endAt}
-                  onChange={handleEndDate}
-                  minimumDate={challenge.startAt}
-                  timeZoneName={timezone}
-                />
-              )}
             </View>
           </View>
-          {/* /\ datePickersContainer View */}
           <View style={styles.calendarContainer}>
             <CalendarPicker
-              onDateChange={(date, type) => {
-                if (type === "CLEAR") {
-                  setstart(undefined);
-                  setend(undefined);
-                  return;
-                }
-
-                if (type === "START_DATE") {
-                  setstart(date);
-                  setend(undefined);
-                  return;
-                }
-
-                setend(date);
-              }}
+              onDateChange={onChangeCalendarPicker}
               selectedStartDate={start}
               selectedEndDate={end}
             />
           </View>
         </View>
-        {/* /\ Content View */}
       </ScrollView>
       <View style={styles.buttonView}>
         <Button
@@ -228,6 +252,15 @@ const styles = StyleSheet.create({
     borderColor: COLORS.inputBorder,
     borderRadius: SPACING.sm,
     paddingHorizontal: SPACING.md,
+  },
+  bottomSheetButton: {
+    flexDirection: "row",
+    gap: SPACING[4],
+    alignItems: "center",
+  },
+  header: {
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 

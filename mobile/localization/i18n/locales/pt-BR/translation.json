@@ -60,6 +60,8 @@
     "createSuccess": "Desafio criado com sucesso",
     "createError": "Erro ao criar desafio",
     "addBanner": "Adicionar banner",
+    "addActivities": "Adicionar atividades",
+    "searchActivities": "Buscar atividades",
     "addBannerDescription": "Até 40MB · Formatos aceitos: JPG, PNG, WEBP e HEIC.",
     "addBannerFromLibrary": "Adicionar da biblioteca",
     "selectedBanner": "Imagem selecionada",
