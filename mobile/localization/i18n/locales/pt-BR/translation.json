@@ -70,7 +70,19 @@
     "createQuickly": "Crie seu desafio de forma rápida",
     "challengeCreationBriefing": "Defina os detalhes, adicione atividades, defina as regras e convide participantes para realizar o desafio.",
     "howActivitiesWillBeDistributed": "Como as atividades serão distribuídas?",
-    "howCheckInWillBeValidated": "Como o check-in será validado?"
+    "howCheckInWillBeValidated": "Como o check-in será validado?",
+    "myActivities": "Minhas atividades",
+    "generalActivities": "Geral",
+    "noActivitiesFound": "Nenhuma atividade encontrada",
+    "dateRange": {
+      "sameDay": "Dia {{day}} de {{month}}",
+      "sameMonth": "Do dia {{startDay}} ao {{endDay}} de {{month}}",
+      "differentMonths": "Do dia {{startDay}} de {{startMonth}} ao {{endDay}} de {{endMonth}}"
+    },
+    "createActivity": "Criar atividade",
+    "addActivities_zero": "Adicionar atividade",
+    "addActivities_one": "Adicionar atividade", 
+    "addActivities_other": "Adicionar atividades"
   },
   "files": {
     "invalidFile": "Arquivo inválido",

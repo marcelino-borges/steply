@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { ActivityIndicator, TouchableOpacity } from "react-native";
 
 import { PropsWithFullwidth } from "@/types/abstractions/fullwidth";
@@ -20,6 +20,8 @@ interface ButtonProps extends PropsWithFullwidth {
     borderColor?: string;
     backgroundColor?: string;
   };
+  leftElement?: ReactNode;
+  rightElement?: ReactNode;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -32,6 +34,8 @@ const Button: React.FC<ButtonProps> = ({
   boldFont = true,
   loading = false,
   onPress,
+  leftElement,
+  rightElement,
   ...props
 }) => {
   return (
@@ -63,6 +67,7 @@ const Button: React.FC<ButtonProps> = ({
       onPress={onPress}
       activeOpacity={0.7}
     >
+      {leftElement}
       {loading ? (
         <ActivityIndicator size="small" color={COLORS.bgWhite} />
       ) : (
@@ -72,7 +77,7 @@ const Button: React.FC<ButtonProps> = ({
               ? COLORS.mutedForeground
               : customStyle?.color
                 ? COLORS[customStyle.color]
-                : variant === "outlined"
+                : variant === "outlined" || variant === "ghost"
                   ? COLORS.primary
                   : buttonStyles[color].color
           }
@@ -84,6 +89,7 @@ const Button: React.FC<ButtonProps> = ({
           {children}
         </Typography>
       )}
+      {rightElement}
     </TouchableOpacity>
   );
 };

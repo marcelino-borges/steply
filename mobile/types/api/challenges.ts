@@ -10,8 +10,8 @@ export enum JoinMethod {
 }
 
 export enum ChallengeCheckInTypeCode {
-  MULTIPLE_ACTIVITIES,
-  SINGLE_ACTIVITY,
+  DAILY_DIFFERENT_ACTIVITIES,
+  REPEATING_ACTIVITIES,
 }
 
 export interface ChallengeCheckInTypeDto {

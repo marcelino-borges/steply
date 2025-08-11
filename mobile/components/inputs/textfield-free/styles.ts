@@ -20,10 +20,10 @@ const textfieldStyles = StyleSheet.create({
     fontFamily: "WorkSans_400Regular",
   },
   errorFont: {
-    color: COLORS.error,
+    color: COLORS.destructive,
   },
   errorBorder: {
-    borderColor: COLORS.error,
+    borderColor: COLORS.destructive,
   },
   placeholderBase: {
     position: "absolute",

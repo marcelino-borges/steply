@@ -7,19 +7,20 @@ import { COLORS } from "@/constants/colors";
 interface Tab {
   id: string;
   label: string;
-  onPress: VoidFunction;
 }
 
 interface TabsHeaderProps {
   tabLeft: Tab;
   tabRight: Tab;
   selectedId: string;
+  onChangeTab: (tabId: string) => void;
 }
 
 export default function TabsHeader({
   tabLeft,
   tabRight,
   selectedId,
+  onChangeTab,
 }: TabsHeaderProps) {
   return (
     <View style={tabsHeaderStyles.root}>
@@ -28,7 +29,7 @@ export default function TabsHeader({
           tabLeft.label.replaceAll(" ", "_").toLowerCase() +
           `_${Math.round(Math.random() * 10000)}_${Date.now()}`
         }
-        onPress={tabLeft.onPress}
+        onPress={() => onChangeTab(tabLeft.id)}
         style={[
           tabsHeaderStyles.tabButton,
           selectedId === tabLeft.id && {
@@ -39,6 +40,7 @@ export default function TabsHeader({
         <Typography
           weight={selectedId === tabLeft.id ? "semibold" : undefined}
           color={selectedId === tabLeft.id ? "white" : undefined}
+          size="sm"
         >
           {tabLeft.label}
         </Typography>
@@ -49,7 +51,7 @@ export default function TabsHeader({
           tabRight.label.replaceAll(" ", "_").toLowerCase() +
           `_${Math.round(Math.random() * 10000)}_${Date.now()}`
         }
-        onPress={tabRight.onPress}
+        onPress={() => onChangeTab(tabRight.id)}
         style={[
           tabsHeaderStyles.tabButton,
           selectedId === tabRight.id && {
@@ -60,6 +62,7 @@ export default function TabsHeader({
         <Typography
           weight={selectedId === tabRight.id ? "semibold" : undefined}
           color={selectedId === tabRight.id ? "white" : undefined}
+          size="sm"
         >
           {tabRight.label}
         </Typography>

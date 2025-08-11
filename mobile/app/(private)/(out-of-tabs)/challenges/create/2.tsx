@@ -66,7 +66,7 @@ const CreateChallenge2: React.FC = () => {
             <Typography>
               {t("challenge.howActivitiesWillBeDistributed")}
             </Typography>
-            <Typography color={COLORS.error}>*</Typography>
+            <Typography color={COLORS.destructive}>*</Typography>
           </Typography>
           {!isFetchingCheckInTypes ? (
             <RadioGroup
@@ -89,7 +89,7 @@ const CreateChallenge2: React.FC = () => {
           )}
           <Typography>
             <Typography>{t("challenge.howCheckInWillBeValidated")}</Typography>
-            <Typography color={COLORS.error}>*</Typography>
+            <Typography color={COLORS.destructive}>*</Typography>
           </Typography>
           <Switch
             disabled={isFetchingCheckInTypes}

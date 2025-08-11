@@ -22,10 +22,10 @@ export const tagsfieldStyles = StyleSheet.create({
     fontSize: FONT_SIZE.base,
   },
   errorFont: {
-    color: COLORS.error,
+    color: COLORS.destructive,
   },
   errorBorder: {
-    borderColor: COLORS.error,
+    borderColor: COLORS.destructive,
   },
   placeholderBase: {
     position: "absolute",

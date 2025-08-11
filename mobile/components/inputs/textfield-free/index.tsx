@@ -147,7 +147,7 @@ const TextfieldFree = React.forwardRef<TextInput, TextfieldFreeProps>(
           </Typography>
           {required && (
             <Typography
-              color={!disabled ? COLORS.error : COLORS.mutedForeground}
+              color={!disabled ? COLORS.destructive : COLORS.mutedForeground}
               size={shouldShrinkPlaceholder ? "xs" : "sm"}
             >
               *

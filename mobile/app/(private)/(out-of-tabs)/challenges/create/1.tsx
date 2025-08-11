@@ -245,7 +245,11 @@ const CreateChallenge1: React.FC = () => {
                   </Typography>
                 </View>
                 <Pressable onPress={removeBanner}>
-                  <Feather name="trash-2" size={24} color={COLORS.error} />
+                  <Feather
+                    name="trash-2"
+                    size={24}
+                    color={COLORS.destructive}
+                  />
                 </Pressable>
               </View>
             )}

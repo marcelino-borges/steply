@@ -13,6 +13,7 @@ import { getLocales } from "expo-localization";
 import { adaptAxiosErrorToApiErrorMessage } from "@/adapters/api-error";
 import { useFileStorage } from "@/hooks/s3";
 import { Toast } from "toastify-react-native";
+import { ActivityDto, NonExistingActivityDto } from "@/types/api/activity";
 
 const defaultChallenge: NonExistingChallengeDto = {
   title: "",
@@ -39,6 +40,8 @@ interface CreateChallengeContextProps {
   isPending: boolean;
   banner?: BannerProps;
   setBanner: (banner: BannerProps | undefined) => void;
+  activities: NonExistingActivityDto[];
+  setActivities: (activities: NonExistingActivityDto[]) => void;
 }
 
 interface BannerProps {
@@ -55,6 +58,8 @@ export const CreateChallengeContext =
     isPending: false,
     banner: undefined,
     setBanner: () => {},
+    activities: [],
+    setActivities: () => {},
   });
 
 export const CreateChallengeProvider: React.FC<React.PropsWithChildren> = ({
@@ -65,15 +70,16 @@ export const CreateChallengeProvider: React.FC<React.PropsWithChildren> = ({
   const { uploadFile, deleteFile, isUploading, isDeleting } = useFileStorage();
 
   const [banner, setBanner] = useState<BannerProps | undefined>();
+  const [activities, setActivities] = useState<NonExistingActivityDto[]>([]);
 
   const [challenge, setChallenge] =
     useState<NonExistingChallengeDto>(defaultChallenge);
 
-  const { mutateAsync, isError, isPending } = useMutation<
-    FullChallengeDto,
-    AxiosError,
-    NonExistingChallengeDto
-  >({
+  const {
+    mutateAsync: createChallenge,
+    isError,
+    isPending: isCreatingChallenge,
+  } = useMutation<FullChallengeDto, AxiosError, NonExistingChallengeDto>({
     mutationFn: async (_newChallenge: NonExistingChallengeDto) => {
       try {
         const response = await api.post<FullChallengeDto>(
@@ -120,7 +126,7 @@ export const CreateChallengeProvider: React.FC<React.PropsWithChildren> = ({
     }
 
     try {
-      const challengeCreated = await mutateAsync({
+      const challengeCreated = await createChallenge({
         ...challenge,
         bannerUrl,
       });
@@ -147,9 +153,11 @@ export const CreateChallengeProvider: React.FC<React.PropsWithChildren> = ({
         setChallenge,
         createChallenge: handleCreateChallenge,
         isError,
-        isPending: isPending || isUploading || isDeleting,
+        isPending: isCreatingChallenge || isUploading || isDeleting,
         banner,
         setBanner,
+        activities,
+        setActivities,
       }}
     >
       {children}

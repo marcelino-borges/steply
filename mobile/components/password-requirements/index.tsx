@@ -11,17 +11,17 @@ interface PasswordRequirementProps {
   isValid: boolean;
 }
 
-const PasswordRequirement: React.FC<PasswordRequirementProps> = ({ text, isValid }) => (
+const PasswordRequirement: React.FC<PasswordRequirementProps> = ({
+  text,
+  isValid,
+}) => (
   <View style={styles.requirementRow}>
-    <Feather 
-      name={isValid ? "check" : "x"} 
-      size={16} 
-      color={isValid ? COLORS.success : COLORS.error} 
+    <Feather
+      name={isValid ? "check" : "x"}
+      size={16}
+      color={isValid ? COLORS.success : COLORS.destructive}
     />
-    <Typography 
-      size="sm" 
-      color={isValid ? COLORS.success : COLORS.error}
-    >
+    <Typography size="sm" color={isValid ? COLORS.success : COLORS.destructive}>
       {text}
     </Typography>
   </View>
@@ -31,7 +31,9 @@ interface PasswordRequirementsProps {
   password: string;
 }
 
-const PasswordRequirements: React.FC<PasswordRequirementsProps> = ({ password }) => {
+const PasswordRequirements: React.FC<PasswordRequirementsProps> = ({
+  password,
+}) => {
   const { t } = useTranslation();
 
   return (
