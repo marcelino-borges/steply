@@ -26,7 +26,6 @@ import {
   NonExistingChallengeDto,
   UpdateChallengeDto,
   UserInteractChallengeBodyDto,
-  UserInteractChallengeDto,
 } from "@/modules/challenges/application/dtos/challenge.dto";
 import { CreateChallengeUseCase } from "@/modules/challenges/application/use-cases/challenge/create-challenge.use-case";
 import { UpdateChallengeUseCase } from "@/modules/challenges/application/use-cases/challenge/update-challenge.use-case";

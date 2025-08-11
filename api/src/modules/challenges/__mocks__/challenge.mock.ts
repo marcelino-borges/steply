@@ -1,4 +1,5 @@
 import { JoinMethod } from "@/core/domain/entities/challenge.entity";
+import { ChallengeCheckInTypeCode } from "@/core/domain/entities/challenge-checkin-type";
 import {
   ChallengeDto,
   FullChallengeDto,
@@ -18,7 +19,7 @@ export const NON_EXISTING_CHALLENGE_MOCK = {
   tags: ["fitness", "health", "challenge"] as string[],
   checkInEndOfDay: false,
   multipleCheckIns: false,
-  checkInTypeCode: 1,
+  checkInTypeCode: ChallengeCheckInTypeCode.DAILY_DIFFERENT_ACTIVITIES,
 };
 
 export const EXISTING_CHALLENGE_MOCK: ChallengeDto = {
@@ -53,9 +54,9 @@ export const EXISTING_FULL_CHALLENGE_MOCK: FullChallengeDto = {
   activities: [],
   checkInType: {
     id: 1,
-    code: 1,
-    name: "Daily Check-in",
-    description: "Check-in once per day",
+    code: ChallengeCheckInTypeCode.DAILY_DIFFERENT_ACTIVITIES,
+    name: "Daily Different Activities",
+    description: "Check-in with different activities each day",
     lang: "en",
     createdAt: new Date(2005, 5, 22),
     updatedAt: new Date(2005, 5, 22),

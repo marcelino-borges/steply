@@ -8,6 +8,7 @@ import { intSchema } from "./primitives/number.schema";
 import { booleanSchema } from "./primitives/boolean.schema";
 import { dbIdSchema } from "./db-exclusive-fields.schema";
 import { enumSchema } from "./primitives/enum.schema";
+import { createActivitySchema } from "./activity.schema";
 
 export const createChallengeSchema = (lang: Lang) =>
   z.object({
@@ -25,6 +26,7 @@ export const createChallengeSchema = (lang: Lang) =>
     checkInEndOfDay: booleanSchema(lang),
     multipleCheckIns: booleanSchema(lang),
     checkInTypeCode: intSchema(lang),
+    activities: z.array(createActivitySchema(lang)).optional(),
   });
 
 export const updateChallengeSchema = (lang: Lang) =>

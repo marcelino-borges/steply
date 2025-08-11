@@ -32,10 +32,20 @@ export class ChallengeRepository implements BaseChallengeRepository {
   async create(
     newChallenge: NonExistingChallengeDto,
   ): Promise<FullChallengeDto> {
+    const { activities, ...challengeData } = newChallenge;
+    
     const result = await this.db.challenge.create({
       data: {
-        ...newChallenge,
-        joinMethod: this.joinMethodAdapter.fromDomain(newChallenge.joinMethod),
+        ...challengeData,
+        joinMethod: this.joinMethodAdapter.fromDomain(challengeData.joinMethod),
+        activities: activities ? {
+          create: activities.map(activity => ({
+            title: activity.title,
+            description: activity.description || null,
+            startAt: activity.startAt,
+            endAt: activity.endAt,
+          })),
+        } : undefined,
       },
       include: CHALLENGE_INCLUDES,
     });

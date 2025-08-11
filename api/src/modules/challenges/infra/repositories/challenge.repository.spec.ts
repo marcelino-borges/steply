@@ -55,6 +55,7 @@ describe("ChallengeRepository", () => {
           joinMethod: adapterJoinMethod.fromDomain(
             NON_EXISTING_CHALLENGE_MOCK.joinMethod,
           ),
+          activities: undefined,
         },
         include: CHALLENGE_INCLUDES,
       });
@@ -68,6 +69,58 @@ describe("ChallengeRepository", () => {
       );
 
       expect(result).toStrictEqual(dbResult);
+    });
+
+    it("should create a challenge with activities when activities are provided", async () => {
+      const challengeWithActivities = {
+        ...NON_EXISTING_CHALLENGE_MOCK,
+        activities: [
+          {
+            title: "Morning Workout",
+            description: "30 minute morning workout",
+            startAt: new Date("2024-01-01T08:00:00.000Z"),
+            endAt: new Date("2024-01-01T08:30:00.000Z"),
+          },
+          {
+            title: "Evening Walk",
+            description: "20 minute walk",
+            startAt: new Date("2024-01-01T18:00:00.000Z"),
+            endAt: new Date("2024-01-01T18:20:00.000Z"),
+          },
+        ],
+      };
+
+      const createSpy = jest
+        .spyOn(prismaService.challenge, "create")
+        .mockResolvedValue(dbResult);
+
+      await challengeRepository.create(challengeWithActivities);
+
+      expect(createSpy).toHaveBeenCalledWith({
+        data: {
+          ...NON_EXISTING_CHALLENGE_MOCK,
+          joinMethod: adapterJoinMethod.fromDomain(
+            NON_EXISTING_CHALLENGE_MOCK.joinMethod,
+          ),
+          activities: {
+            create: [
+              {
+                title: "Morning Workout",
+                description: "30 minute morning workout",
+                startAt: new Date("2024-01-01T08:00:00.000Z"),
+                endAt: new Date("2024-01-01T08:30:00.000Z"),
+              },
+              {
+                title: "Evening Walk",
+                description: "20 minute walk",
+                startAt: new Date("2024-01-01T18:00:00.000Z"),
+                endAt: new Date("2024-01-01T18:20:00.000Z"),
+              },
+            ],
+          },
+        },
+        include: CHALLENGE_INCLUDES,
+      });
     });
   });
 

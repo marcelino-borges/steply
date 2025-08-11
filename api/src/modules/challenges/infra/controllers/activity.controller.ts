@@ -35,9 +35,7 @@ import { FindActivityByIdUseCase } from "@/modules/challenges/application/use-ca
 import { QueryActivitiesUseCase } from "@/modules/challenges/application/use-cases/activity/query-activities.use-case";
 import { Lang, t } from "@/core/application/locales";
 import { EndpointDoc } from "@/core/infra/decorators/swagger-endpoint-doc.decorator";
-import { stringSchema } from "@/core/application/schemas/primitives/string.schema";
 import { intSchema } from "@/core/application/schemas/primitives/number.schema";
-import { ZodError } from "zod";
 
 @Controller("challenges/:challengeId/activities")
 export class ActivityController {

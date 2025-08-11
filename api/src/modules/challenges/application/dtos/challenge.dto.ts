@@ -5,7 +5,7 @@ import { Challenge, JoinMethod } from "@/core/domain/entities/challenge.entity";
 import { MinimalOrganizationDto } from "@/modules/organizations/application/dtos/organization.dto";
 import { RewardDto } from "@/modules/challenges/application/dtos/reward.dto";
 import { RankTypeDto } from "@/modules/challenges/application/dtos/rank-type.dto";
-import { ActivityDto } from "@/modules/challenges/application/dtos/activity.dto";
+import { ActivityDto, NonExistingActivityDto } from "@/modules/challenges/application/dtos/activity.dto";
 import { UserChallengeInteraction } from "@/core/domain/entities/user-challenge-interaction.entity";
 import { DatabaseId } from "@/core/domain/abstractions/database-id.interface";
 import { ChallengeCheckInTypeDto } from "@/modules/challenges/application/dtos/challenge-checkin-type.dto";
@@ -40,6 +40,8 @@ export class NonExistingChallengeDto {
   multipleCheckIns: boolean;
   @ApiProperty()
   checkInTypeCode: ChallengeCheckInTypeCode;
+  @ApiProperty({ type: [NonExistingActivityDto], required: false })
+  activities?: NonExistingActivityDto[];
 }
 
 interface ChallengeExpandableFieldsDto {
