@@ -99,4 +99,30 @@ export class ActivityRepository implements BaseActivityRepository {
       where: { id: activityId, challengeId },
     });
   }
+
+  async findByUserId(userId: number): Promise<ActivityDto[]> {
+    const activities = await this.db.challengeActivity.findMany({
+      where: {
+        challenge: {
+          usersChallenges: {
+            some: {
+              userId: userId,
+            },
+          },
+        },
+      },
+      orderBy: [
+        { createdAt: 'desc' },
+        { title: 'asc' }
+      ],
+    });
+
+    const uniqueActivities = activities.filter((activity, index, self) => 
+      index === self.findIndex(a => 
+        a.title === activity.title && a.description === activity.description
+      )
+    );
+
+    return uniqueActivities;
+  }
 }

@@ -29,6 +29,8 @@ import BottomSheet from "@/components/sheet";
 import { Feather } from "@expo/vector-icons";
 import TabsHeader from "@/components/tabs-header";
 import { useGetSuggestedActivities } from "@/hooks/suggestions/get-activities";
+import { useGetUserActivities } from "@/hooks/users/get-activities";
+import { useUser } from "@/store/user";
 import { ChallengeCheckInTypeCode } from "@/types/api/challenges";
 import ChallengeActivityCard from "@/components/challenge-activity-card";
 import DebouncedTextfieldSearch from "@/components/inputs/debounced-search";
@@ -57,6 +59,10 @@ const CreateChallenge3: React.FC = () => {
     data: suggestedActivities,
     isFetching: isFetchingSuggestedActivities,
   } = useGetSuggestedActivities();
+
+  const { user } = useUser();
+  const { data: userActivities, isFetching: isFetchingUserActivities } =
+    useGetUserActivities(user?.id || 0);
 
   const [start, setStart] = useState<Date | undefined>();
   const [end, setEnd] = useState<Date | undefined>();
@@ -89,6 +95,19 @@ const CreateChallenge3: React.FC = () => {
       return titleMatch || descriptionMatch;
     });
   }, [suggestedActivities, searchText]);
+
+  const filteredUserActivities = useMemo(() => {
+    if (!userActivities) return [];
+    if (!searchText.trim()) return userActivities;
+
+    const searchLower = searchText.toLowerCase();
+    return userActivities.filter((activity) => {
+      const titleMatch = activity.title.toLowerCase().includes(searchLower);
+      const descriptionMatch =
+        activity.description?.toLowerCase().includes(searchLower) ?? false;
+      return titleMatch || descriptionMatch;
+    });
+  }, [userActivities, searchText]);
 
   const handleContinue = async () => {
     if (challenge.startAt.getTime() > challenge.endAt.getTime()) {
@@ -165,7 +184,12 @@ const CreateChallenge3: React.FC = () => {
   };
 
   const handleAddSelectedActivities = () => {
-    const selectedActivities = filteredSuggestedActivities.filter((activity) =>
+    const currentActivitiesList =
+      addActivityTab === AddActivityTab.GENERAL
+        ? filteredSuggestedActivities
+        : filteredUserActivities;
+
+    const selectedActivities = currentActivitiesList.filter((activity) =>
       tempSelectedActivityIds.includes(activity.id.toString())
     );
 
@@ -245,17 +269,61 @@ const CreateChallenge3: React.FC = () => {
                         selectedValues={tempSelectedActivityIds}
                       />
 
-                      {filteredSuggestedActivities.length === 0 &&
+                      {!filteredSuggestedActivities.length &&
                         searchText.trim() && (
-                          <Typography color={COLORS.gray}>
-                            {t("challenge.noActivitiesFound")}
+                          <Typography
+                            color={COLORS.gray}
+                            align="center"
+                            size="sm"
+                          >
+                            {t("challenge.noSuggestedActivitiesFound")}
                           </Typography>
                         )}
                     </View>
                   )}
                 </View>
               )}
-              {addActivityTab === AddActivityTab.MY_ACTIVITIES && <View></View>}
+              {addActivityTab === AddActivityTab.MY_ACTIVITIES && (
+                <View style={{ flex: 1 }}>
+                  {isFetchingUserActivities ? (
+                    <View
+                      style={{
+                        height: 300,
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Typography color={COLORS.gray}>
+                        {t("common.loading")}
+                      </Typography>
+                    </View>
+                  ) : (
+                    <View style={{ flex: 1 }}>
+                      {filteredUserActivities.length > 0 ? (
+                        <CheckboxGroup
+                          items={filteredUserActivities.map((activity) => ({
+                            label: activity.title,
+                            subLabel: activity.description ?? undefined,
+                            value: activity.id.toString(),
+                          }))}
+                          onToggle={handleToggleActivity}
+                          variant="outline"
+                          selectedValues={tempSelectedActivityIds}
+                          fullWidth
+                        />
+                      ) : (
+                        <Typography
+                          color={COLORS.gray}
+                          align="center"
+                          size="sm"
+                        >
+                          {t("challenge.noUserActivitiesFound")}
+                        </Typography>
+                      )}
+                    </View>
+                  )}
+                </View>
+              )}
             </View>
           </ScrollView>
 

@@ -19,7 +19,10 @@ export const ACTIVITY_REPO_MOCK = {
   findById: jest.fn(),
   query: jest.fn(),
   delete: jest.fn(),
+  findByUserId: jest.fn(),
 };
+
+export const ACTIVITY_REPOSITORY_MOCK = ACTIVITY_REPO_MOCK;
 
 export const ACTIVITY_USECASE_MOCK = {
   findById: jest.fn(),

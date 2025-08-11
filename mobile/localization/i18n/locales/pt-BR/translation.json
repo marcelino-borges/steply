@@ -73,7 +73,8 @@
     "howCheckInWillBeValidated": "Como o check-in será validado?",
     "myActivities": "Minhas atividades",
     "generalActivities": "Geral",
-    "noActivitiesFound": "Nenhuma atividade encontrada",
+    "noSuggestedActivitiesFound": "Nenhuma atividade encontrada. Busque utilizando outro nome ou crie uma nova atividade.",
+    "noUserActivitiesFound": "Nenhuma atividade criada ainda. Toque no botão abaixo para adicionar a primeira.",
     "dateRange": {
       "sameDay": "Dia {{day}} de {{month}}",
       "sameMonth": "Do dia {{startDay}} ao {{endDay}} de {{month}}",
@@ -81,7 +82,7 @@
     },
     "createActivity": "Criar atividade",
     "addActivities_zero": "Adicionar atividade",
-    "addActivities_one": "Adicionar atividade", 
+    "addActivities_one": "Adicionar atividade",
     "addActivities_other": "Adicionar atividades",
     "activityName": "Nome da atividade",
     "activityDescription": "Descrição da atividade",

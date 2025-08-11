@@ -1,4 +1,6 @@
 import { Repository } from "@/core/domain/abstractions/repository.interface";
 import { ActivityDto } from "@/modules/challenges/application/dtos/activity.dto";
 
-export interface BaseActivityRepository extends Repository<ActivityDto> {}
+export interface BaseActivityRepository extends Repository<ActivityDto> {
+  findByUserId: (userId: number) => Promise<ActivityDto[]>;
+}

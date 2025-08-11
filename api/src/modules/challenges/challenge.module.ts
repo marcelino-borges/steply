@@ -44,6 +44,8 @@ import {
 } from "@/modules/challenges/infra/repositories/challenge-checkin-type.repository";
 import { ChallengeCheckInTypeController } from "@/modules/challenges/infra/controllers/challenge-checkin-type.controller";
 import { FindAllChallengeCheckInTypesUseCase } from "@/modules/challenges/application/use-cases/challenge-checkin-type/find-all-challenge-checkin-types.use-case";
+import { FindUserActivitiesUseCase } from "@/modules/challenges/application/use-cases/activity/find-user-activities.use-case";
+import { UserActivityController } from "@/modules/challenges/infra/controllers/user-activity.controller";
 
 @Module({
   imports: [DatabaseModule],
@@ -87,6 +89,7 @@ import { FindAllChallengeCheckInTypesUseCase } from "@/modules/challenges/applic
     FindActivityByIdUseCase,
     QueryActivitiesUseCase,
     UpdateActivityUseCase,
+    FindUserActivitiesUseCase,
 
     CreateRewardUseCase,
     DeleteRewardUseCase,
@@ -102,6 +105,7 @@ import { FindAllChallengeCheckInTypesUseCase } from "@/modules/challenges/applic
     RankTypeController,
     RewardController,
     ChallengeCheckInTypeController,
+    UserActivityController,
   ],
 })
 export class ChallengeModule {}
