@@ -1,6 +1,6 @@
 import type { PropsWithChildren } from "react";
 import { useCallback, useEffect, useState } from "react";
-import { Modal, Pressable, View } from "react-native";
+import { Modal, Pressable, View, ViewStyle } from "react-native";
 import Animated, {
   runOnJS,
   useAnimatedStyle,
@@ -14,6 +14,7 @@ interface BottomSheetProps extends PropsWithChildren {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   title?: string;
+  modalStyle?: ViewStyle;
 }
 
 export default function BottomSheet({
@@ -21,6 +22,7 @@ export default function BottomSheet({
   open,
   children,
   title,
+  modalStyle,
 }: BottomSheetProps) {
   const [isVisible, setIsVisible] = useState(false);
   const backdropOpacity = useSharedValue(0);
@@ -66,6 +68,7 @@ export default function BottomSheet({
       onRequestClose={() => {
         onOpenChange(!open);
       }}
+      style={modalStyle}
     >
       <View style={styles.backdrop}>
         <Animated.View style={[styles.backdrop, backdropAnimatedStyle]}>

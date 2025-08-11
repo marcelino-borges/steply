@@ -82,7 +82,10 @@
     "createActivity": "Criar atividade",
     "addActivities_zero": "Adicionar atividade",
     "addActivities_one": "Adicionar atividade", 
-    "addActivities_other": "Adicionar atividades"
+    "addActivities_other": "Adicionar atividades",
+    "activityName": "Nome da atividade",
+    "activityDescription": "Descrição da atividade",
+    "addActivity": "Adicionar atividade"
   },
   "files": {
     "invalidFile": "Arquivo inválido",

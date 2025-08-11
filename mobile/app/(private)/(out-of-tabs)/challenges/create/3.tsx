@@ -1,11 +1,10 @@
-import React, { useCallback, useState, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import {
   View,
   StyleSheet,
   ScrollView,
-  Platform,
-  Pressable,
   TouchableOpacity,
+  useWindowDimensions,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
@@ -18,16 +17,15 @@ import { SPACING } from "@/constants/spacings";
 import Button from "@/components/button";
 import { useCreateChallenge } from "@/hooks/challenges/create";
 import TextfieldFree from "@/components/inputs/textfield-free";
+import TextArea from "@/components/inputs/textarea";
 import { formatDateByLocale } from "@/utils/string-masks";
-import { getCalendars, getLocales } from "expo-localization";
-import { DateTimePickerEvent } from "@react-native-community/datetimepicker";
-import { DEFAULT_TIMEZONE } from "@/constants/timezone";
+import { getLocales } from "expo-localization";
 import CalendarPicker, {
   CalendarChangedDate,
 } from "@/components/calendar-picker";
-import { differenceInCalendarDays } from "date-fns";
 import Typography from "@/components/typography";
 import { NonExistingActivityDto } from "@/types/api/activity";
+import BottomSheet from "@/components/sheet";
 import { Feather } from "@expo/vector-icons";
 import TabsHeader from "@/components/tabs-header";
 import { useGetSuggestedActivities } from "@/hooks/suggestions/get-activities";
@@ -41,13 +39,14 @@ enum AddActivityTab {
   MY_ACTIVITIES,
 }
 
+const MAX_DESCRIPTION_LENGTH = 2048;
+
 const CreateChallenge3: React.FC = () => {
   const router = useRouter();
   const { t } = useTranslation();
-  const timezone = getCalendars()[0].timeZone ?? DEFAULT_TIMEZONE;
+  const { height } = useWindowDimensions();
 
   const {
-    setChallenge,
     challenge,
     isPending: isCreatingChallange,
     activities,
@@ -63,8 +62,15 @@ const CreateChallenge3: React.FC = () => {
   const [end, setEnd] = useState<Date | undefined>();
   const [openAddActivity, setOpenAddActivity] = useState(false);
   const [addActivityTab, setAddActivityTab] = useState(AddActivityTab.GENERAL);
-  const [newActivity, setNewActivity] = useState<NonExistingActivityDto>();
   const [searchText, setSearchText] = useState("");
+  const [isCreateActivitySheetOpen, setIsCreateActivitySheetOpen] =
+    useState(false);
+  const [customActivityTitle, setCustomActivityTitle] = useState("");
+  const [customActivityDescription, setCustomActivityDescription] =
+    useState("");
+  const [tempSelectedActivityIds, setTempSelectedActivityIds] = useState<
+    string[]
+  >([]);
 
   const hasFilledForm =
     challenge.title.length > 4 && challenge.description.length > 10;
@@ -84,34 +90,6 @@ const CreateChallenge3: React.FC = () => {
     });
   }, [suggestedActivities, searchText]);
 
-  // Calculate selected activity IDs based on current activities in context
-  const selectedActivityValues = useMemo(() => {
-    return filteredSuggestedActivities
-      .filter((activity) =>
-        activities.some(
-          (selectedActivity) => selectedActivity.title === activity.title
-        )
-      )
-      .map((activity) => activity.id.toString());
-  }, [filteredSuggestedActivities, activities]);
-
-  const DaysBox = useCallback(() => {
-    const daysDiff = differenceInCalendarDays(
-      challenge.endAt,
-      challenge.startAt
-    );
-
-    return (
-      <View style={styles.daysBox}>
-        <Typography size="xs" color={COLORS.contentBlack} weight="semibold">
-          {`${daysDiff} ${t("common.days", {
-            count: daysDiff,
-          })}`}
-        </Typography>
-      </View>
-    );
-  }, [challenge.endAt, challenge.startAt, t]);
-
   const handleContinue = async () => {
     if (challenge.startAt.getTime() > challenge.endAt.getTime()) {
       console.log(
@@ -122,18 +100,6 @@ const CreateChallenge3: React.FC = () => {
     }
 
     router.push("/(private)/(out-of-tabs)/challenges/create/4");
-  };
-
-  const handleStartDate = (_event: DateTimePickerEvent, date?: Date) => {
-    if (date) {
-      setChallenge({ ...challenge, startAt: date });
-    }
-  };
-
-  const handleEndDate = (_event: DateTimePickerEvent, date?: Date) => {
-    if (date) {
-      setChallenge({ ...challenge, endAt: date });
-    }
   };
 
   const onChangeCalendarPicker = (date: Date, type: CalendarChangedDate) => {
@@ -151,7 +117,6 @@ const CreateChallenge3: React.FC = () => {
 
     setEnd(date);
 
-    // Just for giving the user the visual of the end date being selected
     setTimeout(() => {
       setOpenAddActivity(true);
     }, 250);
@@ -163,35 +128,68 @@ const CreateChallenge3: React.FC = () => {
   };
 
   const handleToggleActivity = (value: string) => {
-    const activityId = parseInt(value);
-    const selectedActivity = filteredSuggestedActivities.find(
-      (activity) => activity.id === activityId
-    );
-
-    if (!selectedActivity) return;
-
-    const isAlreadySelected = activities.some(
-      (activity) => activity.title === selectedActivity.title
-    );
-
-    if (isAlreadySelected) {
-      // Remover atividade
-      setActivities(
-        activities.filter(
-          (activity) => activity.title !== selectedActivity.title
-        )
+    if (tempSelectedActivityIds.includes(value)) {
+      setTempSelectedActivityIds(
+        tempSelectedActivityIds.filter((id) => id !== value)
       );
     } else {
-      // Adicionar atividade
-      const newActivity: NonExistingActivityDto = {
-        title: selectedActivity.title,
-        description: selectedActivity.description,
-        startAt: start || new Date(),
-        endAt: end || new Date(),
-      };
-      setActivities([...activities, newActivity]);
+      setTempSelectedActivityIds([...tempSelectedActivityIds, value]);
     }
   };
+
+  const handleAddCustomActivity = () => {
+    if (!customActivityTitle.trim()) return;
+
+    const newActivity: NonExistingActivityDto = {
+      title: customActivityTitle.trim(),
+      description: customActivityDescription.trim() || null,
+      startAt: showCalendar ? start || challenge.startAt : challenge.startAt,
+      endAt: showCalendar ? end || challenge.endAt : challenge.endAt,
+    };
+
+    setActivities([...activities, newActivity]);
+
+    if (showCalendar) {
+      setStart(undefined);
+      setEnd(undefined);
+    }
+
+    setCustomActivityTitle("");
+    setCustomActivityDescription("");
+    setIsCreateActivitySheetOpen(false);
+    setOpenAddActivity(false);
+  };
+
+  const handleRemoveActivity = (index: number) => {
+    setActivities(activities.filter((_, i) => i !== index));
+  };
+
+  const handleAddSelectedActivities = () => {
+    const selectedActivities = filteredSuggestedActivities.filter((activity) =>
+      tempSelectedActivityIds.includes(activity.id.toString())
+    );
+
+    const newActivities = selectedActivities.map((selectedActivity) => ({
+      title: selectedActivity.title,
+      description: selectedActivity.description,
+      startAt: showCalendar ? start || challenge.startAt : challenge.startAt,
+      endAt: showCalendar ? end || challenge.endAt : challenge.endAt,
+    }));
+
+    setActivities([...activities, ...newActivities]);
+
+    if (showCalendar) {
+      setStart(undefined);
+      setEnd(undefined);
+    }
+
+    setTempSelectedActivityIds([]);
+    setOpenAddActivity(false);
+  };
+
+  const showCalendar =
+    challenge.checkInTypeCode ===
+    ChallengeCheckInTypeCode.DAILY_DIFFERENT_ACTIVITIES;
 
   if (openAddActivity) {
     return (
@@ -205,6 +203,7 @@ const CreateChallenge3: React.FC = () => {
               step={3}
               onPressBack={() => {
                 clearPickedDates();
+                setTempSelectedActivityIds([]);
                 setOpenAddActivity(false);
               }}
             />
@@ -243,7 +242,7 @@ const CreateChallenge3: React.FC = () => {
                         }))}
                         onToggle={handleToggleActivity}
                         variant="outline"
-                        selectedValues={selectedActivityValues}
+                        selectedValues={tempSelectedActivityIds}
                       />
 
                       {filteredSuggestedActivities.length === 0 &&
@@ -260,34 +259,67 @@ const CreateChallenge3: React.FC = () => {
             </View>
           </ScrollView>
 
-          {/* Botões fixos na parte inferior */}
           <View style={styles.fixedButtonsContainer}>
             <Button
               variant="ghost"
               color="primary"
-              onPress={() => {
-                // TODO: Implementar criação de atividade personalizada
-              }}
+              onPress={() => setIsCreateActivitySheetOpen(true)}
             >
               {t("challenge.createActivity")}
             </Button>
             <Button
-              onPress={() => {
-                // TODO: Implementar adição das atividades selecionadas
-                setOpenAddActivity(false);
-              }}
+              onPress={handleAddSelectedActivities}
+              disabled={tempSelectedActivityIds.length === 0}
             >
-              {t("challenge.addActivities", { count: activities.length })}
+              {t("challenge.addActivities", {
+                count: tempSelectedActivityIds.length,
+              })}
             </Button>
           </View>
         </View>
+
+        <BottomSheet
+          open={isCreateActivitySheetOpen}
+          onOpenChange={(open) => {
+            if (open) return;
+            setIsCreateActivitySheetOpen(false);
+            setCustomActivityTitle("");
+            setCustomActivityDescription("");
+          }}
+          modalStyle={{ zIndex: 999 }}
+        >
+          <View style={styles.bottomSheetContent}>
+            <View style={styles.formContainer}>
+              <TextfieldFree
+                placeholder={t("challenge.activityName")}
+                value={customActivityTitle}
+                onChangeText={setCustomActivityTitle}
+                required
+              />
+
+              <TextArea
+                placeholder={t("challenge.activityDescription")}
+                value={customActivityDescription}
+                onChangeText={setCustomActivityDescription}
+                rows={3}
+                maxHeight={height / 2}
+                maxLength={MAX_DESCRIPTION_LENGTH}
+              />
+            </View>
+
+            <View style={styles.bottomSheetButtonContainer}>
+              <Button
+                onPress={handleAddCustomActivity}
+                disabled={!customActivityTitle.trim()}
+              >
+                {t("challenge.addActivity")}
+              </Button>
+            </View>
+          </View>
+        </BottomSheet>
       </SafeAreaView>
     );
   }
-
-  const showCalendar =
-    challenge.checkInTypeCode ===
-    ChallengeCheckInTypeCode.DAILY_DIFFERENT_ACTIVITIES;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -355,8 +387,13 @@ const CreateChallenge3: React.FC = () => {
                   key={`${activity.title.replaceAll(" ", "_").toLowerCase()}_${activity.description?.replaceAll(" ", "_").toLowerCase() ?? "act"}_${Math.round(Math.random() * 10000)}`}
                   activity={activity}
                   isLastInList={index === activities.length - 1}
-                  onEdit={() => {}}
-                  onRemove={() => {}}
+                  onEdit={() => {
+                    setOpenAddActivity(true);
+                    setIsCreateActivitySheetOpen(true);
+                    setCustomActivityTitle(activity.title);
+                    setCustomActivityDescription(activity.description ?? "");
+                  }}
+                  onRemove={() => handleRemoveActivity(index)}
                 />
               ))}
             </View>
@@ -440,6 +477,18 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: COLORS.inputBorder,
     gap: SPACING[4],
+  },
+  bottomSheetContent: {
+    width: "100%",
+  },
+  bottomSheetTitle: {
+    textAlign: "center",
+  },
+  formContainer: {
+    gap: SPACING[4],
+  },
+  bottomSheetButtonContainer: {
+    marginTop: SPACING[4],
   },
 });
 

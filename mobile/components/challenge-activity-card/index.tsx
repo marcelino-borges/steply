@@ -74,7 +74,13 @@ export default function ChallengeActivityCard({
         </View>
         <Typography weight="semibold">{activity.title}</Typography>
         {activity.description && (
-          <Typography color={COLORS.gray} size="xs">
+          <Typography
+            color={COLORS.gray}
+            size="xs"
+            style={{
+              maxHeight: 100,
+            }}
+          >
             {activity.description}
           </Typography>
         )}

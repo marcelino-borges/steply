@@ -26,6 +26,10 @@ export interface TextfieldFreeProps
   leftElement?: ReactNode;
   type?: "text" | "password";
   mask?: Mask;
+  multiline?: boolean;
+  numberOfLines?: number;
+  minHeight?: number;
+  maxHeight?: number;
 }
 
 const TextfieldFree = React.forwardRef<TextInput, TextfieldFreeProps>(
@@ -45,6 +49,10 @@ const TextfieldFree = React.forwardRef<TextInput, TextfieldFreeProps>(
       mask,
       onChangeText,
       style,
+      multiline = false,
+      numberOfLines = 1,
+      minHeight,
+      maxHeight,
       ...props
     },
     ref
@@ -52,6 +60,9 @@ const TextfieldFree = React.forwardRef<TextInput, TextfieldFreeProps>(
     const { t } = useTranslation();
     const [isFocused, setIsFocused] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const [inputHeight, setInputHeight] = useState(
+      multiline ? (numberOfLines * 20 + 32) : SPACING[14]
+    );
     const inputRef = useRef<TextInput>(null);
     const animatedValue = useRef(new Animated.Value(0)).current;
     const hasValue = value && value.length;
@@ -73,6 +84,22 @@ const TextfieldFree = React.forwardRef<TextInput, TextfieldFreeProps>(
     const handleBlur = (e: any) => {
       setIsFocused(false);
       onBlur?.(e);
+    };
+
+    const handleContentSizeChange = (e: any) => {
+      if (!multiline) return;
+      
+      const newHeight = e.nativeEvent.contentSize.height;
+      let calculatedHeight = newHeight + 32; // Add padding
+
+      if (minHeight && calculatedHeight < minHeight) {
+        calculatedHeight = minHeight;
+      }
+      if (maxHeight && calculatedHeight > maxHeight) {
+        calculatedHeight = maxHeight;
+      }
+
+      setInputHeight(calculatedHeight);
     };
 
     const translateY = animatedValue.interpolate({
@@ -106,8 +133,12 @@ const TextfieldFree = React.forwardRef<TextInput, TextfieldFreeProps>(
           ref={ref ?? inputRef}
           value={value}
           secureTextEntry={isPasswordField ? !showPassword : false}
+          multiline={multiline}
+          numberOfLines={numberOfLines}
+          textAlignVertical={multiline ? "top" : "center"}
           style={[
             textfieldStyles.input,
+            { height: inputHeight },
             fullWidth && { width: "100%" },
             !!error?.length && textfieldStyles.errorBorder,
             disabled && {
@@ -119,6 +150,7 @@ const TextfieldFree = React.forwardRef<TextInput, TextfieldFreeProps>(
           editable={!disabled}
           onFocus={handleFocus}
           onBlur={handleBlur}
+          onContentSizeChange={handleContentSizeChange}
           onChangeText={(text: string) => {
             if (!onChangeText) return;
 
