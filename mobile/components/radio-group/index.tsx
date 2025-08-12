@@ -1,7 +1,7 @@
 import React from "react";
 import { View } from "react-native";
 import { radioGroupStyles } from "./styles";
-import RadioButton from "../radio-button";
+import RadioButton, { RadioButtonVariant } from "../radio-button";
 
 interface RadioGroupProps {
   items: {
@@ -14,7 +14,7 @@ interface RadioGroupProps {
   reverse?: boolean;
   justifyBetween?: boolean;
   fullWidth?: boolean;
-  variant?: "outline" | "ghost";
+  variant?: RadioButtonVariant;
   disabled?: boolean;
 }
 
@@ -32,20 +32,26 @@ export default function RadioGroup({
     <View
       style={[radioGroupStyles.root, fullWidth && { flexDirection: "column" }]}
     >
-      {items.map((item) => (
-        <RadioButton
-          key={item.value + `_${item.label.replaceAll(" ", "_").toLowerCase()}`}
-          label={item.label}
-          subLabel={item.subLabel}
-          onSelect={() => onSelect(item.value)}
-          selected={selectedValue === item.value}
-          fullWidth={fullWidth}
-          justifyBetween={justifyBetween}
-          reverse={reverse}
-          variant={variant}
-          disabled={disabled}
-        />
-      ))}
+      {items.map((item) => {
+        const isSelected = selectedValue === item.value;
+
+        return (
+          <RadioButton
+            key={
+              item.value + `_${item.label.replaceAll(" ", "_").toLowerCase()}`
+            }
+            label={item.label}
+            subLabel={item.subLabel}
+            onSelect={() => onSelect(item.value)}
+            selected={isSelected}
+            fullWidth={fullWidth}
+            justifyBetween={justifyBetween}
+            reverse={reverse}
+            variant={variant}
+            disabled={disabled}
+          />
+        );
+      })}
     </View>
   );
 }

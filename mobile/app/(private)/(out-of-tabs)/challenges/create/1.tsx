@@ -116,7 +116,7 @@ const CreateChallenge1: React.FC = () => {
   };
 
   const handleAddTag = (tag: string) => {
-    const updatedTags = [...challenge.tags, tag];
+    const updatedTags = [...challenge.tags, tag.toLowerCase()];
     setChallenge({
       ...challenge,
       tags: updatedTags,

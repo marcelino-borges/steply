@@ -13,7 +13,8 @@
     "you": "você",
     "continue": "Continuar",
     "notNow": "Agora não",
-    "clear": "Limpar"
+    "clear": "Limpar",
+    "sharingNotAvailable": "Seu dispositivo não permite compartilhamento"
   },
   "forms": {
     "fieldRequired": "Campo obrigatório",
@@ -100,7 +101,29 @@
     "rewardDocumentsLabel": "Documentos importantes",
     "rewardDocumentsSubLabel": "Até 50MB · Formatos aceitos: PDF, DOCX e DOC.",
     "noRewardButton": "Esse desafio não tem prêmio",
-    "reward": "Prêmio"
+    "reward": "Prêmio",
+    "joinMethods": {
+      "open": {
+        "name": "Aberto",
+        "description": "Qualquer pessoa pode participar"
+      },
+      "invite": {
+        "name": "Por convite",
+        "description": "Qualquer pessoa com o link pode participar; sem necessidade de aprovação."
+      },
+      "approval": {
+        "name": "Por aprovação",
+        "description": "Qualquer pessoa pode participar mediante aprovação."
+      }
+    },
+    "createAndShare": "Criar & Compartilhar",
+    "whoCanJoin": "Quem pode participar?",
+    "seeChallenge": "Ver desafio",
+    "invitePeople": "Convidar participantes",
+    "challengeCreatedTitle": "Desafio criado!",
+    "challengeCreatedSubtitle": "Seu desafio está pronto! Convide amigos para participar e alcance sua meta junto com eles.",
+    "shareChallengeUrl": "Olá!\nAcabei de criar um desafio super legal no Steply! 💪\nVem participar!\n\nSó acessar aqui: {{url}}",
+    "errorCreating": "Ops! Tivemos um erro ao criar esse desafio, tente novamente em instantes"
   },
   "files": {
     "invalidFile": "Arquivo inválido",

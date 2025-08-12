@@ -23,7 +23,6 @@ const CreateChallenge5: React.FC = () => {
   const { t } = useTranslation();
 
   const {
-    challenge,
     selectedRewardType,
     reward,
     setReward,

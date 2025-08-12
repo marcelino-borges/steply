@@ -97,7 +97,7 @@ const CreateChallenge4: React.FC = () => {
                 }}
                 selectedValue={selectedRewardType.id.toString()}
                 fullWidth
-                variant="outline"
+                variant="outlineOnlySelected"
               />
             )
           )}

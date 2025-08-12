@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { View, StyleSheet, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
@@ -10,6 +10,8 @@ import { COLORS } from "@/constants/colors";
 import { SPACING } from "@/constants/spacings";
 import Button from "@/components/button";
 import { useCreateChallenge } from "@/hooks/challenges/create";
+import RadioGroup from "@/components/radio-group";
+import { JoinMethod } from "@/types/api/challenges";
 
 const CreateChallenge6: React.FC = () => {
   const router = useRouter();
@@ -19,42 +21,56 @@ const CreateChallenge6: React.FC = () => {
     setChallenge,
     challenge,
     isPending: isCreatingChallange,
+    createChallenge,
   } = useCreateChallenge();
-
-  const hasFilledForm =
-    challenge.title.length > 4 && challenge.description.length > 10;
 
   const isLoadingScreen = isCreatingChallange;
 
   const handleContinue = async () => {
-    if (challenge.startAt.getTime() > challenge.endAt.getTime()) {
-      console.log(
-        "------------- [ERROR] Challenge start date cannot be after end date"
-      );
-      Toast.error(t("challenge.startDateCannotBeAfterEnd"));
-      return;
-    }
+    try {
+      await createChallenge?.();
 
-    // router.push("");
+      router.push("/(private)/(out-of-tabs)/challenges/create/finished");
+    } catch (error) {
+      console.log("Error creating challenge: ", error);
+      Toast.error(t("challenge.errorCreating"));
+    }
   };
+
+  const options = useMemo(
+    () =>
+      Object.values(JoinMethod).map((method) => ({
+        value: method,
+        label: t(`challenge.joinMethods.${method.toLowerCase()}.name`),
+        subLabel: t(
+          `challenge.joinMethods.${method.toLowerCase()}.description`
+        ),
+      })),
+    [t]
+  );
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <SteppedHeader
-          title={t("challenge.details")}
+          title={t("challenge.createAndShare")}
           foreground={COLORS.contentBlack}
           totalSteps={6}
           step={6}
         />
-        <View style={styles.content}></View>
+        <View style={styles.content}>
+          <RadioGroup
+            items={options}
+            onSelect={(value: string) => {
+              setChallenge({ ...challenge, joinMethod: value as JoinMethod });
+            }}
+            selectedValue={challenge.joinMethod}
+            variant="outlineOnlySelected"
+          />
+        </View>
       </ScrollView>
       <View style={styles.buttonView}>
-        <Button
-          loading={isLoadingScreen}
-          disabled={!hasFilledForm}
-          onPress={handleContinue}
-        >
+        <Button loading={isLoadingScreen} onPress={handleContinue}>
           {t("common.next")}
         </Button>
       </View>

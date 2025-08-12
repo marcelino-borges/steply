@@ -79,7 +79,7 @@ const CreateChallenge2: React.FC = () => {
               }}
               selectedValue={challenge.checkInTypeCode.toString()}
               fullWidth
-              variant="outline"
+              variant="outlineOnlySelected"
             />
           ) : (
             <View style={{ gap: SPACING[4] }}>

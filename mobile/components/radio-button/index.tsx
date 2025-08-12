@@ -6,6 +6,8 @@ import { COLORS } from "@/constants/colors";
 import { SPACING } from "@/constants/spacings";
 import { RADIUS } from "@/constants/radius";
 
+export type RadioButtonVariant = "outlineAll" | "outlineOnlySelected" | "ghost";
+
 export interface RadioButtonProps {
   label: string;
   subLabel?: string;
@@ -15,7 +17,7 @@ export interface RadioButtonProps {
   selected: boolean;
   fullWidth?: boolean;
   disabled?: boolean;
-  variant?: "outline" | "ghost";
+  variant?: RadioButtonVariant;
 }
 
 export default function RadioButton({
@@ -35,13 +37,15 @@ export default function RadioButton({
         radioButtonStyles.root,
         justifyBetween && { justifyContent: "space-between" },
         reverse && { flexDirection: "row-reverse" },
-        variant === "outline" && {
+        (variant === "outlineAll" || variant === "outlineOnlySelected") && {
           borderWidth: 1,
           borderColor: disabled
             ? COLORS.muted
             : selected
               ? COLORS.primary
-              : COLORS.inputBorder,
+              : variant === "outlineAll"
+                ? COLORS.inputBorder
+                : "transparent",
           borderRadius: RADIUS.sm,
           padding: SPACING[4],
         },

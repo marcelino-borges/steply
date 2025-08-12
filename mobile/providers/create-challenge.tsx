@@ -35,6 +35,7 @@ const defaultChallenge: NonExistingChallengeDto = {
 
 interface CreateChallengeContextProps {
   challenge: NonExistingChallengeDto;
+  createdChallenge?: FullChallengeDto;
   setChallenge: (newChallenge: NonExistingChallengeDto) => void;
   createChallenge?: () => Promise<FullChallengeDto>;
   isError: boolean;
@@ -81,6 +82,7 @@ export const CreateChallengeContext =
     setRewardImage: () => {},
     rewardFiles: undefined,
     setRewardFiles: () => {},
+    createdChallenge: undefined,
   });
 
 export const CreateChallengeProvider: React.FC<React.PropsWithChildren> = ({
@@ -107,6 +109,8 @@ export const CreateChallengeProvider: React.FC<React.PropsWithChildren> = ({
 
   const [challenge, setChallenge] =
     useState<NonExistingChallengeDto>(defaultChallenge);
+
+  const [createdChallenge, setCreatedChallenge] = useState<FullChallengeDto>();
 
   const {
     mutateAsync: createChallenge,
@@ -236,13 +240,27 @@ export const CreateChallengeProvider: React.FC<React.PropsWithChildren> = ({
     };
   };
 
+  const clearAllStates = () => {
+    setChallenge(defaultChallenge);
+    setBanner(undefined);
+    setActivities([]);
+    setSelectedRewardType(undefined);
+    setReward(undefined);
+    setRewardImage(undefined);
+    setRewardFiles(undefined);
+  };
+
   const handleCreateChallenge = async () => {
     let uploadedFiles: string[] = [];
-    
+
     try {
-      const { bannerUrl, rewardImageUrl, rewardFilesUrls, uploadedFiles: files } =
-        await uploadChallengeFiles();
-      
+      const {
+        bannerUrl,
+        rewardImageUrl,
+        rewardFilesUrls,
+        uploadedFiles: files,
+      } = await uploadChallengeFiles();
+
       uploadedFiles = files;
 
       // Prepare reward data if exists
@@ -261,6 +279,9 @@ export const CreateChallengeProvider: React.FC<React.PropsWithChildren> = ({
         bannerUrl,
         reward: rewardData,
       });
+
+      setCreatedChallenge(challengeCreated);
+      clearAllStates();
 
       Toast.success(t("challenge.createSuccess"));
       return challengeCreated;
@@ -301,6 +322,7 @@ export const CreateChallengeProvider: React.FC<React.PropsWithChildren> = ({
         setRewardImage,
         rewardFiles,
         setRewardFiles,
+        createdChallenge,
       }}
     >
       {children}
