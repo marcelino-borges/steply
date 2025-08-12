@@ -38,6 +38,26 @@ const Button: React.FC<ButtonProps> = ({
   rightElement,
   ...props
 }) => {
+  const getFontColor = () => {
+    if (disabled) return COLORS.mutedForeground;
+    if (customStyle?.color) return COLORS[customStyle.color];
+    if (variant === "outlined") {
+      if (color === "primary") {
+        return COLORS.primary;
+      }
+      return "white";
+    }
+
+    if (variant === "ghost") {
+      if (color === "primary") {
+        return COLORS.primary;
+      }
+      return "white";
+    }
+
+    return buttonStyles[color].color;
+  };
+
   return (
     <TouchableOpacity
       {...props}
@@ -72,15 +92,7 @@ const Button: React.FC<ButtonProps> = ({
         <ActivityIndicator size="small" color={COLORS.bgWhite} />
       ) : (
         <Typography
-          color={
-            disabled
-              ? COLORS.mutedForeground
-              : customStyle?.color
-                ? COLORS[customStyle.color]
-                : variant === "outlined" || variant === "ghost"
-                  ? COLORS.primary
-                  : buttonStyles[color].color
-          }
+          color={getFontColor()}
           letterSpacing={0.1}
           lineHeight={SPACING[5]}
           weight={!boldFont ? "normal" : "semibold"}

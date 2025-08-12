@@ -229,6 +229,8 @@ model Reward {
   deliveryDetails String?
   name            String
   description     String?
+  imageUrl        String?
+  filesUrls       String[]
 
   challengeId Int @unique
 

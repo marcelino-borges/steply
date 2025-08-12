@@ -1,7 +1,7 @@
 import { ActivityDto } from "./activity";
 import { MinimalOrganizationDto } from "./organization";
 import { RankTypeDto } from "./rank-type";
-import { RewardDto } from "./reward";
+import { RewardDto, NonExistingRewardDto } from "./reward";
 
 export enum JoinMethod {
   OPEN = "OPEN",
@@ -60,7 +60,7 @@ export interface NonExistingChallengeDto {
   joinMethod: JoinMethod;
   organizationId: number;
   bannerUrl?: string;
-  rewardId?: number;
+  reward?: NonExistingRewardDto;
   interactionIncrement: number;
   tags: string[];
   checkInEndOfDay: boolean;

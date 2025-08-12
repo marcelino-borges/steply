@@ -30,6 +30,7 @@ import { useCreateChallenge } from "@/hooks/challenges/create";
 import { DEFAULT_TIMEZONE } from "@/constants/timezone";
 import TagsField from "@/components/inputs/tags";
 import { formatDateByLocale } from "@/utils/string-masks";
+import { RADIUS } from "@/constants/radius";
 
 const CreateChallenge1: React.FC = () => {
   const router = useRouter();
@@ -227,10 +228,7 @@ const CreateChallenge1: React.FC = () => {
               {t("challenge.addBannerDescription")}
             </Typography>
             {!banner?.uri.length ? (
-              <AttachButton
-                leftIcon={<Feather name="upload" size={24} />}
-                onPress={pickBanner}
-              >
+              <AttachButton leftIcon="upload" onPress={pickBanner}>
                 {t("challenge.addBannerFromLibrary")}
               </AttachButton>
             ) : (
@@ -298,6 +296,7 @@ const styles = StyleSheet.create({
   },
   buttonView: {
     paddingHorizontal: SPACING.md,
+    paddingBottom: SPACING.lg,
     width: "100%",
   },
   bannerCard: {
@@ -306,9 +305,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     gap: SPACING[2],
-    borderWidth: 1,
-    borderColor: COLORS.muted,
-    borderRadius: SPACING.xs,
+    borderWidth: 2,
+    borderColor: COLORS.inputBorder,
+    borderRadius: RADIUS.xs,
     overflow: "hidden",
     paddingRight: SPACING.md,
   },

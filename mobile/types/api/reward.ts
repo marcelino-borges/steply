@@ -4,6 +4,8 @@ export interface Reward {
   rewardTypeId: number;
   deliveryDetails: string | null;
   challengeId: number;
+  imageUrl: string | null;
+  filesUrls: string[];
 }
 
 export interface NonExistingRewardDto {
@@ -11,6 +13,8 @@ export interface NonExistingRewardDto {
   description?: string;
   rewardTypeId: number;
   deliveryDetails?: string;
+  imageUrl?: string;
+  filesUrls?: string[];
 }
 
 export interface RewardDto extends Reward {

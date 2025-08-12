@@ -78,9 +78,6 @@ const CreateChallenge3: React.FC = () => {
     string[]
   >([]);
 
-  const hasFilledForm =
-    challenge.title.length > 4 && challenge.description.length > 10;
-
   const isLoadingScreen = isCreatingChallange;
 
   const filteredSuggestedActivities = useMemo(() => {
@@ -450,20 +447,26 @@ const CreateChallenge3: React.FC = () => {
               </TouchableOpacity>
             </View>
             <View>
-              {activities.map((activity, index) => (
-                <ChallengeActivityCard
-                  key={`${activity.title.replaceAll(" ", "_").toLowerCase()}_${activity.description?.replaceAll(" ", "_").toLowerCase() ?? "act"}_${Math.round(Math.random() * 10000)}`}
-                  activity={activity}
-                  isLastInList={index === activities.length - 1}
-                  onEdit={() => {
-                    setOpenAddActivity(true);
-                    setIsCreateActivitySheetOpen(true);
-                    setCustomActivityTitle(activity.title);
-                    setCustomActivityDescription(activity.description ?? "");
-                  }}
-                  onRemove={() => handleRemoveActivity(index)}
-                />
-              ))}
+              {!activities.length && (
+                <Typography italic size="sm" color={COLORS.muted}>
+                  {t("challenge.addActivityBeforeContinue")}
+                </Typography>
+              )}
+              {!!activities.length &&
+                activities.map((activity, index) => (
+                  <ChallengeActivityCard
+                    key={`${activity.title.replaceAll(" ", "_").toLowerCase()}_${activity.description?.replaceAll(" ", "_").toLowerCase() ?? "act"}_${Math.round(Math.random() * 10000)}`}
+                    activity={activity}
+                    isLastInList={index === activities.length - 1}
+                    onEdit={() => {
+                      setOpenAddActivity(true);
+                      setIsCreateActivitySheetOpen(true);
+                      setCustomActivityTitle(activity.title);
+                      setCustomActivityDescription(activity.description ?? "");
+                    }}
+                    onRemove={() => handleRemoveActivity(index)}
+                  />
+                ))}
             </View>
           </View>
         </View>
@@ -471,10 +474,10 @@ const CreateChallenge3: React.FC = () => {
       <View style={styles.buttonView}>
         <Button
           loading={isLoadingScreen}
-          disabled={!hasFilledForm}
+          disabled={!activities.length}
           onPress={handleContinue}
         >
-          {t("common.next")}
+          {t("common.continue")}
         </Button>
       </View>
     </SafeAreaView>
@@ -497,6 +500,7 @@ const styles = StyleSheet.create({
   },
   buttonView: {
     paddingHorizontal: SPACING.md,
+    paddingBottom: SPACING.lg,
     width: "100%",
   },
   datePickersContainer: {

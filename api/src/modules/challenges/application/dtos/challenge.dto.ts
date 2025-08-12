@@ -3,7 +3,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { DatabaseRecord } from "@/core/domain/abstractions/database-record.interface";
 import { Challenge, JoinMethod } from "@/core/domain/entities/challenge.entity";
 import { MinimalOrganizationDto } from "@/modules/organizations/application/dtos/organization.dto";
-import { RewardDto } from "@/modules/challenges/application/dtos/reward.dto";
+import { RewardDto, NonExistingRewardDto } from "@/modules/challenges/application/dtos/reward.dto";
 import { RankTypeDto } from "@/modules/challenges/application/dtos/rank-type.dto";
 import { ActivityDto, NonExistingActivityDto } from "@/modules/challenges/application/dtos/activity.dto";
 import { UserChallengeInteraction } from "@/core/domain/entities/user-challenge-interaction.entity";
@@ -29,7 +29,7 @@ export class NonExistingChallengeDto {
   @ApiProperty()
   bannerUrl?: string;
   @ApiProperty()
-  rewardId?: number;
+  reward?: Omit<NonExistingRewardDto, 'challengeId'>;
   @ApiProperty()
   interactionIncrement: number;
   @ApiProperty({ type: [String] })

@@ -9,6 +9,7 @@ import { booleanSchema } from "./primitives/boolean.schema";
 import { dbIdSchema } from "./db-exclusive-fields.schema";
 import { enumSchema } from "./primitives/enum.schema";
 import { createActivitySchema } from "./activity.schema";
+import { createRewardSchema } from "./reward.schema";
 
 export const createChallengeSchema = (lang: Lang) =>
   z.object({
@@ -20,7 +21,14 @@ export const createChallengeSchema = (lang: Lang) =>
     joinMethod: enumSchema(lang, JoinMethod),
     organizationId: intSchema(lang),
     bannerUrl: stringSchema(lang).optional(),
-    rewardId: intSchema(lang).optional(),
+    reward: z.object({
+      rewardTypeId: intSchema(lang),
+      deliveryDetails: stringSchema(lang).optional(),
+      name: stringSchema(lang),
+      description: stringSchema(lang).optional(),
+      imageUrl: stringSchema(lang).optional(),
+      filesUrls: z.array(stringSchema(lang)).optional().default([]),
+    }).optional(),
     interactionIncrement: intSchema(lang).optional().default(1),
     tags: z.array(stringSchema(lang)).default([]),
     checkInEndOfDay: booleanSchema(lang),

@@ -22,7 +22,7 @@ prisma.rewardType
         recommended: false,
       },
       {
-        title: "Participação vale mais",
+        title: "🌱 Participação vale mais",
         description:
           "Sem premiação. Aqui, o foco é na jornada, não na competição.",
         lang: "pt",

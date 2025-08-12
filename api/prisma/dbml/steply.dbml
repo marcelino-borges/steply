@@ -176,6 +176,8 @@ Table rewards {
   deliveryDetails String
   name String [not null]
   description String
+  imageUrl String
+  filesUrls String[] [not null]
   challengeId Int [unique, not null]
   rewardType rewards_types [not null]
   challenge challenges [not null]

@@ -11,4 +11,8 @@ export class Reward {
   public deliveryDetails: string | null;
   @ApiProperty()
   public challengeId: number;
+  @ApiProperty()
+  public imageUrl?: string | null;
+  @ApiProperty()
+  public filesUrls: string[];
 }

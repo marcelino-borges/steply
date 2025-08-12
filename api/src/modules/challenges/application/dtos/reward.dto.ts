@@ -14,6 +14,10 @@ export class NonExistingRewardDto {
   deliveryDetails?: string;
   @ApiProperty()
   description?: string;
+  @ApiProperty()
+  imageUrl?: string;
+  @ApiProperty()
+  filesUrls?: string[];
 }
 
 export class RewardDto extends Reward implements DatabaseRecord {

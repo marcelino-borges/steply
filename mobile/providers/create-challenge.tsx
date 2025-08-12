@@ -13,7 +13,9 @@ import { getLocales } from "expo-localization";
 import { adaptAxiosErrorToApiErrorMessage } from "@/adapters/api-error";
 import { useFileStorage } from "@/hooks/s3";
 import { Toast } from "toastify-react-native";
-import { ActivityDto, NonExistingActivityDto } from "@/types/api/activity";
+import { NonExistingActivityDto } from "@/types/api/activity";
+import { RewardTypeDto } from "@/types/api/reward-type";
+import { NonExistingRewardDto } from "@/types/api/reward";
 
 const defaultChallenge: NonExistingChallengeDto = {
   title: "",
@@ -22,7 +24,6 @@ const defaultChallenge: NonExistingChallengeDto = {
   endAt: new Date(),
   joinMethod: JoinMethod.OPEN,
   bannerUrl: undefined,
-  rewardId: undefined,
   interactionIncrement: 1,
   isPublic: true,
   organizationId: 0,
@@ -42,6 +43,18 @@ interface CreateChallengeContextProps {
   setBanner: (banner: BannerProps | undefined) => void;
   activities: NonExistingActivityDto[];
   setActivities: (activities: NonExistingActivityDto[]) => void;
+  selectedRewardType?: RewardTypeDto;
+  setSelectedRewardType: (rewardType: RewardTypeDto | undefined) => void;
+  reward?: NonExistingRewardDto;
+  setReward: (reward: NonExistingRewardDto | undefined) => void;
+  rewardImage?: { uri: string; mimeType: string };
+  setRewardImage: (
+    image: { uri: string; mimeType: string } | undefined
+  ) => void;
+  rewardFiles?: { uri: string; mimeType: string; name: string }[];
+  setRewardFiles: (
+    files: { uri: string; mimeType: string; name: string }[] | undefined
+  ) => void;
 }
 
 interface BannerProps {
@@ -60,6 +73,14 @@ export const CreateChallengeContext =
     setBanner: () => {},
     activities: [],
     setActivities: () => {},
+    selectedRewardType: undefined,
+    setSelectedRewardType: () => {},
+    reward: undefined,
+    setReward: () => {},
+    rewardImage: undefined,
+    setRewardImage: () => {},
+    rewardFiles: undefined,
+    setRewardFiles: () => {},
   });
 
 export const CreateChallengeProvider: React.FC<React.PropsWithChildren> = ({
@@ -71,6 +92,18 @@ export const CreateChallengeProvider: React.FC<React.PropsWithChildren> = ({
 
   const [banner, setBanner] = useState<BannerProps | undefined>();
   const [activities, setActivities] = useState<NonExistingActivityDto[]>([]);
+  const [selectedRewardType, setSelectedRewardType] = useState<
+    RewardTypeDto | undefined
+  >(undefined);
+  const [reward, setReward] = useState<NonExistingRewardDto | undefined>(
+    undefined
+  );
+  const [rewardImage, setRewardImage] = useState<
+    { uri: string; mimeType: string } | undefined
+  >(undefined);
+  const [rewardFiles, setRewardFiles] = useState<
+    { uri: string; mimeType: string; name: string }[] | undefined
+  >(undefined);
 
   const [challenge, setChallenge] =
     useState<NonExistingChallengeDto>(defaultChallenge);
@@ -103,44 +136,146 @@ export const CreateChallengeProvider: React.FC<React.PropsWithChildren> = ({
     },
   });
 
-  const handleCreateChallenge = async () => {
-    let bannerUrl = "";
+  const uploadChallengeFiles = async () => {
+    const uploadPromises: Promise<
+      { error: string; data: null } | { data: string; error: null }
+    >[] = [];
 
+    // Upload banner
     if (banner) {
-      const { data, error } = await uploadFile(
-        "challenges",
-        banner.uri,
-        banner.mimeType,
-        `banner_${Date.now()}`
+      uploadPromises.push(
+        uploadFile(
+          "challenges",
+          banner.uri,
+          banner.mimeType,
+          `banner_${Date.now()}`
+        )
       );
+    }
 
-      if (error) {
-        console.log("------------- [ERROR] Upload banner failed", error);
-        Toast.error(error);
-        throw new Error(error);
+    // Upload reward image
+    if (rewardImage) {
+      uploadPromises.push(
+        uploadFile(
+          "rewards",
+          rewardImage.uri,
+          rewardImage.mimeType,
+          `reward_image_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`
+        )
+      );
+    }
+
+    // Upload reward files
+    if (rewardFiles && rewardFiles.length > 0) {
+      rewardFiles.forEach((file, index) => {
+        const fileExtension = file.name.split(".").pop() || "";
+        uploadPromises.push(
+          uploadFile(
+            "rewards",
+            file.uri,
+            file.mimeType,
+            `reward_file_${Date.now()}_${index}_${Math.random().toString(36).substring(2, 11)}.${fileExtension}`
+          )
+        );
+      });
+    }
+
+    // Upload all files in parallel
+    const uploadResults = await Promise.all(uploadPromises);
+
+    let bannerUrl = "";
+    let rewardImageUrl = "";
+    const rewardFilesUrls: string[] = [];
+    const uploadedFiles: string[] = [];
+
+    let resultIndex = 0;
+
+    // Process banner result
+    if (banner) {
+      const bannerResult = uploadResults[resultIndex++];
+      if (bannerResult.error) {
+        throw new Error(bannerResult.error);
       }
-
-      if (data) {
-        bannerUrl = data;
+      if (bannerResult.data) {
+        bannerUrl = bannerResult.data;
+        uploadedFiles.push(bannerUrl);
       }
     }
 
+    // Process reward image result
+    if (rewardImage) {
+      const imageResult = uploadResults[resultIndex++];
+      if (imageResult.error) {
+        throw new Error(imageResult.error);
+      }
+      if (imageResult.data) {
+        rewardImageUrl = imageResult.data;
+        uploadedFiles.push(rewardImageUrl);
+      }
+    }
+
+    // Process reward files results
+    if (rewardFiles && rewardFiles.length > 0) {
+      for (let i = 0; i < rewardFiles.length; i++) {
+        const fileResult = uploadResults[resultIndex++];
+        if (fileResult.error) {
+          throw new Error(fileResult.error);
+        }
+        if (fileResult.data) {
+          rewardFilesUrls.push(fileResult.data);
+          uploadedFiles.push(fileResult.data);
+        }
+      }
+    }
+
+    return {
+      bannerUrl,
+      rewardImageUrl,
+      rewardFilesUrls,
+      uploadedFiles, // for cleanup on error
+    };
+  };
+
+  const handleCreateChallenge = async () => {
+    let uploadedFiles: string[] = [];
+    
     try {
+      const { bannerUrl, rewardImageUrl, rewardFilesUrls, uploadedFiles: files } =
+        await uploadChallengeFiles();
+      
+      uploadedFiles = files;
+
+      // Prepare reward data if exists
+      let rewardData = undefined;
+      if (reward && selectedRewardType) {
+        rewardData = {
+          ...reward,
+          rewardTypeId: selectedRewardType.id,
+          imageUrl: rewardImageUrl || undefined,
+          filesUrls: rewardFilesUrls.length > 0 ? rewardFilesUrls : undefined,
+        };
+      }
+
       const challengeCreated = await createChallenge({
         ...challenge,
         bannerUrl,
+        reward: rewardData,
       });
-      Toast.success(t("challenge.createSuccess"));
 
+      Toast.success(t("challenge.createSuccess"));
       return challengeCreated;
     } catch (error) {
-      deleteFile(bannerUrl)
-        .then(() => {
-          console.log("-------------- [DEBUG] File deleted successfuly");
-        })
-        .catch((error) => {
-          console.log("-------------- [ERROR] File deletion failed", error);
-        });
+      // Clean up uploaded files on error
+      const deletePromises = uploadedFiles.map((fileUrl) =>
+        deleteFile(fileUrl).catch((deleteError) =>
+          console.log(
+            "-------------- [ERROR] File deletion failed",
+            deleteError
+          )
+        )
+      );
+
+      await Promise.all(deletePromises);
       Toast.error(`${t("challenge.createError")}: ${(error as Error).message}`);
       throw error;
     }
@@ -158,6 +293,14 @@ export const CreateChallengeProvider: React.FC<React.PropsWithChildren> = ({
         setBanner,
         activities,
         setActivities,
+        selectedRewardType,
+        setSelectedRewardType,
+        reward,
+        setReward,
+        rewardImage,
+        setRewardImage,
+        rewardFiles,
+        setRewardFiles,
       }}
     >
       {children}

@@ -11,15 +11,18 @@ export const createRewardSchema = (lang: Lang) =>
     deliveryDetails: stringSchema(lang).optional(),
     name: stringSchema(lang),
     description: stringSchema(lang).optional(),
+    imageUrl: stringSchema(lang).optional(),
+    filesUrls: z.array(stringSchema(lang)).optional().default([]),
   });
 
 export const updateRewardSchema = (lang: Lang) =>
   createRewardSchema(lang)
-    .omit({ deliveryDetails: true, description: true })
+    .omit({ deliveryDetails: true, description: true, imageUrl: true })
     .merge(
       z.object({
         deliveryDetails: stringSchema(lang).nullable(),
         description: stringSchema(lang).nullable(),
+        imageUrl: stringSchema(lang).nullable().optional(),
       }),
     )
     .merge(dbIdSchema(lang));

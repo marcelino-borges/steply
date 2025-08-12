@@ -15,12 +15,17 @@ import {
   RewardRepository,
 } from "@/modules/challenges/infra/repositories/reward.repository";
 import {
+  REWARD_TYPE_REPOSITORY_TOKEN,
+  RewardTypeRepository,
+} from "@/modules/challenges/infra/repositories/reward-type.repository";
+import {
   ACTIVITY_REPOSITORY_TOKEN,
   ActivityRepository,
 } from "@/modules/challenges/infra/repositories/activity.repository";
 import { ActivityController } from "@/modules/challenges/infra/controllers/activity.controller";
 import { RankTypeController } from "@/modules/challenges/infra/controllers/rank-type.controller";
 import { RewardController } from "@/modules/challenges/infra/controllers/reward.controller";
+import { RewardTypeController } from "@/modules/challenges/infra/controllers/reward-type.controller";
 import { CreateChallengeUseCase } from "@/modules/challenges/application/use-cases/challenge/create-challenge.use-case";
 import { UpdateChallengeUseCase } from "@/modules/challenges/application/use-cases/challenge/update-challenge.use-case";
 import { FindChallengeByIdUseCase } from "@/modules/challenges/application/use-cases/challenge/find-challenge-by-id.use-case";
@@ -46,6 +51,7 @@ import { ChallengeCheckInTypeController } from "@/modules/challenges/infra/contr
 import { FindAllChallengeCheckInTypesUseCase } from "@/modules/challenges/application/use-cases/challenge-checkin-type/find-all-challenge-checkin-types.use-case";
 import { FindUserActivitiesUseCase } from "@/modules/challenges/application/use-cases/activity/find-user-activities.use-case";
 import { UserActivityController } from "@/modules/challenges/infra/controllers/user-activity.controller";
+import { FindAllRewardTypesUseCase } from "@/modules/challenges/application/use-cases/reward-type/find-all-reward-types.use-case";
 
 @Module({
   imports: [DatabaseModule],
@@ -62,6 +68,10 @@ import { UserActivityController } from "@/modules/challenges/infra/controllers/u
     {
       provide: REWARD_REPOSITORY_TOKEN,
       useClass: RewardRepository,
+    },
+    {
+      provide: REWARD_TYPE_REPOSITORY_TOKEN,
+      useClass: RewardTypeRepository,
     },
     {
       provide: ACTIVITY_REPOSITORY_TOKEN,
@@ -96,6 +106,8 @@ import { UserActivityController } from "@/modules/challenges/infra/controllers/u
     FindAllRewardsUseCase,
     UpdateRewardUseCase,
 
+    FindAllRewardTypesUseCase,
+
     FindAllChallengeCheckInTypesUseCase,
     // #endregion
   ],
@@ -104,6 +116,7 @@ import { UserActivityController } from "@/modules/challenges/infra/controllers/u
     ActivityController,
     RankTypeController,
     RewardController,
+    RewardTypeController,
     ChallengeCheckInTypeController,
     UserActivityController,
   ],

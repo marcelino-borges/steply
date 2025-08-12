@@ -77,7 +77,7 @@
     "noUserActivitiesFound": "Nenhuma atividade criada ainda. Toque no botão abaixo para adicionar a primeira.",
     "dateRange": {
       "sameDay": "Dia {{day}} de {{month}}",
-      "sameMonth": "Do dia {{startDay}} ao {{endDay}} de {{month}}",
+      "sameMonth": "Do dia {{startDay}} ao {{endDay}} de {{month} }",
       "differentMonths": "Do dia {{startDay}} de {{startMonth}} ao {{endDay}} de {{endMonth}}"
     },
     "createActivity": "Criar atividade",
@@ -86,7 +86,21 @@
     "addActivities_other": "Adicionar atividades",
     "activityName": "Nome da atividade",
     "activityDescription": "Descrição da atividade",
-    "addActivity": "Adicionar atividade"
+    "addActivity": "Adicionar atividade",
+    "addActivityBeforeContinue": "Adicione ao menos uma atividade para continuar",
+    "rewardType": "Formato do desafio",
+    "selectRewardType": "Selecione o tipo de recompensa",
+    "multipleCheckInsLabel": "Múltiplos check-ins por dia?",
+    "multipleCheckInsSubLabel": "Os participantes podem fazer mais de um check-in por dia, desde que registrem atividades diferentes ou interações válidas.",
+    "rewardDetails": "Detalhes do prêmio",
+    "rewardNamePlaceholder": "Nome do prêmio",
+    "rewardDescriptionPlaceholder": "Descrição",
+    "rewardImageLabel": "Imagem do prêmio",
+    "rewardImageSubLabel": "Até 40MB · Formatos aceitos: JPG, PNG, WEBP e HEIC.",
+    "rewardDocumentsLabel": "Documentos importantes",
+    "rewardDocumentsSubLabel": "Até 50MB · Formatos aceitos: PDF, DOCX e DOC.",
+    "noRewardButton": "Esse desafio não tem prêmio",
+    "reward": "Prêmio"
   },
   "files": {
     "invalidFile": "Arquivo inválido",

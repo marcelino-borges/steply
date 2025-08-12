@@ -32,7 +32,7 @@ export class ChallengeRepository implements BaseChallengeRepository {
   async create(
     newChallenge: NonExistingChallengeDto,
   ): Promise<FullChallengeDto> {
-    const { activities, ...challengeData } = newChallenge;
+    const { activities, reward, ...challengeData } = newChallenge;
     
     const result = await this.db.challenge.create({
       data: {
@@ -45,6 +45,16 @@ export class ChallengeRepository implements BaseChallengeRepository {
             startAt: activity.startAt,
             endAt: activity.endAt,
           })),
+        } : undefined,
+        reward: reward ? {
+          create: {
+            name: reward.name,
+            description: reward.description || null,
+            rewardTypeId: reward.rewardTypeId,
+            deliveryDetails: reward.deliveryDetails || null,
+            imageUrl: reward.imageUrl || null,
+            filesUrls: reward.filesUrls || [],
+          },
         } : undefined,
       },
       include: CHALLENGE_INCLUDES,

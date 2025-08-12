@@ -1,6 +1,6 @@
-import React, { ReactNode } from "react";
+import React from "react";
 import { TouchableOpacity, View } from "react-native";
-import AntDesign from "@expo/vector-icons/AntDesign";
+import Feather from "@expo/vector-icons/Feather";
 
 import Typography from "../typography";
 import { COLORS } from "@/constants/colors";
@@ -12,7 +12,7 @@ interface AttachButtonProps {
   disabled?: boolean;
   fullWidth?: boolean;
   onPress: VoidFunction;
-  leftIcon: ReactNode;
+  leftIcon: React.ComponentProps<typeof Feather>["name"];
 }
 
 const AttachButton: React.FC<AttachButtonProps> = ({
@@ -25,11 +25,12 @@ const AttachButton: React.FC<AttachButtonProps> = ({
   return (
     <TouchableOpacity
       disabled={disabled ?? false}
-      style={[attachButtonStyles.container, fullWidth ? { width: "100%" } : {}]}
+      style={[attachButtonStyles.container, fullWidth && { width: "100%" }]}
       onPress={onPress}
+      activeOpacity={0.7}
     >
       <View style={[attachButtonStyles.labelIcon]}>
-        {leftIcon}
+        <Feather name={leftIcon} size={24} color={COLORS.contentBlack} />
         <Typography
           color={COLORS.contentBlack}
           letterSpacing={0.1}
@@ -39,7 +40,7 @@ const AttachButton: React.FC<AttachButtonProps> = ({
           {children}
         </Typography>
       </View>
-      <AntDesign name="caretright" />
+      <Feather name="chevron-right" size={16} />
     </TouchableOpacity>
   );
 };

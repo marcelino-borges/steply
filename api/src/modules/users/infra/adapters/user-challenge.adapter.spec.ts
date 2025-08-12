@@ -34,6 +34,8 @@ describe("PrismaUserChallengeAdapter", () => {
             id: 1,
             name: "Name",
             rewardTypeId: 2,
+            imageUrl: "http://image.com",
+            filesUrls: ["http://file1.com"],
           },
         },
         challengeId: 1,

@@ -107,6 +107,8 @@ describe("PrismaFullUserAdapter", () => {
             id: 1,
             name: "Name",
             rewardTypeId: 1,
+            imageUrl: "http://image.com",
+            filesUrls: ["http://file1.com"],
           },
         },
         challengeId: 1,

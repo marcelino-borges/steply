@@ -7,7 +7,6 @@ import {
 
 export const NON_EXISTING_CHALLENGE_MOCK = {
   organizationId: 1,
-  rewardId: 1,
   interactionIncrement: 1,
   title: "Lorem",
   description: "Ipsum Lorem",
@@ -49,6 +48,8 @@ export const EXISTING_FULL_CHALLENGE_MOCK: FullChallengeDto = {
     deliveryDetails: "Blabla",
     description: "Desc",
     rewardTypeId: 1,
+    imageUrl: "http://image.com",
+    filesUrls: ["http://file1.com", "http://file2.com"],
   },
   rankTypes: [],
   activities: [],

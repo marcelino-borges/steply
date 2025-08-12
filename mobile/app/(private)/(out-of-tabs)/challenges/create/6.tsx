@@ -45,7 +45,7 @@ const CreateChallenge6: React.FC = () => {
           title={t("challenge.details")}
           foreground={COLORS.contentBlack}
           totalSteps={6}
-          step={1}
+          step={6}
         />
         <View style={styles.content}></View>
       </ScrollView>
@@ -78,6 +78,7 @@ const styles = StyleSheet.create({
   },
   buttonView: {
     paddingHorizontal: SPACING.md,
+    paddingBottom: SPACING.lg,
     width: "100%",
   },
 });

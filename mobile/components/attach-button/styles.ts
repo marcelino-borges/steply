@@ -1,3 +1,4 @@
+import { COLORS } from "@/constants/colors";
 import { SPACING } from "@/constants/spacings";
 import { StyleSheet } from "react-native";
 
@@ -10,8 +11,8 @@ export const attachButtonStyles = StyleSheet.create({
   },
   container: {
     height: SPACING[14],
-    borderWidth: SPACING["1/4"],
-    borderColor: "#E0EBEB",
+    borderWidth: SPACING["1/2"],
+    borderColor: COLORS.inputBorder,
     borderRadius: SPACING.sm,
     paddingHorizontal: SPACING.md,
     display: "flex",

@@ -132,6 +132,7 @@ const styles = StyleSheet.create({
   },
   buttonView: {
     paddingHorizontal: SPACING.md,
+    paddingBottom: SPACING.lg,
     width: "100%",
   },
 });

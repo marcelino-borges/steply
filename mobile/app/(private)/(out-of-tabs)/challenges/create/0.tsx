@@ -57,7 +57,10 @@ const CreateChallenge0: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <SteppedHeader title="Crie seu desafio" foreground={COLORS.bgWhite} />
+      <SteppedHeader
+        title={t("challenge.createYourChallenge")}
+        foreground={COLORS.bgWhite}
+      />
       <View style={styles.content}>
         <Image
           style={styles.icon}
@@ -77,13 +80,18 @@ const CreateChallenge0: React.FC = () => {
       </View>
       <View style={styles.buttonView}>
         <Button
+          variant="ghost"
+          color="primaryInverted"
+          boldFont={false}
+          onPress={setDontShowAgain}
+        >
+          {t("common.dontShowScreenAgain")}
+        </Button>
+        <Button
           color="primaryInverted"
           onPress={() => router.replace("/challenges/create/1")}
         >
           {t("challenge.createYourChallenge")}
-        </Button>
-        <Button variant="ghost" boldFont={false} onPress={setDontShowAgain}>
-          {t("common.dontShowScreenAgain")}
         </Button>
       </View>
     </SafeAreaView>
@@ -111,6 +119,7 @@ const styles = StyleSheet.create({
   },
   buttonView: {
     paddingHorizontal: SPACING.md,
+    paddingBottom: SPACING.lg,
     width: "100%",
     display: "flex",
     gap: SPACING.md,
