@@ -7,20 +7,20 @@ import {
 import { DatabaseModule } from "@/core/infra/services/database.module";
 import {
   CHALLENGES_REPO_MOCK,
-  EXISTING_CHALLENGE_INTERACTION,
-  NON_EXISTING_CHALLENGE_INTERACTION,
+  EXISTING_CHALLENGE_CHECKIN,
+  NON_EXISTING_CHALLENGE_CHECKIN,
 } from "@/modules/challenges/__mocks__/challenge.mock";
-import { UserInteractChallengeUseCase } from "./user-interact-challenge.use-case";
+import { UserCheckInChallengeUseCase } from "./user-interact-challenge.use-case";
 
 describe("UserInteractChallengeUseCase", () => {
   let repo: ChallengeRepository;
-  let useCase: UserInteractChallengeUseCase;
+  let useCase: UserCheckInChallengeUseCase;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [DatabaseModule],
       providers: [
-        UserInteractChallengeUseCase,
+        UserCheckInChallengeUseCase,
         {
           provide: CHALLENGE_REPOSITORY_TOKEN,
           useValue: CHALLENGES_REPO_MOCK,
@@ -28,7 +28,7 @@ describe("UserInteractChallengeUseCase", () => {
       ],
     }).compile();
 
-    useCase = module.get(UserInteractChallengeUseCase);
+    useCase = module.get(UserCheckInChallengeUseCase);
     repo = module.get(CHALLENGE_REPOSITORY_TOKEN);
   });
 
@@ -37,17 +37,17 @@ describe("UserInteractChallengeUseCase", () => {
       expect(typeof useCase.execute).toBe("function");
     });
 
-    it("should call the 'createUserInteraction' function from ChallengeRepository", async () => {
-      const spy = jest.spyOn(repo, "createUserInteraction");
+    it("should call the 'createUserCheckIn' function from ChallengeRepository", async () => {
+      const spy = jest.spyOn(repo, "createUserCheckIn");
 
       await useCase.execute({
-        ...NON_EXISTING_CHALLENGE_INTERACTION,
-        challengeId: EXISTING_CHALLENGE_INTERACTION.id,
+        ...NON_EXISTING_CHALLENGE_CHECKIN,
+        challengeId: EXISTING_CHALLENGE_CHECKIN.id,
       });
 
       expect(spy).toHaveBeenCalledWith({
-        ...NON_EXISTING_CHALLENGE_INTERACTION,
-        challengeId: EXISTING_CHALLENGE_INTERACTION.id,
+        ...NON_EXISTING_CHALLENGE_CHECKIN,
+        challengeId: EXISTING_CHALLENGE_CHECKIN.id,
       });
     });
   });

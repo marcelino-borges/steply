@@ -52,7 +52,7 @@ export const PRISMA_MOCK = {
   country: {
     findMany: jest.fn(),
   },
-  userChallengeInteraction: {
+  userChallengeCheckIn: {
     create: jest.fn(),
     findMany: jest.fn(),
   },

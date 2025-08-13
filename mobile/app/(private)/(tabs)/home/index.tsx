@@ -1,5 +1,5 @@
 import { StyleSheet, View } from "react-native";
-import { useRouter } from "expo-router";
+import { Link, useRouter } from "expo-router";
 
 import Button from "@/components/button";
 import { COLORS } from "@/constants/colors";
@@ -28,6 +28,9 @@ export default function TabHomeScreen() {
       >
         Criar desafio
       </Button>
+      <Link href={`/(private)/(out-of-tabs)/challenges/11`}>
+        Marcelino's challenge
+      </Link>
       <Button onPress={handleSignOut} fullWidth>
         Sair
       </Button>

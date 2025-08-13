@@ -2,16 +2,16 @@ import { Inject, Injectable } from "@nestjs/common";
 
 import { UseCase } from "@/core/domain/abstractions/use-case.abstract";
 import {
-  UserChallengeInteractionDto,
-  UserInteractChallengeDto,
+  UserChallengeCheckInDto,
+  UserCheckInChallengeDto,
 } from "@/modules/challenges/application/dtos/challenge.dto";
 import { CHALLENGE_REPOSITORY_TOKEN } from "@/modules/challenges/infra/repositories/challenge.repository";
 import { BaseChallengeRepository } from "@/modules/challenges/infra/abstractions/challenge-repository.interface";
 
 @Injectable()
-export class UserInteractChallengeUseCase extends UseCase<
-  [UserInteractChallengeDto],
-  UserChallengeInteractionDto | null
+export class UserCheckInChallengeUseCase extends UseCase<
+  [UserCheckInChallengeDto],
+  UserChallengeCheckInDto | null
 > {
   constructor(
     @Inject(CHALLENGE_REPOSITORY_TOKEN)
@@ -21,8 +21,8 @@ export class UserInteractChallengeUseCase extends UseCase<
   }
 
   async execute(
-    interaction: UserInteractChallengeDto,
-  ): Promise<UserChallengeInteractionDto | null> {
-    return await this.repository.createUserInteraction(interaction);
+    interaction: UserCheckInChallengeDto,
+  ): Promise<UserChallengeCheckInDto | null> {
+    return await this.repository.createUserCheckIn(interaction);
   }
 }

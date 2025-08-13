@@ -124,7 +124,10 @@
     "challengeCreatedTitle": "Desafio criado!",
     "challengeCreatedSubtitle": "Seu desafio está pronto! Convide amigos para participar e alcance sua meta junto com eles.",
     "shareChallengeUrl": "Olá!\nAcabei de criar um desafio super legal no Steply! 💪\nVem participar!\n\nSó acessar aqui: {{url}}",
-    "errorCreating": "Ops! Tivemos um erro ao criar esse desafio, tente novamente em instantes"
+    "errorCreating": "Ops! Tivemos um erro ao criar esse desafio, tente novamente em instantes",
+    "summary": "Resumo",
+    "participants": "Participantes",
+    "engagement": "Engajamento"
   },
   "files": {
     "invalidFile": "Arquivo inválido",

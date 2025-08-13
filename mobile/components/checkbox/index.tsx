@@ -1,11 +1,11 @@
 import React from "react";
 import { TouchableOpacity, View } from "react-native";
-import { Feather } from "@expo/vector-icons";
 import { checkboxStyles } from "./styles";
 import Typography from "../typography";
 import { COLORS } from "@/constants/colors";
 import { SPACING } from "@/constants/spacings";
 import { RADIUS } from "@/constants/radius";
+import { CheckIcon } from "lucide-react-native";
 
 export interface CheckboxProps {
   label: string;
@@ -64,7 +64,7 @@ export default function Checkbox({
           },
         ]}
       >
-        {checked && <Feather name="check" size={12} color={COLORS.bgWhite} />}
+        {checked && <CheckIcon size={12} color={COLORS.bgWhite} />}
       </View>
     </TouchableOpacity>
   );

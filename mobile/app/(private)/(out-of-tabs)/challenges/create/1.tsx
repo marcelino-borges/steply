@@ -9,7 +9,6 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
-import Feather from "@expo/vector-icons/Feather";
 import * as ImagePicker from "expo-image-picker";
 import { Toast } from "toastify-react-native";
 import RNDateTimePicker, {
@@ -31,6 +30,7 @@ import { DEFAULT_TIMEZONE } from "@/constants/timezone";
 import TagsField from "@/components/inputs/tags";
 import { formatDateByLocale } from "@/utils/string-masks";
 import { RADIUS } from "@/constants/radius";
+import { Trash2Icon } from "lucide-react-native";
 
 const CreateChallenge1: React.FC = () => {
   const router = useRouter();
@@ -243,11 +243,7 @@ const CreateChallenge1: React.FC = () => {
                   </Typography>
                 </View>
                 <Pressable onPress={removeBanner}>
-                  <Feather
-                    name="trash-2"
-                    size={24}
-                    color={COLORS.destructive}
-                  />
+                  <Trash2Icon size={24} color={COLORS.destructive} />
                 </Pressable>
               </View>
             )}

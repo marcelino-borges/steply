@@ -1,6 +1,5 @@
 import { COLORS } from "@/constants/colors";
 import { FONT_SIZE } from "@/constants/fonts";
-import { Feather } from "@expo/vector-icons";
 import { addYears, isAfter, isBefore, isSameDay } from "date-fns";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
@@ -9,6 +8,7 @@ import { END_CONTAINER, START_CONTAINER } from "./constants";
 import { View } from "react-native";
 import Typography from "../typography";
 import { SPACING } from "@/constants/spacings";
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react-native";
 
 const YEARS_THRESHOLD = 5;
 export type CalendarChangedDate = "START_DATE" | "END_DATE" | "CLEAR";
@@ -89,8 +89,8 @@ export default function CalendarPicker({
         }}
         onDateChange={onDateChange}
         horizontal
-        previousComponent={<Feather name="chevron-left" size={24} />}
-        nextComponent={<Feather name="chevron-right" size={24} />}
+        previousComponent={<ChevronLeftIcon size={24} />}
+        nextComponent={<ChevronRightIcon size={24} />}
         months={[
           t("calendar.months.jan"),
           t("calendar.months.feb"),

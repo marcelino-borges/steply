@@ -5,12 +5,12 @@ import { SPACING } from "@/constants/spacings";
 import { useUser } from "@/store/user";
 import { UserRegistrationStep } from "@/types/api/user";
 import { useUpdateUser } from "@/hooks/users/update";
-import Ionicons from "@expo/vector-icons/Ionicons";
 import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { useRouter } from "expo-router";
 import { Toast } from "toastify-react-native";
 import { useTranslation } from "react-i18next";
+import { TrophyIcon } from "lucide-react-native";
 
 enum LoadingAction {
   NONE = 0,
@@ -53,7 +53,7 @@ export default function PersonalizationPreference() {
       setUser(updatedUser);
 
       if (wantsPersonalization) {
-        router.replace("/(private)/(out-of-tabs)/onboarding/2-gender");
+        router.replace("/(private)/(out-of-tabs)/onboarding/(steps)/2-gender");
       } else {
         router.replace("/(private)/(tabs)/home");
       }
@@ -77,11 +77,7 @@ export default function PersonalizationPreference() {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        <Ionicons
-          name="trophy-outline"
-          size={40}
-          style={{ marginBottom: SPACING[10] }}
-        />
+        <TrophyIcon size={40} style={{ marginBottom: SPACING[10] }} />
 
         {user && (
           <Typography weight="medium" size="3xl" lineHeight={SPACING[10]}>

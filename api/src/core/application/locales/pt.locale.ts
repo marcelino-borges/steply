@@ -39,7 +39,7 @@ export const ptMessages = {
     Country: "país",
     Challenge: "desafio",
     UserChallenge: "desafio de usuário",
-    UserChallengeInteraction: "interação de usuário com desafio",
+    UserChallengeCheckIn: "interação de usuário com desafio",
     Reward: "prêmio",
     RewardType: "tipo de prêmio",
     Activity: "atividade",

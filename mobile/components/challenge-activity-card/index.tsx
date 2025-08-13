@@ -5,7 +5,7 @@ import { NonExistingActivityDto } from "@/types/api/activity";
 import Typography from "../typography";
 import { COLORS } from "@/constants/colors";
 import { isSameDay } from "date-fns";
-import { Feather } from "@expo/vector-icons";
+import { CalendarIcon, PencilIcon, Trash2Icon } from "lucide-react-native";
 
 interface ChallengeActivityCard {
   activity: NonExistingActivityDto;
@@ -67,7 +67,7 @@ export default function ChallengeActivityCard({
     >
       <View style={challengeActivityCardStyles.textsContainer}>
         <View style={challengeActivityCardStyles.datesRow}>
-          <Feather name="calendar" size={14} color={COLORS.gray} />
+          <CalendarIcon size={14} color={COLORS.gray} />
           <Typography color={COLORS.gray} size="xs">
             {formatActivityDateRange(activity.startAt, activity.endAt)}
           </Typography>
@@ -87,10 +87,10 @@ export default function ChallengeActivityCard({
       </View>
       <View style={challengeActivityCardStyles.iconscontainer}>
         <TouchableOpacity activeOpacity={0.7} onPress={onEdit}>
-          <Feather name="edit-2" size={20} />
+          <PencilIcon size={20} />
         </TouchableOpacity>
         <TouchableOpacity activeOpacity={0.7} onPress={onRemove}>
-          <Feather name="trash-2" color={COLORS.destructive} size={20} />
+          <Trash2Icon color={COLORS.destructive} size={20} />
         </TouchableOpacity>
       </View>
     </View>

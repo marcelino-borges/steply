@@ -3,8 +3,8 @@ import Typography from "@/components/typography";
 import { COLORS } from "@/constants/colors";
 import { SPACING } from "@/constants/spacings";
 import { useCreateChallenge } from "@/hooks/challenges";
-import Feather from "@expo/vector-icons/Feather";
 import { useRouter } from "expo-router";
+import { SendHorizonalIcon } from "lucide-react-native";
 import { useTranslation } from "react-i18next";
 import { SafeAreaView, View, Image, StyleSheet } from "react-native";
 import { Share } from "react-native";
@@ -79,9 +79,7 @@ export default function ChallengeCreated() {
         <Button
           color="primaryInverted"
           onPress={share}
-          rightElement={
-            <Feather name="send" color={COLORS.primary} size={16} />
-          }
+          rightElement={<SendHorizonalIcon color={COLORS.primary} size={16} />}
         >
           {t("challenge.invitePeople")}
         </Button>

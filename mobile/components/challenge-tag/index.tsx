@@ -3,7 +3,7 @@ import { Pressable, View } from "react-native";
 import { challengeTagStyles } from "./styles";
 import Typography from "../typography";
 import { COLORS } from "@/constants/colors";
-import { Feather } from "@expo/vector-icons";
+import { XIcon } from "lucide-react-native";
 
 interface ChallengeTagProps {
   name: string;
@@ -22,7 +22,7 @@ export default function ChallengeTag({ name, onRemove }: ChallengeTagProps) {
         #{name}
       </Typography>
       <Pressable onPress={() => onRemove(name)}>
-        <Feather name="x" color={COLORS.primary} size={18} />
+        <XIcon color={COLORS.primary} size={18} />
       </Pressable>
     </View>
   );

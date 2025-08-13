@@ -39,7 +39,7 @@ export const enMessages: Dictionary = {
     Country: "country",
     Challenge: "challenge",
     UserChallenge: "user challenge",
-    UserChallengeInteraction: "user challenge interaction",
+    UserChallengeCheckIn: "user challenge check-in",
     Reward: "reward",
     RewardType: "reward type",
     Activity: "activity",

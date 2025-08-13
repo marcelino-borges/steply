@@ -17,7 +17,7 @@ import {
   challengeIdParamsSchema,
   queryChallengesSchema,
   updateChallengeSchema,
-  userInteractChallengeSchema,
+  userCheckInChallengeSchema,
 } from "@/core/application/schemas/challenge.schema";
 import { EndpointDoc } from "@/core/infra/decorators/swagger-endpoint-doc.decorator";
 import { Lang, t } from "@/core/application/locales";
@@ -25,7 +25,7 @@ import {
   ChallengeIdParamsDto,
   NonExistingChallengeDto,
   UpdateChallengeDto,
-  UserInteractChallengeBodyDto,
+  UserCheckInChallengeBodyDto,
 } from "@/modules/challenges/application/dtos/challenge.dto";
 import { CreateChallengeUseCase } from "@/modules/challenges/application/use-cases/challenge/create-challenge.use-case";
 import { UpdateChallengeUseCase } from "@/modules/challenges/application/use-cases/challenge/update-challenge.use-case";
@@ -33,7 +33,7 @@ import { FindChallengeByIdUseCase } from "@/modules/challenges/application/use-c
 import { QueryChallengesUseCase } from "@/modules/challenges/application/use-cases/challenge/query-challenges.use-case";
 import { ChallengeQueryParamsDto } from "@/modules/challenges/application/dtos/challenge-query.dto";
 import { FullChallengeDto } from "@/modules/challenges/application/dtos/challenge.dto";
-import { UserInteractChallengeUseCase } from "@/modules/challenges/application/use-cases/challenge/user-interact-challenge.use-case";
+import { UserCheckInChallengeUseCase } from "@/modules/challenges/application/use-cases/challenge/user-interact-challenge.use-case";
 
 @Controller("challenges")
 export class ChallengeController {
@@ -42,7 +42,7 @@ export class ChallengeController {
     private readonly updateUseCase: UpdateChallengeUseCase,
     private readonly findByIdUseCase: FindChallengeByIdUseCase,
     private readonly queryUseCase: QueryChallengesUseCase,
-    private readonly userInteractUseCase: UserInteractChallengeUseCase,
+    private readonly userInteractUseCase: UserCheckInChallengeUseCase,
   ) {}
 
   @Get(":challengeId")
@@ -146,10 +146,10 @@ export class ChallengeController {
     return await this.updateUseCase.execute(parsedBody as UpdateChallengeDto);
   }
 
-  @Post(":challengeId/interactions")
+  @Post(":challengeId/checkins")
   @EndpointDoc({
     operation: {
-      summary: "Creates a user interaction with an existing challenge",
+      summary: "Creates a user check-in with an existing challenge",
     },
     response: {
       status: HttpStatus.CREATED,
@@ -157,13 +157,13 @@ export class ChallengeController {
     },
     body: { type: NonExistingChallengeDto },
   })
-  async createUserInteraction(
+  async createUserCheckIn(
     @Param() params: ChallengeIdParamsDto,
-    @Body() body: UserInteractChallengeBodyDto,
+    @Body() body: UserCheckInChallengeBodyDto,
     @Headers("lang") lang: Lang = "en",
   ) {
     const { data: parsedBody } = ZodValidationFactory.parseOrThrow(
-      userInteractChallengeSchema,
+      userCheckInChallengeSchema,
       body,
       lang,
     );

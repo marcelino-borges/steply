@@ -1,8 +1,7 @@
 import { useEffect } from "react";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { tokenCache } from "@clerk/clerk-expo/token-cache";
 import { useFonts } from "@expo-google-fonts/work-sans/useFonts";
-import { Stack, usePathname, useRouter } from "expo-router";
+import { Stack, usePathname } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { WorkSans_100Thin } from "@expo-google-fonts/work-sans/100Thin";
 import { WorkSans_200ExtraLight } from "@expo-google-fonts/work-sans/200ExtraLight";
@@ -65,7 +64,6 @@ export default function RootLayout() {
     WorkSans_700Bold_Italic,
     WorkSans_800ExtraBold_Italic,
     WorkSans_900Black_Italic,
-    ...FontAwesome.font,
   });
 
   useEffect(() => {

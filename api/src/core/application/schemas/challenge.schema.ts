@@ -11,74 +11,75 @@ import { enumSchema } from "./primitives/enum.schema";
 import { createActivitySchema } from "./activity.schema";
 
 export const createChallengeSchema = (lang: Lang) =>
-  z.object({
-    title: stringSchema(lang),
-    description: stringSchema(lang),
-    startAt: dateSchema(lang),
-    endAt: dateSchema(lang),
-    isPublic: booleanSchema(lang),
-    joinMethod: enumSchema(lang, JoinMethod),
-    organizationId: intSchema(lang).nullable().optional(),
-    ownerUserId: intSchema(lang).nullable().optional(),
-    bannerUrl: stringSchema(lang).optional(),
-    reward: z
-      .object({
-        rewardTypeId: intSchema(lang),
-        deliveryDetails: stringSchema(lang).optional(),
-        name: stringSchema(lang),
-        description: stringSchema(lang).optional(),
-        imageUrl: stringSchema(lang).optional(),
-        filesUrls: z.array(stringSchema(lang)).optional().default([]),
-      })
-      .optional(),
-    interactionIncrement: intSchema(lang).optional().default(1),
-    tags: z.array(stringSchema(lang)).default([]),
-    checkInEndOfDay: booleanSchema(lang),
-    multipleCheckIns: booleanSchema(lang),
-    checkInTypeCode: intSchema(lang),
-    activities: z.array(createActivitySchema(lang)).optional(),
-  }).refine(
-    (data) => data.organizationId || data.ownerUserId,
-    {
-      message: t(lang).validations.challengeRequiresOwner || "A challenge must have either an organization or an owner user",
-    }
-  );
+  z
+    .object({
+      title: stringSchema(lang),
+      description: stringSchema(lang),
+      startAt: dateSchema(lang),
+      endAt: dateSchema(lang),
+      isPublic: booleanSchema(lang),
+      joinMethod: enumSchema(lang, JoinMethod),
+      organizationId: intSchema(lang).nullable().optional(),
+      ownerUserId: intSchema(lang).nullable().optional(),
+      bannerUrl: stringSchema(lang).optional(),
+      reward: z
+        .object({
+          rewardTypeId: intSchema(lang),
+          deliveryDetails: stringSchema(lang).optional(),
+          name: stringSchema(lang),
+          description: stringSchema(lang).optional(),
+          imageUrl: stringSchema(lang).optional(),
+          filesUrls: z.array(stringSchema(lang)).optional().default([]),
+        })
+        .optional(),
+      interactionIncrement: intSchema(lang).optional().default(1),
+      tags: z.array(stringSchema(lang)).default([]),
+      checkInEndOfDay: booleanSchema(lang),
+      multipleCheckIns: booleanSchema(lang),
+      checkInTypeCode: intSchema(lang),
+      activities: z.array(createActivitySchema(lang)).optional(),
+    })
+    .refine((data) => data.organizationId || data.ownerUserId, {
+      message:
+        t(lang).validations.challengeRequiresOwner ||
+        "A challenge must have either an organization or an owner user",
+    });
 
 export const updateChallengeSchema = (lang: Lang) =>
-  z.object({
-    title: stringSchema(lang),
-    description: stringSchema(lang),
-    startAt: dateSchema(lang),
-    endAt: dateSchema(lang),
-    isPublic: booleanSchema(lang),
-    joinMethod: enumSchema(lang, JoinMethod),
-    organizationId: intSchema(lang).nullable().optional(),
-    ownerUserId: intSchema(lang).nullable().optional(),
-    bannerUrl: stringSchema(lang).nullable(),
-    reward: z
-      .object({
-        rewardTypeId: intSchema(lang),
-        deliveryDetails: stringSchema(lang).optional(),
-        name: stringSchema(lang),
-        description: stringSchema(lang).optional(),
-        imageUrl: stringSchema(lang).optional(),
-        filesUrls: z.array(stringSchema(lang)).optional().default([]),
-      })
-      .optional(),
-    interactionIncrement: intSchema(lang).optional().default(1),
-    tags: z.array(stringSchema(lang)).default([]),
-    checkInEndOfDay: booleanSchema(lang),
-    multipleCheckIns: booleanSchema(lang),
-    checkInTypeCode: intSchema(lang),
-    activities: z.array(createActivitySchema(lang)).optional(),
-  })
+  z
+    .object({
+      title: stringSchema(lang),
+      description: stringSchema(lang),
+      startAt: dateSchema(lang),
+      endAt: dateSchema(lang),
+      isPublic: booleanSchema(lang),
+      joinMethod: enumSchema(lang, JoinMethod),
+      organizationId: intSchema(lang).nullable().optional(),
+      ownerUserId: intSchema(lang).nullable().optional(),
+      bannerUrl: stringSchema(lang).nullable(),
+      reward: z
+        .object({
+          rewardTypeId: intSchema(lang),
+          deliveryDetails: stringSchema(lang).optional(),
+          name: stringSchema(lang),
+          description: stringSchema(lang).optional(),
+          imageUrl: stringSchema(lang).optional(),
+          filesUrls: z.array(stringSchema(lang)).optional().default([]),
+        })
+        .optional(),
+      interactionIncrement: intSchema(lang).optional().default(1),
+      tags: z.array(stringSchema(lang)).default([]),
+      checkInEndOfDay: booleanSchema(lang),
+      multipleCheckIns: booleanSchema(lang),
+      checkInTypeCode: intSchema(lang),
+      activities: z.array(createActivitySchema(lang)).optional(),
+    })
     .merge(dbIdSchema(lang))
-    .refine(
-      (data) => data.organizationId || data.ownerUserId,
-      {
-        message: t(lang).validations.challengeRequiresOwner || "A challenge must have either an organization or an owner user",
-      }
-    );
+    .refine((data) => data.organizationId || data.ownerUserId, {
+      message:
+        t(lang).validations.challengeRequiresOwner ||
+        "A challenge must have either an organization or an owner user",
+    });
 
 export const challengeIdParamsSchema = (lang: Lang) =>
   z.object({
@@ -96,7 +97,7 @@ export const queryChallengesSchema = (lang: Lang) =>
     })
     .optional();
 
-export const userInteractChallengeSchema = (lang: Lang) =>
+export const userCheckInChallengeSchema = (lang: Lang) =>
   z
     .object({
       videoUrl: stringSchema(lang).optional(),

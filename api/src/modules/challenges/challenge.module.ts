@@ -42,7 +42,7 @@ import { CreateRewardUseCase } from "@/modules/challenges/application/use-cases/
 import { DeleteRewardUseCase } from "@/modules/challenges/application/use-cases/reward/delete-reward.use-case";
 import { FindAllRewardsUseCase } from "@/modules/challenges/application/use-cases/reward/find-all-rewards.use-case";
 import { UpdateRewardUseCase } from "@/modules/challenges/application/use-cases/reward/update-reward.use-case";
-import { UserInteractChallengeUseCase } from "@/modules/challenges/application/use-cases/challenge/user-interact-challenge.use-case";
+import { UserCheckInChallengeUseCase } from "@/modules/challenges/application/use-cases/challenge/user-interact-challenge.use-case";
 import {
   CHALLENGE_CHECKIN_TYPE_REPOSITORY_TOKEN,
   ChallengeCheckInTypeRepository,
@@ -88,7 +88,7 @@ import { FindAllRewardTypesUseCase } from "@/modules/challenges/application/use-
     UpdateChallengeUseCase,
     FindChallengeByIdUseCase,
     QueryChallengesUseCase,
-    UserInteractChallengeUseCase,
+    UserCheckInChallengeUseCase,
 
     CreateRankTypeUseCase,
     DeleteRankTypeUseCase,

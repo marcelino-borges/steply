@@ -72,13 +72,13 @@ export const EXISTING_FULL_CHALLENGE_MOCK: FullChallengeDto = {
   },
 };
 
-export const NON_EXISTING_CHALLENGE_INTERACTION = {
+export const NON_EXISTING_CHALLENGE_CHECKIN = {
   userId: 1,
   videoUrl: "https://video.com",
 };
 
-export const EXISTING_CHALLENGE_INTERACTION = {
-  ...NON_EXISTING_CHALLENGE_INTERACTION,
+export const EXISTING_CHALLENGE_CHECKIN = {
+  ...NON_EXISTING_CHALLENGE_CHECKIN,
   location: null,
   text: null,
   imageUrl: null,
@@ -93,5 +93,5 @@ export const CHALLENGES_REPO_MOCK = {
   update: jest.fn(),
   findById: jest.fn(),
   query: jest.fn(),
-  createUserInteraction: jest.fn(),
+  createUserCheckIn: jest.fn(),
 };

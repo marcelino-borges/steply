@@ -8,8 +8,8 @@ import {
   ChallengeDto,
   FullChallengeDto,
   NonExistingChallengeDto,
-  UserChallengeInteractionDto,
-  UserInteractChallengeDto,
+  UserChallengeCheckInDto,
+  UserCheckInChallengeDto,
 } from "@/modules/challenges/application/dtos/challenge.dto";
 import {
   ChallengeQueryParamsDto,
@@ -170,13 +170,13 @@ export class ChallengeRepository implements BaseChallengeRepository {
     return finalResult;
   }
 
-  async createUserInteraction(
-    interaction: UserInteractChallengeDto,
-  ): Promise<UserChallengeInteractionDto | null> {
+  async createUserCheckIn(
+    checkIn: UserCheckInChallengeDto,
+  ): Promise<UserChallengeCheckInDto | null> {
     const userChallenge = await this.db.userChallenge.findFirst({
       where: {
-        userId: interaction.userId,
-        challengeId: interaction.challengeId,
+        userId: checkIn.userId,
+        challengeId: checkIn.challengeId,
       },
       include: {
         challenge: {
@@ -195,8 +195,8 @@ export class ChallengeRepository implements BaseChallengeRepository {
       await this.db.userChallenge.update({
         where: {
           userId_challengeId: {
-            challengeId: interaction.challengeId,
-            userId: interaction.userId,
+            challengeId: checkIn.challengeId,
+            userId: checkIn.userId,
           },
         },
         data: {
@@ -207,7 +207,7 @@ export class ChallengeRepository implements BaseChallengeRepository {
       });
 
       return await this.db.userChallengeInteraction.create({
-        data: interaction,
+        data: checkIn,
       });
     });
   }

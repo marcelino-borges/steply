@@ -46,7 +46,7 @@ export default function Gender() {
       });
 
       setUser(updatedUser);
-      router.replace("/(private)/(out-of-tabs)/onboarding/3-main-goal");
+      router.replace("/(private)/(out-of-tabs)/onboarding/(steps)/3-main-goal");
     } catch (error) {
       Toast.error(t("user.updateError"));
       console.error("Error updating gender:", error);
@@ -84,7 +84,7 @@ export default function Gender() {
             onSelect={(value) => setSelectedGender(value)}
             selectedValue={selectedGender}
             fullWidth
-            variant="outline"
+            variant="outlineOnlySelected"
           />
         )}
       </View>

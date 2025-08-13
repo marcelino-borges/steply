@@ -1,20 +1,11 @@
 import { useState } from "react";
-import {
-  ActivityIndicator,
-  Pressable,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import Ionicons from "@expo/vector-icons/Ionicons";
+import { StyleSheet } from "react-native";
 import { Control } from "react-hook-form";
 import React from "react";
 
 import { PropsWithFullwidth } from "@/types/abstractions/fullwidth";
 import { SPACING } from "@/constants/spacings";
 import { COLORS } from "@/constants/colors";
-import Typography from "../typography";
-import Sheet from "../sheet";
 
 interface SelectProps<T> extends PropsWithFullwidth {
   sheetTitle: string;

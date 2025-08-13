@@ -1,12 +1,12 @@
 import { Repository } from "@/core/domain/abstractions/repository.interface";
 import {
   FullChallengeDto,
-  UserChallengeInteractionDto,
-  UserInteractChallengeDto,
+  UserChallengeCheckInDto,
+  UserCheckInChallengeDto,
 } from "@/modules/challenges/application/dtos/challenge.dto";
 
 export interface BaseChallengeRepository extends Repository<FullChallengeDto> {
-  createUserInteraction: (
-    interaction: UserInteractChallengeDto,
-  ) => Promise<UserChallengeInteractionDto | null>;
+  createUserCheckIn: (
+    interaction: UserCheckInChallengeDto,
+  ) => Promise<UserChallengeCheckInDto | null>;
 }

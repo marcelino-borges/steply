@@ -46,7 +46,9 @@ export default function MainGoal() {
       });
 
       setUser(updatedUser);
-      router.replace("/(private)/(out-of-tabs)/onboarding/4-main-goal-level");
+      router.replace(
+        "/(private)/(out-of-tabs)/onboarding/(steps)/4-main-goal-level"
+      );
     } catch (error) {
       Toast.error(t("user.updateError"));
       console.error("Error updating main goal:", error);
@@ -84,7 +86,7 @@ export default function MainGoal() {
             onSelect={(value) => setSelectedGoal(value)}
             selectedValue={selectedGoal}
             fullWidth
-            variant="outline"
+            variant="outlineOnlySelected"
           />
         )}
       </View>

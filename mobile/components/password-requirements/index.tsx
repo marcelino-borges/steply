@@ -1,10 +1,10 @@
 import * as React from "react";
 import { View } from "react-native";
-import Feather from "@expo/vector-icons/Feather";
 import { useTranslation } from "react-i18next";
 import Typography from "../typography";
 import { COLORS } from "@/constants/colors";
 import { styles } from "./styles";
+import { CheckIcon, XIcon } from "lucide-react-native";
 
 interface PasswordRequirementProps {
   text: string;
@@ -14,18 +14,21 @@ interface PasswordRequirementProps {
 const PasswordRequirement: React.FC<PasswordRequirementProps> = ({
   text,
   isValid,
-}) => (
-  <View style={styles.requirementRow}>
-    <Feather
-      name={isValid ? "check" : "x"}
-      size={16}
-      color={isValid ? COLORS.success : COLORS.destructive}
-    />
-    <Typography size="sm" color={isValid ? COLORS.success : COLORS.destructive}>
-      {text}
-    </Typography>
-  </View>
-);
+}) => {
+  const Icon = isValid ? CheckIcon : XIcon;
+
+  return (
+    <View style={styles.requirementRow}>
+      <Icon size={16} color={isValid ? COLORS.success : COLORS.destructive} />
+      <Typography
+        size="sm"
+        color={isValid ? COLORS.success : COLORS.destructive}
+      >
+        {text}
+      </Typography>
+    </View>
+  );
+};
 
 interface PasswordRequirementsProps {
   password: string;

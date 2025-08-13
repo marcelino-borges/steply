@@ -5,9 +5,9 @@ import { JoinMethodAdapter } from "@/core/application/adapters/join-method.adapt
 import { PaginatedItems } from "@/core/application/dtos/paginated-result.dto";
 import { PRISMA_MOCK } from "@/test/__mocks__/prisma.mock";
 import {
-  EXISTING_CHALLENGE_INTERACTION,
+  EXISTING_CHALLENGE_CHECKIN,
   EXISTING_CHALLENGE_MOCK,
-  NON_EXISTING_CHALLENGE_INTERACTION,
+  NON_EXISTING_CHALLENGE_CHECKIN,
   NON_EXISTING_CHALLENGE_MOCK,
 } from "@/modules/challenges/__mocks__/challenge.mock";
 import { CHALLENGE_INCLUDES } from "@/modules/challenges/infra/constants/challenge.constants";
@@ -322,15 +322,15 @@ describe("ChallengeRepository", () => {
         .spyOn(prismaService.userChallenge, "findFirst")
         .mockResolvedValue(null);
 
-      const result = await challengeRepository.createUserInteraction({
-        ...NON_EXISTING_CHALLENGE_INTERACTION,
-        challengeId: EXISTING_CHALLENGE_INTERACTION.id,
+      const result = await challengeRepository.createUserCheckIn({
+        ...NON_EXISTING_CHALLENGE_CHECKIN,
+        challengeId: EXISTING_CHALLENGE_CHECKIN.id,
       });
 
       expect(findUserChallengeSpy).toHaveBeenCalledWith({
         where: {
-          userId: NON_EXISTING_CHALLENGE_INTERACTION.userId,
-          challengeId: EXISTING_CHALLENGE_INTERACTION.challengeId,
+          userId: NON_EXISTING_CHALLENGE_CHECKIN.userId,
+          challengeId: EXISTING_CHALLENGE_CHECKIN.challengeId,
         },
         include: {
           challenge: {
@@ -366,17 +366,17 @@ describe("ChallengeRepository", () => {
         .mockResolvedValue(updatedUserChallenge);
       const createSpy = jest
         .spyOn(prismaService.userChallengeInteraction, "create")
-        .mockResolvedValue(EXISTING_CHALLENGE_INTERACTION);
+        .mockResolvedValue(EXISTING_CHALLENGE_CHECKIN);
 
-      const result = await challengeRepository.createUserInteraction({
-        ...NON_EXISTING_CHALLENGE_INTERACTION,
-        challengeId: EXISTING_CHALLENGE_INTERACTION.id,
+      const result = await challengeRepository.createUserCheckIn({
+        ...NON_EXISTING_CHALLENGE_CHECKIN,
+        challengeId: EXISTING_CHALLENGE_CHECKIN.id,
       });
 
       expect(findUserChallengeSpy).toHaveBeenCalledWith({
         where: {
-          userId: NON_EXISTING_CHALLENGE_INTERACTION.userId,
-          challengeId: EXISTING_CHALLENGE_INTERACTION.challengeId,
+          userId: NON_EXISTING_CHALLENGE_CHECKIN.userId,
+          challengeId: EXISTING_CHALLENGE_CHECKIN.challengeId,
         },
         include: {
           challenge: {
@@ -390,8 +390,8 @@ describe("ChallengeRepository", () => {
       expect(updateSpy).toHaveBeenCalledWith({
         where: {
           userId_challengeId: {
-            challengeId: EXISTING_CHALLENGE_INTERACTION.challengeId,
-            userId: NON_EXISTING_CHALLENGE_INTERACTION.userId,
+            challengeId: EXISTING_CHALLENGE_CHECKIN.challengeId,
+            userId: NON_EXISTING_CHALLENGE_CHECKIN.userId,
           },
         },
         data: {
@@ -403,11 +403,11 @@ describe("ChallengeRepository", () => {
       });
       expect(createSpy).toHaveBeenCalledWith({
         data: {
-          ...NON_EXISTING_CHALLENGE_INTERACTION,
-          challengeId: EXISTING_CHALLENGE_INTERACTION.id,
+          ...NON_EXISTING_CHALLENGE_CHECKIN,
+          challengeId: EXISTING_CHALLENGE_CHECKIN.id,
         },
       });
-      expect(result).toStrictEqual(EXISTING_CHALLENGE_INTERACTION);
+      expect(result).toStrictEqual(EXISTING_CHALLENGE_CHECKIN);
     });
   });
 });

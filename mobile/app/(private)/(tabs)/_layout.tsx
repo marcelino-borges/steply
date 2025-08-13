@@ -5,7 +5,7 @@ import { useAuth } from "@clerk/clerk-expo";
 import { COLORS } from "@/constants/colors";
 import { useUser } from "@/store/user";
 import TabBarLabel from "@/components/tab-bar";
-import Feather from "@expo/vector-icons/Feather";
+import { HomeIcon } from "lucide-react-native";
 
 export default function TabLayout() {
   const router = useRouter();
@@ -34,7 +34,7 @@ export default function TabLayout() {
             <TabBarLabel color={color}>Home</TabBarLabel>
           ),
           tabBarIcon: ({ color, size }) => (
-            <Feather name="home" size={size} color={color} />
+            <HomeIcon size={size} color={color} />
           ),
         }}
       />

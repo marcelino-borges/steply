@@ -26,7 +26,6 @@ import CalendarPicker, {
 import Typography from "@/components/typography";
 import { NonExistingActivityDto } from "@/types/api/activity";
 import BottomSheet from "@/components/sheet";
-import { Feather } from "@expo/vector-icons";
 import TabsHeader from "@/components/tabs-header";
 import { useGetSuggestedActivities } from "@/hooks/suggestions/get-activities";
 import { useGetUserActivities } from "@/hooks/users/get-activities";
@@ -35,6 +34,7 @@ import { ChallengeCheckInTypeCode } from "@/types/api/challenges";
 import ChallengeActivityCard from "@/components/challenge-activity-card";
 import DebouncedTextfieldSearch from "@/components/inputs/debounced-search";
 import CheckboxGroup from "@/components/checkbox-group";
+import { CirclePlusIcon } from "lucide-react-native";
 
 enum AddActivityTab {
   GENERAL,
@@ -443,7 +443,7 @@ const CreateChallenge3: React.FC = () => {
                 activeOpacity={0.7}
                 onPress={() => setOpenAddActivity(true)}
               >
-                <Feather name="plus-circle" size={20} color={COLORS.primary} />
+                <CirclePlusIcon size={20} color={COLORS.primary} />
               </TouchableOpacity>
             </View>
             <View>

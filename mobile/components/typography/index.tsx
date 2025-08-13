@@ -5,6 +5,7 @@ import { FONT_SIZE } from "@/constants/fonts";
 import { COLORS } from "@/constants/colors";
 import { SPACING } from "@/constants/spacings";
 import { FontSize, FontWeight } from "@/types/app";
+import { getFontFamily } from "@/utils/fonts";
 
 interface TypographyProps {
   weight?: FontWeight;
@@ -22,7 +23,7 @@ interface TypographyProps {
 }
 
 const Typography: React.FC<PropsWithChildren<TypographyProps>> = ({
-  weight = 400,
+  weight = "normal",
   size = "base",
   color = COLORS.contentBlack,
   lineHeight = SPACING[6],
@@ -36,34 +37,10 @@ const Typography: React.FC<PropsWithChildren<TypographyProps>> = ({
   numberOfLines,
   pointerEvents,
 }) => {
-  const getFontFamily = () => {
-    let fontName = "WorkSans";
-
-    const weightStrings: Record<string, string> = {
-      thin: "_100Thin",
-      extralight: "_200ExtraLight",
-      light: "_300Light",
-      normal: "_400Regular",
-      medium: "_500Medium",
-      semibold: "_600SemiBold",
-      bold: "_700Bold",
-      extrabold: "_800ExtraBold",
-      black: "_900Black",
-    };
-
-    fontName += weightStrings[weight] ?? "_400Regular";
-
-    if (italic) {
-      fontName += "_Italic";
-    }
-
-    return fontName;
-  };
-
   return (
     <Text
       style={[
-        { fontFamily: getFontFamily() },
+        { fontFamily: getFontFamily(weight, italic) },
         { fontSize: FONT_SIZE[size] },
         { letterSpacing },
         { lineHeight },

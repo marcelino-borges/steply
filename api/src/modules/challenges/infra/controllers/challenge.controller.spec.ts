@@ -8,13 +8,13 @@ import { UpdateChallengeUseCase } from "@/modules/challenges/application/use-cas
 import { FindChallengeByIdUseCase } from "@/modules/challenges/application/use-cases/challenge/find-challenge-by-id.use-case";
 import { QueryChallengesUseCase } from "@/modules/challenges/application/use-cases/challenge/query-challenges.use-case";
 import {
-  EXISTING_CHALLENGE_INTERACTION,
+  EXISTING_CHALLENGE_CHECKIN,
   EXISTING_CHALLENGE_MOCK,
   EXISTING_FULL_CHALLENGE_MOCK,
-  NON_EXISTING_CHALLENGE_INTERACTION,
+  NON_EXISTING_CHALLENGE_CHECKIN,
   NON_EXISTING_CHALLENGE_MOCK,
 } from "@/modules/challenges/__mocks__/challenge.mock";
-import { UserInteractChallengeUseCase } from "@/modules/challenges/application/use-cases/challenge/user-interact-challenge.use-case";
+import { UserCheckInChallengeUseCase } from "@/modules/challenges/application/use-cases/challenge/user-interact-challenge.use-case";
 import { ChallengeController } from "./challenge.controller";
 
 describe("ChallengeController", () => {
@@ -24,7 +24,7 @@ describe("ChallengeController", () => {
   let updateUseCase: UpdateChallengeUseCase;
   let findByIdUseCase: FindChallengeByIdUseCase;
   let queryUseCase: QueryChallengesUseCase;
-  let interactUseCase: UserInteractChallengeUseCase;
+  let interactUseCase: UserCheckInChallengeUseCase;
 
   const CreateUseCaseMock = {
     execute: jest.fn(),
@@ -67,7 +67,7 @@ describe("ChallengeController", () => {
           useValue: QueryChallengesUseCaseMock,
         },
         {
-          provide: UserInteractChallengeUseCase,
+          provide: UserCheckInChallengeUseCase,
           useValue: UserInteractChallengeUseCaseMock,
         },
       ],
@@ -79,7 +79,7 @@ describe("ChallengeController", () => {
     findByIdUseCase = module.get(FindChallengeByIdUseCase);
     updateUseCase = module.get(UpdateChallengeUseCase);
     queryUseCase = module.get(QueryChallengesUseCase);
-    interactUseCase = module.get(UserInteractChallengeUseCase);
+    interactUseCase = module.get(UserCheckInChallengeUseCase);
   });
 
   afterEach(() => {
@@ -294,26 +294,26 @@ describe("ChallengeController", () => {
     it("should call the execute method from UserInteractChallengeUseCase instance and return the user challenge interaction created", async () => {
       jest
         .spyOn(interactUseCase, "execute")
-        .mockResolvedValue(EXISTING_CHALLENGE_INTERACTION);
+        .mockResolvedValue(EXISTING_CHALLENGE_CHECKIN);
 
-      const result = await controller.createUserInteraction(
-        { challengeId: EXISTING_CHALLENGE_INTERACTION.challengeId },
-        NON_EXISTING_CHALLENGE_INTERACTION,
+      const result = await controller.createUserCheckIn(
+        { challengeId: EXISTING_CHALLENGE_CHECKIN.challengeId },
+        NON_EXISTING_CHALLENGE_CHECKIN,
       );
 
       expect(interactUseCase.execute).toHaveBeenCalledWith({
-        ...NON_EXISTING_CHALLENGE_INTERACTION,
-        challengeId: EXISTING_CHALLENGE_INTERACTION.challengeId,
+        ...NON_EXISTING_CHALLENGE_CHECKIN,
+        challengeId: EXISTING_CHALLENGE_CHECKIN.challengeId,
       });
-      expect(result).toStrictEqual(EXISTING_CHALLENGE_INTERACTION);
+      expect(result).toStrictEqual(EXISTING_CHALLENGE_CHECKIN);
     });
 
     it("should throw a BadRequestException if the body passed has unexpected data types", async () => {
       try {
-        await controller.createUserInteraction(
-          { challengeId: EXISTING_CHALLENGE_INTERACTION.challengeId },
+        await controller.createUserCheckIn(
+          { challengeId: EXISTING_CHALLENGE_CHECKIN.challengeId },
           {
-            ...NON_EXISTING_CHALLENGE_INTERACTION,
+            ...NON_EXISTING_CHALLENGE_CHECKIN,
             videoUrl: 123,
           } as any,
         );
@@ -327,9 +327,9 @@ describe("ChallengeController", () => {
 
     it("should throw a BadRequestException if the challengeId passed in params has unexpected data types", async () => {
       try {
-        await controller.createUserInteraction(
+        await controller.createUserCheckIn(
           { challengeId: "1A" } as any,
-          NON_EXISTING_CHALLENGE_INTERACTION,
+          NON_EXISTING_CHALLENGE_CHECKIN,
         );
       } catch (error) {
         expect(error).toBeInstanceOf(BadRequestException);
@@ -341,8 +341,8 @@ describe("ChallengeController", () => {
 
     it("should throw a BadRequestException if the body is sent missing some required prop", async () => {
       try {
-        await controller.createUserInteraction(
-          { challengeId: EXISTING_CHALLENGE_INTERACTION.challengeId },
+        await controller.createUserCheckIn(
+          { challengeId: EXISTING_CHALLENGE_CHECKIN.challengeId },
           {
             challengeId: 1,
             videoUrl: "https://video.com",

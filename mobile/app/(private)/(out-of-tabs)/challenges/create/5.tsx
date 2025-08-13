@@ -4,7 +4,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { Toast } from "toastify-react-native";
 import { useTranslation } from "react-i18next";
-import Feather from "@expo/vector-icons/Feather";
 import * as ImagePicker from "expo-image-picker";
 import * as DocumentPicker from "expo-document-picker";
 
@@ -17,6 +16,7 @@ import TextfieldFree from "@/components/inputs/textfield-free";
 import AttachButton from "@/components/attach-button";
 import Typography from "@/components/typography";
 import { RADIUS } from "@/constants/radius";
+import { PaperclipIcon, Trash2Icon } from "lucide-react-native";
 
 const CreateChallenge5: React.FC = () => {
   const router = useRouter();
@@ -162,11 +162,7 @@ const CreateChallenge5: React.FC = () => {
                   </Typography>
                 </View>
                 <Pressable onPress={removeRewardImage}>
-                  <Feather
-                    name="trash-2"
-                    size={24}
-                    color={COLORS.destructive}
-                  />
+                  <Trash2Icon size={24} color={COLORS.destructive} />
                 </Pressable>
               </View>
             )}
@@ -186,18 +182,14 @@ const CreateChallenge5: React.FC = () => {
               <View key={file.uri} style={styles.fileCard}>
                 <View style={styles.fileCardLeftContainer}>
                   <View style={styles.imagePreview}>
-                    <Feather name="paperclip" size={20} />
+                    <PaperclipIcon size={20} />
                   </View>
                   <Typography size="sm" numberOfLines={1}>
                     {file.name}
                   </Typography>
                 </View>
                 <Pressable onPress={() => removeRewardFile(file.uri)}>
-                  <Feather
-                    name="trash-2"
-                    size={24}
-                    color={COLORS.destructive}
-                  />
+                  <Trash2Icon size={24} color={COLORS.destructive} />
                 </Pressable>
               </View>
             ))}

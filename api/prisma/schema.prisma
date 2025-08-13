@@ -189,23 +189,23 @@ model ChallengeCheckInType {
 }
 
 model UserChallenge {
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
-  interactionCount Int
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  checkInsCount Int
 
   userId      Int
   challengeId Int
 
-  user         User                       @relation(fields: [userId], references: [id])
-  challenge    Challenge                  @relation(fields: [challengeId], references: [id])
-  interactions UserChallengeInteraction[]
+  user      User                   @relation(fields: [userId], references: [id])
+  challenge Challenge              @relation(fields: [challengeId], references: [id])
+  checkIns  UserChallengeCheckIn[]
 
   @@id([userId, challengeId])
   @@unique([userId, challengeId])
   @@map("user_challenges")
 }
 
-model UserChallengeInteraction {
+model UserChallengeCheckIn {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -220,7 +220,7 @@ model UserChallengeInteraction {
 
   userChallenge UserChallenge @relation(fields: [userId, challengeId], references: [userId, challengeId])
 
-  @@map("users_challenges_interactions")
+  @@map("users_challenges_checkins")
 }
 
 model Reward {
@@ -282,10 +282,10 @@ model RankType {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  title           String
-  minInteractions Int
-  rank            Int
-  description     String?
+  title       String
+  minCheckIns Int
+  rank        Int
+  description String?
 
   challengeId Int
 

@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 
-export class UserChallengeInteraction {
+export class UserChallengeCheckIn {
   @ApiProperty()
   public readonly videoUrl: string | null;
   @ApiProperty()

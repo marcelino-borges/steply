@@ -2,7 +2,6 @@ import * as React from "react";
 import { StyleSheet, View } from "react-native";
 import { useSignUp } from "@clerk/clerk-expo";
 import { Link, useRouter } from "expo-router";
-import Feather from "@expo/vector-icons/Feather";
 
 import TextfieldFormControlled from "@/components/inputs/textfield-form-controlled";
 import { useForm } from "react-hook-form";
@@ -23,6 +22,7 @@ import { Toast } from "toastify-react-native";
 import { handleClerkErrorMessage } from "@/utils/clerk-error";
 import { useUser } from "@/store/user";
 import { useState } from "react";
+import { ArrowLeftIcon } from "lucide-react-native";
 
 export default function SignUpScreen() {
   const { isLoaded, signUp, setActive } = useSignUp();
@@ -158,7 +158,7 @@ export default function SignUpScreen() {
 
   return (
     <View style={authStyles.screenContainer}>
-      <Feather name="arrow-left" size={24} onPress={() => router.back()} />
+      <ArrowLeftIcon size={24} onPress={() => router.back()} />
       <View style={authStyles.contentContainer}>
         <Typography size="2xl" weight="bold">
           Criar conta

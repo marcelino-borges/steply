@@ -1,25 +1,25 @@
 import React from "react";
 import { TouchableOpacity, View } from "react-native";
-import Feather from "@expo/vector-icons/Feather";
 
 import Typography from "../typography";
 import { COLORS } from "@/constants/colors";
 import { SPACING } from "@/constants/spacings";
 import { attachButtonStyles } from "./styles";
+import { ChevronRightIcon, LucideIcon } from "lucide-react-native";
 
 interface AttachButtonProps {
   children: string;
   disabled?: boolean;
   fullWidth?: boolean;
   onPress: VoidFunction;
-  leftIcon: React.ComponentProps<typeof Feather>["name"];
+  leftIcon: LucideIcon;
 }
 
 const AttachButton: React.FC<AttachButtonProps> = ({
   children,
   disabled = false,
   fullWidth = true,
-  leftIcon,
+  leftIcon: LeftIcon,
   onPress,
 }) => {
   return (
@@ -30,7 +30,7 @@ const AttachButton: React.FC<AttachButtonProps> = ({
       activeOpacity={0.7}
     >
       <View style={[attachButtonStyles.labelIcon]}>
-        <Feather name={leftIcon} size={24} color={COLORS.contentBlack} />
+        <LeftIcon size={24} color={COLORS.contentBlack} />
         <Typography
           color={COLORS.contentBlack}
           letterSpacing={0.1}
@@ -40,7 +40,7 @@ const AttachButton: React.FC<AttachButtonProps> = ({
           {children}
         </Typography>
       </View>
-      <Feather name="chevron-right" size={16} />
+      <ChevronRightIcon size={16} />
     </TouchableOpacity>
   );
 };

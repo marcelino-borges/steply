@@ -1,12 +1,12 @@
 import React from "react";
 import { StyleSheet, View, Text } from "react-native";
-import AntDesign from "@expo/vector-icons/AntDesign";
 
 import { COLORS } from "@/constants/colors";
 import { SPACING } from "@/constants/spacings";
 import CircularProgress from "@/components/circular-progress";
 import Typography from "../typography";
 import { Href, useRouter } from "expo-router";
+import { ArrowLeftIcon } from "lucide-react-native";
 
 interface SteppedHeaderProps {
   /** The title of the header */
@@ -51,8 +51,7 @@ const SteppedHeader: React.FC<SteppedHeaderProps> = ({
   return (
     <View style={styles.container}>
       {showBackIcon && (
-        <AntDesign
-          name="arrowleft"
+        <ArrowLeftIcon
           size={24}
           color={foreground}
           onPress={
