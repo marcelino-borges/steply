@@ -4,9 +4,13 @@ import {
   UserChallengeCheckInDto,
   UserCheckInChallengeDto,
 } from "@/modules/challenges/application/dtos/challenge.dto";
+import { ChallengeSummaryDto } from "@/modules/challenges/application/dtos/challenge-summary.dto";
 
 export interface BaseChallengeRepository extends Repository<FullChallengeDto> {
   createUserCheckIn: (
-    interaction: UserCheckInChallengeDto,
+    checkIn: UserCheckInChallengeDto,
   ) => Promise<UserChallengeCheckInDto | null>;
+  getChallengeSummary: (
+    challengeId: number,
+  ) => Promise<ChallengeSummaryDto | null>;
 }

@@ -116,8 +116,8 @@ describe("PrismaFullUserAdapter", () => {
         createdAt: new Date(),
         updatedAt: new Date(),
         userId: 1,
-        interactionCount: 100,
-        interactions: [
+        checkInsCount: 100,
+        checkIns: [
           {
             createdAt: new Date(),
             updatedAt: new Date(),

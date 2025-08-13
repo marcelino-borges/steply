@@ -15,7 +15,9 @@ import {
   NON_EXISTING_CHALLENGE_MOCK,
 } from "@/modules/challenges/__mocks__/challenge.mock";
 import { UserCheckInChallengeUseCase } from "@/modules/challenges/application/use-cases/challenge/user-interact-challenge.use-case";
+import { GetChallengeSummaryUseCase } from "@/modules/challenges/application/use-cases/challenge/get-challenge-summary.use-case";
 import { ChallengeController } from "./challenge.controller";
+import { CHALLENGE_SUMMARY_MOCK } from "@/modules/challenges/__mocks__/challenge-summary.mock";
 
 describe("ChallengeController", () => {
   let controller: ChallengeController;
@@ -25,6 +27,7 @@ describe("ChallengeController", () => {
   let findByIdUseCase: FindChallengeByIdUseCase;
   let queryUseCase: QueryChallengesUseCase;
   let interactUseCase: UserCheckInChallengeUseCase;
+  let getChallengeSummaryUseCase: GetChallengeSummaryUseCase;
 
   const CreateUseCaseMock = {
     execute: jest.fn(),
@@ -43,6 +46,10 @@ describe("ChallengeController", () => {
   };
 
   const UserInteractChallengeUseCaseMock = {
+    execute: jest.fn(),
+  };
+
+  const GetChallengeSummaryUseCaseMock = {
     execute: jest.fn(),
   };
 
@@ -70,6 +77,10 @@ describe("ChallengeController", () => {
           provide: UserCheckInChallengeUseCase,
           useValue: UserInteractChallengeUseCaseMock,
         },
+        {
+          provide: GetChallengeSummaryUseCase,
+          useValue: GetChallengeSummaryUseCaseMock,
+        },
       ],
     }).compile();
 
@@ -80,6 +91,7 @@ describe("ChallengeController", () => {
     updateUseCase = module.get(UpdateChallengeUseCase);
     queryUseCase = module.get(QueryChallengesUseCase);
     interactUseCase = module.get(UserCheckInChallengeUseCase);
+    getChallengeSummaryUseCase = module.get(GetChallengeSummaryUseCase);
   });
 
   afterEach(() => {
@@ -229,6 +241,34 @@ describe("ChallengeController", () => {
     });
   });
 
+  describe("getChallengeSummary", () => {
+    const inputMock = { challengeId };
+
+    it("should call the execute method from GetChallengeSummaryUseCase and return the summary", async () => {
+      jest
+        .spyOn(getChallengeSummaryUseCase, "execute")
+        .mockResolvedValue(CHALLENGE_SUMMARY_MOCK);
+
+      const result = await controller.getChallengeSummary(inputMock);
+
+      expect(getChallengeSummaryUseCase.execute).toHaveBeenCalledWith(
+        challengeId,
+      );
+      expect(result).toStrictEqual(CHALLENGE_SUMMARY_MOCK);
+    });
+
+    it("should throw BadRequestException when challenge not found", async () => {
+      jest.spyOn(getChallengeSummaryUseCase, "execute").mockResolvedValue(null);
+
+      try {
+        await controller.getChallengeSummary(inputMock);
+      } catch (error) {
+        expect(error).toBeInstanceOf(BadRequestException);
+        expect(error.message).toEqual(t("en").challenge.notFound);
+      }
+    });
+  });
+
   describe("update", () => {
     it("should call the execute method from UpdateChallengeUseCase instance and return the challenge updated", async () => {
       jest
@@ -290,8 +330,8 @@ describe("ChallengeController", () => {
     });
   });
 
-  describe("createUserInteraction", () => {
-    it("should call the execute method from UserInteractChallengeUseCase instance and return the user challenge interaction created", async () => {
+  describe("createUserCheckIn", () => {
+    it("should call the execute method from UserInteractChallengeUseCase instance and return the user challenge check-in created", async () => {
       jest
         .spyOn(interactUseCase, "execute")
         .mockResolvedValue(EXISTING_CHALLENGE_CHECKIN);

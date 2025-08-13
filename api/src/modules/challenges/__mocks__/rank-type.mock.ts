@@ -1,7 +1,7 @@
 export const NON_EXISTING_RANK_TYPE_MOCK = {
   title: "Rank title",
   description: "Rank description",
-  minInteractions: 10,
+  minCheckIns: 10,
   rank: 1,
 };
 

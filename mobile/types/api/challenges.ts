@@ -77,3 +77,10 @@ export interface NonExistingChallengeDto {
   multipleCheckIns: boolean;
   checkInTypeCode: number;
 }
+
+export interface ChallengeSummaryDto {
+  participantCount: number;
+  checkInsToday: number;
+  checkInsTotal: number;
+  mediaCount: number;
+}

@@ -56,7 +56,7 @@ export const FULL_USER_INCLUDES = {
           reward: true,
         },
       },
-      interactions: true,
+      checkIns: true,
     },
   },
 } as const;

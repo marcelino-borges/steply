@@ -127,7 +127,7 @@ describe("RankTypeController", () => {
         await controller.create(
           {
             description: "Rank description",
-            minInteractions: 10,
+            minCheckIns: 10,
             rank: 1,
           } as any,
           { challengeId: 1 } as any,
@@ -146,7 +146,7 @@ describe("RankTypeController", () => {
           {
             title: "Rank title",
             description: "Rank description",
-            minInteractions: 10,
+            minCheckIns: 10,
             rank: 1,
           } as any,
           { challengeId } as any,
@@ -239,7 +239,7 @@ describe("RankTypeController", () => {
             updatedAt: new Date(2005, 5, 22),
             title: "Rank title",
             description: "Rank description",
-            minInteractions: 10,
+            minCheckIns: 10,
             rank: 1,
           } as any,
           { challengeId: true } as any,
@@ -261,7 +261,7 @@ describe("RankTypeController", () => {
             updatedAt: new Date(2005, 5, 22),
             title: "Rank title",
             description: "Rank description",
-            minInteractions: 10,
+            minCheckIns: 10,
             rank: 1,
           } as any,
           { challengeId } as any,

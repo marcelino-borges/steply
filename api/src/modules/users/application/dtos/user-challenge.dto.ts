@@ -32,9 +32,9 @@ export class UserChallengeResponseDto implements DatabaseDates {
   @ApiProperty({ required: false })
   ownerUserId: number | null;
   @ApiProperty()
-  interactionCount: number;
+  checkInsCount: number;
   @ApiProperty()
-  interactions: {
+  checkIns: {
     date: Date;
   }[];
   @ApiProperty({ type: [String] })

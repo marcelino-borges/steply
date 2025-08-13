@@ -309,7 +309,7 @@ describe("ChallengeRepository", () => {
     });
   });
 
-  describe("createUserInteraction", () => {
+  describe("createUserCheckIn", () => {
     const userChallengeWithChallengeExpanded = {
       ...EXISTING_USER_CHALLENGE,
       challenge: {
@@ -343,11 +343,11 @@ describe("ChallengeRepository", () => {
       expect(result).toBeNull();
     });
 
-    it("should increment the 'interactionCount' in user challenge, create the interaction and return this, when the user challenge exists", async () => {
+    it("should increment the 'checkInsCount' in user challenge, create the check-in and return this, when the user challenge exists", async () => {
       const updatedUserChallenge = {
         ...EXISTING_USER_CHALLENGE,
-        interactionCount:
-          EXISTING_USER_CHALLENGE.interactionCount +
+        checkInsCount:
+          EXISTING_USER_CHALLENGE.checkInsCount +
           userChallengeWithChallengeExpanded.challenge.interactionIncrement,
       };
 
@@ -365,7 +365,7 @@ describe("ChallengeRepository", () => {
         .spyOn(prismaService.userChallenge, "update")
         .mockResolvedValue(updatedUserChallenge);
       const createSpy = jest
-        .spyOn(prismaService.userChallengeInteraction, "create")
+        .spyOn(prismaService.userChallengeCheckIn, "create")
         .mockResolvedValue(EXISTING_CHALLENGE_CHECKIN);
 
       const result = await challengeRepository.createUserCheckIn({
@@ -395,7 +395,7 @@ describe("ChallengeRepository", () => {
           },
         },
         data: {
-          interactionCount: {
+          checkInsCount: {
             increment:
               userChallengeWithChallengeExpanded.challenge.interactionIncrement,
           },

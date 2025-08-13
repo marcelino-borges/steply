@@ -12,9 +12,9 @@ export class PrismaUserChallengeAdapter {
       userId: prismaUserChallenge.userId,
       joinMethod: prismaUserChallenge.challenge
         .joinMethod as unknown as JoinMethod,
-      interactionCount: prismaUserChallenge.interactionCount,
-      interactions: prismaUserChallenge.interactions.map((interaction) => ({
-        date: interaction.createdAt,
+      checkInsCount: prismaUserChallenge.checkInsCount,
+      checkIns: prismaUserChallenge.checkIns.map((checkIn) => ({
+        date: checkIn.createdAt,
       })),
       tags: prismaUserChallenge.challenge.tags,
     };

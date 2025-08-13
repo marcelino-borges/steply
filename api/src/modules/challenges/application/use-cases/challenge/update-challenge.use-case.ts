@@ -6,7 +6,7 @@ import {
   FullChallengeDto,
   UpdateChallengeDto,
 } from "@/modules/challenges/application/dtos/challenge.dto";
-import { CHALLENGE_REPOSITORY_TOKEN } from "@/modules/challenges/infra/repositories/challenge.repository";
+import { CHALLENGE_REPOSITORY_TOKEN } from "@/modules/challenges/infra/constants/challenge.constants";
 import { BaseChallengeRepository } from "@/modules/challenges/infra/abstractions/challenge-repository.interface";
 
 @Injectable()

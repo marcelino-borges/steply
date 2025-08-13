@@ -11,6 +11,7 @@ import {
   UserChallengeCheckInDto,
   UserCheckInChallengeDto,
 } from "@/modules/challenges/application/dtos/challenge.dto";
+import { ChallengeSummaryDto } from "@/modules/challenges/application/dtos/challenge-summary.dto";
 import {
   ChallengeQueryParamsDto,
   ChallengesQueryBuilderDto,
@@ -18,8 +19,6 @@ import {
 import { CHALLENGE_INCLUDES } from "@/modules/challenges/infra/constants/challenge.constants";
 import { getSafePagination } from "@/modules/challenges/infra/utils/challenge.utils";
 import { BaseChallengeRepository } from "@/modules/challenges/infra/abstractions/challenge-repository.interface";
-
-export const CHALLENGE_REPOSITORY_TOKEN = Symbol("ChallengeRepository");
 
 @Injectable()
 export class ChallengeRepository implements BaseChallengeRepository {
@@ -200,15 +199,61 @@ export class ChallengeRepository implements BaseChallengeRepository {
           },
         },
         data: {
-          interactionCount: {
+          checkInsCount: {
             increment: userChallenge.challenge.interactionIncrement,
           },
         },
       });
 
-      return await this.db.userChallengeInteraction.create({
+      return await this.db.userChallengeCheckIn.create({
         data: checkIn,
       });
     });
+  }
+
+  async getChallengeSummary(
+    challengeId: number,
+  ): Promise<ChallengeSummaryDto | null> {
+    const challenge = await this.db.challenge.findUnique({
+      where: { id: challengeId },
+    });
+
+    if (!challenge) {
+      return null;
+    }
+
+    const startOfToday = new Date();
+    startOfToday.setHours(0, 0, 0, 0);
+
+    const [participantCount, checkInsToday, checkInsTotal, mediaCount] =
+      await Promise.all([
+        this.db.userChallenge.count({
+          where: { challengeId },
+        }),
+        this.db.userChallengeCheckIn.count({
+          where: {
+            challengeId,
+            createdAt: {
+              gte: startOfToday,
+            },
+          },
+        }),
+        this.db.userChallengeCheckIn.count({
+          where: { challengeId },
+        }),
+        this.db.userChallengeCheckIn.count({
+          where: {
+            challengeId,
+            OR: [{ videoUrl: { not: null } }, { imageUrl: { not: null } }],
+          },
+        }),
+      ]);
+
+    return {
+      participantCount,
+      checkInsToday,
+      checkInsTotal,
+      mediaCount,
+    };
   }
 }

@@ -4,5 +4,5 @@ export const FULL_USER_CHALLENGE_INCLUDES = {
       reward: true,
     },
   },
-  interactions: true,
+  checkIns: true,
 };

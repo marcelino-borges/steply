@@ -1,3 +1,5 @@
+export const CHALLENGE_REPOSITORY_TOKEN = Symbol("ChallengeRepository");
+
 export const CHALLENGE_INCLUDES = {
   organization: {
     select: {

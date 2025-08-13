@@ -9,7 +9,7 @@ export const createRankTypeSchema = (lang: Lang) =>
   z.object({
     title: stringSchema(lang),
     description: stringSchema(lang).optional(),
-    minInteractions: intSchema(lang),
+    minCheckIns: intSchema(lang),
     rank: intSchema(lang),
   });
 

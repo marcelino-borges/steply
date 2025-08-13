@@ -84,7 +84,7 @@ export const ptMessages = {
     challenge: "desafio",
     recommended: "recomendado",
     lang: "idioma",
-    minInteractions: "interações mínimas",
+    minInteractions: "check-ins mínimos",
     rank: "posição",
   },
   dbErrors: {

@@ -84,7 +84,7 @@ export const enMessages: Dictionary = {
     challenge: "challenge",
     recommended: "recommended",
     lang: "language",
-    minInteractions: "minimum interactions",
+    minInteractions: "minimum check-ins",
     rank: "rank",
   },
   dbErrors: {

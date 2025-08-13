@@ -4,7 +4,7 @@ export class RankType {
   @ApiProperty()
   public readonly title: string;
   @ApiProperty()
-  public readonly minInteractions: number;
+  public readonly minCheckIns: number;
   @ApiProperty()
   public readonly rank: number;
   @ApiProperty()

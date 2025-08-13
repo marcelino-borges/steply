@@ -1,6 +1,6 @@
 export interface RankType {
   title: string;
-  minInteractions: number;
+  minCheckIns: number;
   rank: number;
   challengeId: number;
   description: string | null;
@@ -8,7 +8,7 @@ export interface RankType {
 
 export interface NonExistingRankTypeDto {
   title: string;
-  minInteractions: number;
+  minCheckIns: number;
   rank: number;
   description?: string;
 }

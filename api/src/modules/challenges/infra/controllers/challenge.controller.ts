@@ -34,6 +34,8 @@ import { QueryChallengesUseCase } from "@/modules/challenges/application/use-cas
 import { ChallengeQueryParamsDto } from "@/modules/challenges/application/dtos/challenge-query.dto";
 import { FullChallengeDto } from "@/modules/challenges/application/dtos/challenge.dto";
 import { UserCheckInChallengeUseCase } from "@/modules/challenges/application/use-cases/challenge/user-interact-challenge.use-case";
+import { GetChallengeSummaryUseCase } from "@/modules/challenges/application/use-cases/challenge/get-challenge-summary.use-case";
+import { ChallengeSummaryDto } from "@/modules/challenges/application/dtos/challenge-summary.dto";
 
 @Controller("challenges")
 export class ChallengeController {
@@ -43,7 +45,38 @@ export class ChallengeController {
     private readonly findByIdUseCase: FindChallengeByIdUseCase,
     private readonly queryUseCase: QueryChallengesUseCase,
     private readonly userInteractUseCase: UserCheckInChallengeUseCase,
+    private readonly getChallengeSummaryUseCase: GetChallengeSummaryUseCase,
   ) {}
+
+  @Get(":challengeId/summary")
+  @EndpointDoc({
+    operation: {
+      summary: "Get challenge summary analytics",
+    },
+    response: {
+      status: HttpStatus.OK,
+      type: ChallengeSummaryDto,
+    },
+  })
+  async getChallengeSummary(
+    @Param() params: ChallengeIdParamsDto,
+    @Headers("lang") lang: Lang = "en",
+  ) {
+    const { data: parsedParams } = ZodValidationFactory.parseOrThrow(
+      challengeIdParamsSchema,
+      params,
+    );
+
+    const summary = await this.getChallengeSummaryUseCase.execute(
+      parsedParams.challengeId,
+    );
+
+    if (!summary) {
+      throw new BadRequestException(t(lang as Lang).challenge.notFound);
+    }
+
+    return summary;
+  }
 
   @Get(":challengeId")
   @EndpointDoc({

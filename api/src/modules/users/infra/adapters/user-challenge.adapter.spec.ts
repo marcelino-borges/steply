@@ -42,9 +42,9 @@ describe("PrismaUserChallengeAdapter", () => {
         challengeId: 1,
         createdAt: new Date(),
         updatedAt: new Date(),
-        interactionCount: 100,
+        checkInsCount: 100,
         userId: 1,
-        interactions: [
+        checkIns: [
           {
             challengeId: 1,
             createdAt: new Date(),
@@ -65,9 +65,9 @@ describe("PrismaUserChallengeAdapter", () => {
         userId: prismaUserChallenge.userId,
         joinMethod: prismaUserChallenge.challenge
           .joinMethod as unknown as JoinMethod,
-        interactionCount: prismaUserChallenge.interactionCount,
-        interactions: prismaUserChallenge.interactions.map((interaction) => ({
-          date: interaction.createdAt,
+        checkInsCount: prismaUserChallenge.checkInsCount,
+        checkIns: prismaUserChallenge.checkIns.map((checkIn) => ({
+          date: checkIn.createdAt,
         })),
       };
 

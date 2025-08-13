@@ -8,7 +8,7 @@ export class NonExistingRankTypeDto {
   @ApiProperty()
   title: string;
   @ApiProperty()
-  minInteractions: number;
+  minCheckIns: number;
   @ApiProperty()
   rank: number;
   @ApiProperty()

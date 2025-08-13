@@ -1,8 +1,6 @@
 import { Test, TestingModule } from "@nestjs/testing";
-import {
-  CHALLENGE_REPOSITORY_TOKEN,
-  ChallengeRepository,
-} from "@/modules/challenges/infra/repositories/challenge.repository";
+import { CHALLENGE_REPOSITORY_TOKEN } from "@/modules/challenges/infra/constants/challenge.constants";
+import { ChallengeRepository } from "@/modules/challenges/infra/repositories/challenge.repository";
 import { CreateChallengeUseCase } from "./create-challenge.use-case";
 import { DatabaseModule } from "@/core/infra/services/database.module";
 import {

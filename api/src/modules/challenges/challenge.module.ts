@@ -1,10 +1,8 @@
 import { Module } from "@nestjs/common";
 
 import { DatabaseModule } from "@/core/infra/services/database.module";
-import {
-  CHALLENGE_REPOSITORY_TOKEN,
-  ChallengeRepository,
-} from "@/modules/challenges/infra/repositories/challenge.repository";
+import { CHALLENGE_REPOSITORY_TOKEN } from "@/modules/challenges/infra/constants/challenge.constants";
+import { ChallengeRepository } from "@/modules/challenges/infra/repositories/challenge.repository";
 import { ChallengeController } from "@/modules/challenges/infra/controllers/challenge.controller";
 import {
   RANK_TYPE_REPOSITORY_TOKEN,
@@ -43,6 +41,7 @@ import { DeleteRewardUseCase } from "@/modules/challenges/application/use-cases/
 import { FindAllRewardsUseCase } from "@/modules/challenges/application/use-cases/reward/find-all-rewards.use-case";
 import { UpdateRewardUseCase } from "@/modules/challenges/application/use-cases/reward/update-reward.use-case";
 import { UserCheckInChallengeUseCase } from "@/modules/challenges/application/use-cases/challenge/user-interact-challenge.use-case";
+import { GetChallengeSummaryUseCase } from "@/modules/challenges/application/use-cases/challenge/get-challenge-summary.use-case";
 import {
   CHALLENGE_CHECKIN_TYPE_REPOSITORY_TOKEN,
   ChallengeCheckInTypeRepository,
@@ -89,6 +88,7 @@ import { FindAllRewardTypesUseCase } from "@/modules/challenges/application/use-
     FindChallengeByIdUseCase,
     QueryChallengesUseCase,
     UserCheckInChallengeUseCase,
+    GetChallengeSummaryUseCase,
 
     CreateRankTypeUseCase,
     DeleteRankTypeUseCase,

@@ -49,7 +49,7 @@ describe("UserChallengeRepository", () => {
       tags: ["test", "challenge"] as string[],
     };
 
-    const challenge1Interactions = [
+    const challenge1CheckIns = [
       {
         id: 1,
         userId,
@@ -76,9 +76,9 @@ describe("UserChallengeRepository", () => {
     const userChallenge = {
       challengeId,
       userId,
-      interactionCount: 0,
+      checkInsCount: 0,
       challenge: existingChallenge1,
-      interactions: challenge1Interactions,
+      checkIns: challenge1CheckIns,
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -91,14 +91,14 @@ describe("UserChallengeRepository", () => {
       await userChallengeRepository.create(newJoin, challengeId);
 
       expect(createSpy).toHaveBeenCalledWith({
-        data: { ...newJoin, interactionCount: 0, challengeId },
+        data: { ...newJoin, checkInsCount: 0, challengeId },
         include: {
           challenge: {
             include: {
               reward: true,
             },
           },
-          interactions: true,
+          checkIns: true,
         },
       });
     });
@@ -113,9 +113,9 @@ describe("UserChallengeRepository", () => {
         challengeId: userChallenge.challenge.id,
         userId,
         joinMethod: userChallenge.challenge.joinMethod as unknown as JoinMethod,
-        interactionCount: 0,
-        interactions: userChallenge.interactions.map((interaction) => ({
-          date: interaction.createdAt,
+        checkInsCount: 0,
+        checkIns: userChallenge.checkIns.map((checkIn) => ({
+          date: checkIn.createdAt,
         })),
       };
 
@@ -180,7 +180,7 @@ describe("UserChallengeRepository", () => {
     });
 
     it("should return from database an array of challenges related to the userId passed", async () => {
-      const challenge1Interactions = [
+      const challenge1CheckIns = [
         {
           userId,
           challengeId: existingChallenge1.id,
@@ -197,7 +197,7 @@ describe("UserChallengeRepository", () => {
           createdAt: new Date(1990, 4, 12),
         },
       ];
-      const challenge2Interactions = [
+      const challenge2CheckIns = [
         {
           userId,
           challengeId: existingChallenge2.id,
@@ -220,9 +220,9 @@ describe("UserChallengeRepository", () => {
           challengeId: existingChallenge1.id,
           userId,
           joinMethod: existingChallenge1.joinMethod as unknown as JoinMethod,
-          interactionCount: challenge1Interactions.length,
-          interactions: challenge1Interactions.map((interaction) => ({
-            date: interaction.createdAt,
+          checkInsCount: challenge1CheckIns.length,
+          checkIns: challenge1CheckIns.map((checkIn) => ({
+            date: checkIn.createdAt,
           })),
           tags: existingChallenge1.tags,
         },
@@ -231,9 +231,9 @@ describe("UserChallengeRepository", () => {
           challengeId: existingChallenge2.id,
           userId,
           joinMethod: existingChallenge2.joinMethod as unknown as JoinMethod,
-          interactionCount: challenge2Interactions.length,
-          interactions: challenge2Interactions.map((interaction) => ({
-            date: interaction.createdAt,
+          checkInsCount: challenge2CheckIns.length,
+          checkIns: challenge2CheckIns.map((checkIn) => ({
+            date: checkIn.createdAt,
           })),
           tags: existingChallenge2.tags,
         },
@@ -243,20 +243,20 @@ describe("UserChallengeRepository", () => {
         {
           challengeId: existingChallenge1.id,
           userId,
-          interactionCount: challenge1Interactions.length,
+          checkInsCount: challenge1CheckIns.length,
           createdAt: new Date(),
           updatedAt: new Date(),
           challenge: existingChallenge1,
-          interactions: challenge1Interactions,
+          checkIns: challenge1CheckIns,
         },
         {
           challengeId: existingChallenge2.id,
           userId,
-          interactionCount: challenge2Interactions.length,
+          checkInsCount: challenge2CheckIns.length,
           createdAt: new Date(),
           updatedAt: new Date(),
           challenge: existingChallenge2,
-          interactions: challenge2Interactions,
+          checkIns: challenge2CheckIns,
         },
       ] as any);
 

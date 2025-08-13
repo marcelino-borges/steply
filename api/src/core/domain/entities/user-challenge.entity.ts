@@ -2,7 +2,7 @@ import { ApiProperty } from "@nestjs/swagger";
 
 export class UserChallenge {
   @ApiProperty()
-  public readonly interactionCount: number;
+  public readonly checkInsCount: number;
   @ApiProperty()
   public readonly userId: number;
   @ApiProperty()

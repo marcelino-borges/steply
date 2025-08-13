@@ -29,7 +29,7 @@ export class UserChallengeRepository implements BaseUserChallengeRepository {
       data: {
         userId,
         challengeId,
-        interactionCount: 0,
+        checkInsCount: 0,
       },
       include: FULL_USER_CHALLENGE_INCLUDES,
     });

@@ -127,7 +127,10 @@
     "errorCreating": "Ops! Tivemos um erro ao criar esse desafio, tente novamente em instantes",
     "summary": "Resumo",
     "participants": "Participantes",
-    "engagement": "Engajamento"
+    "engagement": "Engajamento",
+    "checkInsToday": "Check-ins hoje",
+    "checkInsTotal": "Check-ins totais",
+    "mediasCount": "Mídias"
   },
   "files": {
     "invalidFile": "Arquivo inválido",
