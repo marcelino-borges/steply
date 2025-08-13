@@ -32,30 +32,42 @@ export class ChallengeRepository implements BaseChallengeRepository {
   async create(
     newChallenge: NonExistingChallengeDto,
   ): Promise<FullChallengeDto> {
-    const { activities, reward, ...challengeData } = newChallenge;
-    
+    const {
+      activities,
+      reward,
+      organizationId,
+      ownerUserId,
+      ...challengeData
+    } = newChallenge;
+
     const result = await this.db.challenge.create({
       data: {
         ...challengeData,
+        organizationId: organizationId || null,
+        ownerUserId: ownerUserId || null,
         joinMethod: this.joinMethodAdapter.fromDomain(challengeData.joinMethod),
-        activities: activities ? {
-          create: activities.map(activity => ({
-            title: activity.title,
-            description: activity.description || null,
-            startAt: activity.startAt,
-            endAt: activity.endAt,
-          })),
-        } : undefined,
-        reward: reward ? {
-          create: {
-            name: reward.name,
-            description: reward.description || null,
-            rewardTypeId: reward.rewardTypeId,
-            deliveryDetails: reward.deliveryDetails || null,
-            imageUrl: reward.imageUrl || null,
-            filesUrls: reward.filesUrls || [],
-          },
-        } : undefined,
+        activities: activities
+          ? {
+              create: activities.map((activity) => ({
+                title: activity.title,
+                description: activity.description || null,
+                startAt: activity.startAt,
+                endAt: activity.endAt,
+              })),
+            }
+          : undefined,
+        reward: reward
+          ? {
+              create: {
+                name: reward.name,
+                description: reward.description || null,
+                rewardTypeId: reward.rewardTypeId,
+                deliveryDetails: reward.deliveryDetails || null,
+                imageUrl: reward.imageUrl || null,
+                filesUrls: reward.filesUrls || [],
+              },
+            }
+          : undefined,
       },
       include: CHALLENGE_INCLUDES,
     });
@@ -63,7 +75,7 @@ export class ChallengeRepository implements BaseChallengeRepository {
     return {
       ...result,
       joinMethod: this.joinMethodAdapter.toDomain(result.joinMethod),
-    };
+    } as FullChallengeDto;
   }
 
   async update(updatedChallenge: ChallengeDto): Promise<FullChallengeDto> {
@@ -111,6 +123,10 @@ export class ChallengeRepository implements BaseChallengeRepository {
       queryBuilder.withOrganizationId(params.org);
     }
 
+    if (params?.ownerUserId) {
+      queryBuilder.withOwnerUserId(params.ownerUserId);
+    }
+
     if (params?.search) {
       queryBuilder.withSearch(params.search);
     }
@@ -126,6 +142,7 @@ export class ChallengeRepository implements BaseChallengeRepository {
       where: params ? where : undefined,
       skip: pageSize * pageNumber,
       take: pageSize,
+      include: CHALLENGE_INCLUDES,
     });
 
     const countPromise = this.db.challenge.count({

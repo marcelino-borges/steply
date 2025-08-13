@@ -94,6 +94,7 @@ Table users {
   country countries [not null]
   organization organizations
   ownedOrganization organizations
+  ownedChallenges challenges [not null]
   gender genders
   goal user_goals
   mainGoalLevel user_main_goal_levels
@@ -118,10 +119,12 @@ Table challenges {
   tags String[] [not null]
   checkInEndOfDay Boolean [not null]
   multipleCheckIns Boolean [not null]
-  organizationId Int [not null]
+  organizationId Int
   checkInTypeCode Int [not null]
-  organization organizations [not null]
+  ownerUserId Int
+  organization organizations
   checkInType challenges_checkin_types [not null]
+  ownerUser users
   usersChallenges user_challenges [not null]
   rankTypes rank_types [not null]
   activities challenges_activities [not null]
@@ -345,6 +348,8 @@ Ref: users.mainGoalLevelId > user_main_goal_levels.id
 Ref: challenges.organizationId > organizations.id
 
 Ref: challenges.checkInTypeCode > challenges_checkin_types.code
+
+Ref: challenges.ownerUserId > users.id
 
 Ref: user_challenges.userId > users.id
 

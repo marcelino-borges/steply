@@ -10,6 +10,8 @@ export const enMessages: Dictionary = {
     requiredField: "Required field ",
     interactChallengeOptionalProps:
       "At least one of the fields must be filled: videoUrl, imageUrl, text ou location",
+    challengeRequiresOwner:
+      "A challenge must have either an organization or an owner user",
   },
   forbidden: "Forbidden",
   internalServerError: "Internal server error",

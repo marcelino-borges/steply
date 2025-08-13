@@ -144,8 +144,11 @@ const styles = StyleSheet.create({
   },
   buttonView: {
     paddingHorizontal: SPACING.md,
+    paddingTop: SPACING.md,
     paddingBottom: SPACING.lg,
     width: "100%",
+    borderTopWidth: 1,
+    borderTopColor: COLORS.mutedLight,
   },
 });
 

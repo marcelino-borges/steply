@@ -3,6 +3,13 @@ import { MinimalOrganizationDto } from "./organization";
 import { RankTypeDto } from "./rank-type";
 import { RewardDto, NonExistingRewardDto } from "./reward";
 
+export interface MinimalUserDto {
+  id: number;
+  name: string;
+  email: string;
+  pictureUrl?: string | null;
+}
+
 export enum JoinMethod {
   OPEN = "OPEN",
   INVITE = "INVITE",
@@ -34,7 +41,8 @@ export interface ChallengeDto {
   endAt: Date;
   isPublic: boolean;
   joinMethod: JoinMethod;
-  organizationId: number;
+  organizationId: number | null;
+  ownerUserId: number | null;
   bannerUrl: string | null;
   interactionIncrement: number;
   tags: string[];
@@ -45,6 +53,7 @@ export interface ChallengeDto {
 
 export interface FullChallengeDto extends ChallengeDto {
   organization: MinimalOrganizationDto | null;
+  ownerUser: MinimalUserDto | null;
   reward: RewardDto | null;
   rankTypes: RankTypeDto[];
   activities: ActivityDto[];
@@ -58,7 +67,8 @@ export interface NonExistingChallengeDto {
   endAt: Date;
   isPublic: boolean;
   joinMethod: JoinMethod;
-  organizationId: number;
+  organizationId?: number | null;
+  ownerUserId?: number | null;
   bannerUrl?: string;
   reward?: NonExistingRewardDto;
   interactionIncrement: number;

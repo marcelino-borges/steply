@@ -21,6 +21,7 @@ describe("PrismaUserChallengeAdapter", () => {
           isPublic: true,
           joinMethod: PrismaJoinMethod.APPROVAL,
           organizationId: 1,
+          ownerUserId: null,
           tags: ["test", "adapter"] as string[],
           checkInEndOfDay: false,
           multipleCheckIns: false,

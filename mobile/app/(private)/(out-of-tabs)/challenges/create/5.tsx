@@ -239,10 +239,13 @@ const styles = StyleSheet.create({
     paddingTop: SPACING[10],
   },
   buttonView: {
+    gap: SPACING[2],
     paddingHorizontal: SPACING.md,
+    paddingTop: SPACING.md,
     paddingBottom: SPACING.lg,
     width: "100%",
-    gap: SPACING[2],
+    borderTopWidth: 1,
+    borderTopColor: COLORS.mutedLight,
   },
   attachContainer: {
     display: "flex",

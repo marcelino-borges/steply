@@ -27,8 +27,10 @@ export class UserChallengeResponseDto implements DatabaseDates {
   isPublic: boolean;
   @ApiProperty()
   joinMethod: JoinMethod;
-  @ApiProperty()
-  organizationId: number;
+  @ApiProperty({ required: false })
+  organizationId: number | null;
+  @ApiProperty({ required: false })
+  ownerUserId: number | null;
   @ApiProperty()
   interactionCount: number;
   @ApiProperty()

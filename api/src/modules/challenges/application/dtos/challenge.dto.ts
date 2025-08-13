@@ -24,8 +24,10 @@ export class NonExistingChallengeDto {
   isPublic: boolean;
   @ApiProperty()
   joinMethod: JoinMethod;
-  @ApiProperty()
-  organizationId: number;
+  @ApiProperty({ required: false })
+  organizationId?: number | null;
+  @ApiProperty({ required: false })
+  ownerUserId?: number | null;
   @ApiProperty()
   bannerUrl?: string;
   @ApiProperty()
@@ -44,8 +46,20 @@ export class NonExistingChallengeDto {
   activities?: NonExistingActivityDto[];
 }
 
+export class MinimalUserDto {
+  @ApiProperty()
+  id: number;
+  @ApiProperty()
+  name: string;
+  @ApiProperty()
+  email: string;
+  @ApiProperty({ required: false })
+  pictureUrl?: string | null;
+}
+
 interface ChallengeExpandableFieldsDto {
   organization: MinimalOrganizationDto | null;
+  ownerUser: MinimalUserDto | null;
   reward: RewardDto | null;
   rankTypes: RankTypeDto[];
   activities: ActivityDto[];
@@ -72,6 +86,8 @@ export class FullChallengeDto
 {
   @ApiProperty()
   organization: MinimalOrganizationDto | null;
+  @ApiProperty()
+  ownerUser: MinimalUserDto | null;
   @ApiProperty()
   reward: RewardDto | null;
   @ApiProperty()

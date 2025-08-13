@@ -14,7 +14,8 @@
     "continue": "Continuar",
     "notNow": "Agora não",
     "clear": "Limpar",
-    "sharingNotAvailable": "Seu dispositivo não permite compartilhamento"
+    "sharingNotAvailable": "Seu dispositivo não permite compartilhamento",
+    "userMustBeLoggedIn": "Usuário precisa estar logado"
   },
   "forms": {
     "fieldRequired": "Campo obrigatório",

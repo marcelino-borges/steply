@@ -32,8 +32,11 @@ const CreateChallenge6: React.FC = () => {
 
       router.push("/(private)/(out-of-tabs)/challenges/create/finished");
     } catch (error) {
-      console.log("Error creating challenge: ", error);
-      Toast.error(t("challenge.errorCreating"));
+      console.log(
+        "===================> Error creating challenge: ",
+        JSON.stringify(error, null, 2)
+      );
+      Toast.error((error as Error).message);
     }
   };
 
@@ -71,7 +74,7 @@ const CreateChallenge6: React.FC = () => {
       </ScrollView>
       <View style={styles.buttonView}>
         <Button loading={isLoadingScreen} onPress={handleContinue}>
-          {t("common.next")}
+          {t("challenge.createChallenge")}
         </Button>
       </View>
     </SafeAreaView>
@@ -94,8 +97,11 @@ const styles = StyleSheet.create({
   },
   buttonView: {
     paddingHorizontal: SPACING.md,
+    paddingTop: SPACING.md,
     paddingBottom: SPACING.lg,
     width: "100%",
+    borderTopWidth: 1,
+    borderTopColor: COLORS.mutedLight,
   },
 });
 

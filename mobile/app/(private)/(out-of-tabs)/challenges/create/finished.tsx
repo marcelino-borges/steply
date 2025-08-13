@@ -13,7 +13,16 @@ import { Toast } from "toastify-react-native";
 export default function ChallengeCreated() {
   const router = useRouter();
   const { t } = useTranslation();
-  const { createdChallenge } = useCreateChallenge();
+  const { createdChallenge, clearAllStates } = useCreateChallenge();
+
+  const openChallenge = () => {
+    if (!createdChallenge) return;
+
+    const challengeId = createdChallenge.id;
+    clearAllStates();
+
+    router.replace(`/challenges/${challengeId}`);
+  };
 
   const share = async () => {
     console.log("createdChallenge", JSON.stringify(createdChallenge, null, 2));
@@ -63,7 +72,7 @@ export default function ChallengeCreated() {
           variant="ghost"
           color="primaryInverted"
           boldFont={false}
-          onPress={() => {}}
+          onPress={openChallenge}
         >
           {t("challenge.seeChallenge")}
         </Button>

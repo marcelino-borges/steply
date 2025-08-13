@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { AxiosError } from "axios";
 import { useMutation } from "@tanstack/react-query";
 
@@ -16,6 +16,7 @@ import { Toast } from "toastify-react-native";
 import { NonExistingActivityDto } from "@/types/api/activity";
 import { RewardTypeDto } from "@/types/api/reward-type";
 import { NonExistingRewardDto } from "@/types/api/reward";
+import { useUser } from "@/store/user";
 
 const defaultChallenge: NonExistingChallengeDto = {
   title: "",
@@ -26,7 +27,8 @@ const defaultChallenge: NonExistingChallengeDto = {
   bannerUrl: undefined,
   interactionIncrement: 1,
   isPublic: true,
-  organizationId: 0,
+  organizationId: undefined,
+  ownerUserId: undefined,
   tags: [],
   checkInEndOfDay: false,
   multipleCheckIns: false,
@@ -56,6 +58,7 @@ interface CreateChallengeContextProps {
   setRewardFiles: (
     files: { uri: string; mimeType: string; name: string }[] | undefined
   ) => void;
+  clearAllStates: VoidFunction;
 }
 
 interface BannerProps {
@@ -83,12 +86,14 @@ export const CreateChallengeContext =
     rewardFiles: undefined,
     setRewardFiles: () => {},
     createdChallenge: undefined,
+    clearAllStates: () => {},
   });
 
 export const CreateChallengeProvider: React.FC<React.PropsWithChildren> = ({
   children,
 }) => {
   const { t } = useTranslation();
+  const { user } = useUser();
 
   const { uploadFile, deleteFile, isUploading, isDeleting } = useFileStorage();
 
@@ -251,6 +256,10 @@ export const CreateChallengeProvider: React.FC<React.PropsWithChildren> = ({
   };
 
   const handleCreateChallenge = async () => {
+    if (!user) {
+      throw new Error(t("common.userMustBeLoggedIn"));
+    }
+
     let uploadedFiles: string[] = [];
 
     try {
@@ -274,16 +283,21 @@ export const CreateChallengeProvider: React.FC<React.PropsWithChildren> = ({
         };
       }
 
-      const challengeCreated = await createChallenge({
+      const newChallenge = {
         ...challenge,
         bannerUrl,
         reward: rewardData,
-      });
+        organizationId: user.organizationId || undefined,
+        ownerUserId: !user.organizationId ? user.id : undefined,
+      };
+
+      console.log("---- newChallenge", JSON.stringify(newChallenge, null, 2));
+
+      const challengeCreated = await createChallenge(newChallenge);
 
       setCreatedChallenge(challengeCreated);
       clearAllStates();
 
-      Toast.success(t("challenge.createSuccess"));
       return challengeCreated;
     } catch (error) {
       // Clean up uploaded files on error
@@ -296,8 +310,13 @@ export const CreateChallengeProvider: React.FC<React.PropsWithChildren> = ({
         )
       );
 
-      await Promise.all(deletePromises);
-      Toast.error(`${t("challenge.createError")}: ${(error as Error).message}`);
+      Promise.all(deletePromises).catch((error) => {
+        console.log(
+          "Error deleting files on challenge creation error: ",
+          error
+        );
+      });
+
       throw error;
     }
   };
@@ -323,6 +342,7 @@ export const CreateChallengeProvider: React.FC<React.PropsWithChildren> = ({
         rewardFiles,
         setRewardFiles,
         createdChallenge,
+        clearAllStates,
       }}
     >
       {children}

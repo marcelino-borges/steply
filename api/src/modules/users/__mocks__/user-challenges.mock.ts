@@ -12,6 +12,7 @@ export const EXISTING_USER_CHALLENGE: UserChallengeResponseDto = {
   isPublic: true,
   joinMethod: JoinMethod.OPEN,
   organizationId: 1,
+  ownerUserId: null,
   interactionCount: 1,
   interactions: [],
   tags: ["test", "mock"] as string[],

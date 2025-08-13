@@ -5,6 +5,14 @@ export const CHALLENGE_INCLUDES = {
       name: true,
     },
   },
+  ownerUser: {
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      pictureUrl: true,
+    },
+  },
   reward: {
     include: {
       rewardType: true,

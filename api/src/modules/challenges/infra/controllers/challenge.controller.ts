@@ -143,7 +143,7 @@ export class ChallengeController {
       lang,
     );
 
-    return await this.updateUseCase.execute(parsedBody);
+    return await this.updateUseCase.execute(parsedBody as UpdateChallengeDto);
   }
 
   @Post(":challengeId/interactions")

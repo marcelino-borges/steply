@@ -7,6 +7,7 @@ import {
 
 export const NON_EXISTING_CHALLENGE_MOCK = {
   organizationId: 1,
+  ownerUserId: null,
   interactionIncrement: 1,
   title: "Lorem",
   description: "Ipsum Lorem",
@@ -27,6 +28,9 @@ export const EXISTING_CHALLENGE_MOCK: ChallengeDto = {
   createdAt: new Date(2005, 5, 22),
   updatedAt: new Date(2005, 5, 22),
   joinMethod: JoinMethod.OPEN,
+  organizationId: 1,
+  ownerUserId: null,
+  bannerUrl: "http://url.com",
 };
 
 export const EXISTING_FULL_CHALLENGE_MOCK: FullChallengeDto = {
@@ -35,10 +39,14 @@ export const EXISTING_FULL_CHALLENGE_MOCK: FullChallengeDto = {
   createdAt: new Date(2005, 5, 22),
   updatedAt: new Date(2005, 5, 22),
   joinMethod: JoinMethod.OPEN,
+  organizationId: 1,
+  ownerUserId: null,
+  bannerUrl: "http://url.com",
   organization: {
     id: 1,
     name: "Xpto",
   },
+  ownerUser: null,
   reward: {
     id: 1,
     name: "Repto",

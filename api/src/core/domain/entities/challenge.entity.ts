@@ -14,9 +14,11 @@ export class Challenge {
   public readonly isPublic: boolean;
   @ApiProperty()
   public readonly joinMethod: JoinMethod;
-  @ApiProperty()
-  public readonly organizationId: number;
-  @ApiProperty()
+  @ApiProperty({ required: false })
+  public readonly organizationId: number | null;
+  @ApiProperty({ required: false })
+  public readonly ownerUserId: number | null;
+  @ApiProperty({ required: false })
   public readonly bannerUrl: string | null;
   @ApiProperty()
   public readonly interactionIncrement: number;

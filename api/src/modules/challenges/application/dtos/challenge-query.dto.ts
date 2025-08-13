@@ -9,6 +9,8 @@ export class ChallengeQueryParamsDto {
   @ApiProperty()
   org?: number;
   @ApiProperty()
+  ownerUserId?: number;
+  @ApiProperty()
   search?: string;
 }
 
@@ -24,6 +26,16 @@ type ChallengesQueryFreeSearchOr =
       };
     }
   | {
+      ownerUser: {
+        name: PrismaStringContains;
+      };
+    }
+  | {
+      ownerUser: {
+        email: PrismaStringContains;
+      };
+    }
+  | {
       title: PrismaStringContains;
     }
   | {
@@ -31,11 +43,18 @@ type ChallengesQueryFreeSearchOr =
     };
 
 export class ChallengesQueryBuilderDto {
-  private orgId: number;
+  private orgId?: number;
+  private ownerUserId?: number;
   private or: ChallengesQueryFreeSearchOr[];
 
   withOrganizationId(orgId: number) {
     this.orgId = orgId;
+
+    return this;
+  }
+
+  withOwnerUserId(ownerUserId: number) {
+    this.ownerUserId = ownerUserId;
 
     return this;
   }
@@ -59,6 +78,22 @@ export class ChallengesQueryBuilderDto {
         },
       },
       {
+        ownerUser: {
+          name: {
+            contains: search,
+            mode: "insensitive",
+          },
+        },
+      },
+      {
+        ownerUser: {
+          email: {
+            contains: search,
+            mode: "insensitive",
+          },
+        },
+      },
+      {
         title: {
           contains: search,
           mode: "insensitive",
@@ -76,17 +111,30 @@ export class ChallengesQueryBuilderDto {
   }
 
   build() {
-    return {
-      AND: [
-        {
-          organization: {
-            id: this.orgId,
-          },
+    const andConditions: any[] = [];
+    
+    if (this.orgId) {
+      andConditions.push({
+        organization: {
+          id: this.orgId,
         },
-        {
-          OR: this.or,
+      });
+    }
+    
+    if (this.ownerUserId) {
+      andConditions.push({
+        ownerUser: {
+          id: this.ownerUserId,
         },
-      ],
-    };
+      });
+    }
+    
+    if (this.or) {
+      andConditions.push({
+        OR: this.or,
+      });
+    }
+    
+    return andConditions.length > 0 ? { AND: andConditions } : {};
   }
 }

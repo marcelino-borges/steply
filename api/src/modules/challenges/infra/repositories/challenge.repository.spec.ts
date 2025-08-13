@@ -216,6 +216,7 @@ describe("ChallengeRepository", () => {
         where: undefined,
         take: pageSize,
         skip: pageNumber,
+        include: CHALLENGE_INCLUDES,
       });
 
       expect(countSpy).toHaveBeenCalledWith({
@@ -258,6 +259,7 @@ describe("ChallengeRepository", () => {
         where,
         take: pageSize,
         skip: pageNumber,
+        include: CHALLENGE_INCLUDES,
       });
       expect(countSpy).toHaveBeenCalledWith({
         where,
@@ -298,6 +300,7 @@ describe("ChallengeRepository", () => {
         where,
         take: pageSize,
         skip: pageNumber,
+        include: CHALLENGE_INCLUDES,
       });
       expect(countSpy).toHaveBeenCalledWith({
         where,

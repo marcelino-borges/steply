@@ -10,6 +10,8 @@ export const ptMessages = {
     requiredField: "Campo obrigatório",
     interactChallengeOptionalProps:
       "Pelo menos um dos campos deve ser preenchido: videoUrl, imageUrl, text ou location",
+    challengeRequiresOwner:
+      "Um desafio deve ter ou uma organização ou um usuário proprietário",
   },
   forbidden: "Não permitido",
   internalServerError: "Erro interno do servidor",

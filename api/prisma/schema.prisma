@@ -129,6 +129,7 @@ model User {
   country           Country                @relation(fields: [countryId], references: [id])
   organization      Organization?          @relation(fields: [organizationId], references: [id])
   ownedOrganization Organization?          @relation("OrganizationOwner")
+  ownedChallenges   Challenge[]            @relation("ChallengeOwner")
   gender            Gender?                @relation(fields: [genderId], references: [id])
   goal              UserGoal?              @relation(fields: [goalId], references: [id])
   mainGoalLevel     UserMainGoalLevel?     @relation(fields: [mainGoalLevelId], references: [id])
@@ -157,11 +158,13 @@ model Challenge {
   checkInEndOfDay      Boolean
   multipleCheckIns     Boolean
 
-  organizationId  Int
+  organizationId  Int?
   checkInTypeCode Int
+  ownerUserId     Int?
 
-  organization    Organization         @relation(fields: [organizationId], references: [id])
+  organization    Organization?        @relation(fields: [organizationId], references: [id])
   checkInType     ChallengeCheckInType @relation(fields: [checkInTypeCode], references: [code])
+  ownerUser       User?                @relation("ChallengeOwner", fields: [ownerUserId], references: [id])
   usersChallenges UserChallenge[]
   rankTypes       RankType[]
   activities      ChallengeActivity[]
