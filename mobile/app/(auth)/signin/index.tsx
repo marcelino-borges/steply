@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Platform } from "react-native";
+import { View, StyleSheet, Platform, Pressable } from "react-native";
 import { useSignIn } from "@clerk/clerk-expo";
 import { Link, useRouter } from "expo-router";
 import { useForm } from "react-hook-form";
@@ -139,7 +139,10 @@ export default function SignInScreen() {
             </Button>
           </View>
 
-          <View style={authStyles.biometricSection}>
+          <Pressable
+            onPress={handleSubmit((data) => onSignInPress(data, true))}
+            style={authStyles.biometricSection}
+          >
             {Platform.OS === "ios" ? (
               <ScanFaceIcon size={24} color={COLORS.primary} />
             ) : (
@@ -148,7 +151,7 @@ export default function SignInScreen() {
             <Typography color={COLORS.primary}>
               {t("biometric.signInWithBiometrics")}
             </Typography>
-          </View>
+          </Pressable>
         </View>
       </View>
 
