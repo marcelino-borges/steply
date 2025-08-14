@@ -48,6 +48,7 @@ describe("PrismaFullUserAdapter", () => {
         createdAt: new Date(),
         updatedAt: new Date(),
         interestActivity: {
+          id: 1,
           name: "Act name",
         },
         interestActivityId: 1,
@@ -70,7 +71,10 @@ describe("PrismaFullUserAdapter", () => {
       {
         createdAt: new Date(),
         updatedAt: new Date(),
-        interestGeneral: { name: "General interest name" },
+        interestGeneral: {
+          id: 1,
+          name: "General interest name",
+        },
         interestGeneralId: 1,
         userId: 1,
       },
@@ -166,6 +170,7 @@ describe("PrismaFullUserAdapter", () => {
             createdAt: int.createdAt,
             updatedAt: int.updatedAt,
             name: int.interestActivity.name,
+            id: int.interestActivity.id,
           }) as ActivityInterestDto,
       ),
       generalInterests: prismaUser.generalInterests.map(
@@ -174,6 +179,7 @@ describe("PrismaFullUserAdapter", () => {
             createdAt: int.createdAt,
             updatedAt: int.updatedAt,
             name: int.interestGeneral.name,
+            id: int.interestGeneral.id,
             lang: undefined,
           }) as GeneralInterestDto,
       ),

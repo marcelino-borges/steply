@@ -8,13 +8,13 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useTranslation } from "react-i18next";
+import { Mask } from "@react-input/mask";
 
 import { PropsWithFullwidth } from "@/types/abstractions/fullwidth";
-import textfieldStyles from "./styles";
 import Typography from "@/components/typography";
 import { COLORS } from "@/constants/colors";
 import { SPACING } from "@/constants/spacings";
-import { Mask } from "@react-input/mask";
+import textfieldStyles from "./styles";
 
 export interface TextfieldFreeProps
   extends Omit<TextInputProps, "secureTextEntry">,
@@ -61,7 +61,7 @@ const TextfieldFree = React.forwardRef<TextInput, TextfieldFreeProps>(
     const [isFocused, setIsFocused] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [inputHeight, setInputHeight] = useState(
-      multiline ? (numberOfLines * 20 + 32) : SPACING[14]
+      multiline ? numberOfLines * 20 + 32 : SPACING[14]
     );
     const inputRef = useRef<TextInput>(null);
     const animatedValue = useRef(new Animated.Value(0)).current;
@@ -88,7 +88,7 @@ const TextfieldFree = React.forwardRef<TextInput, TextfieldFreeProps>(
 
     const handleContentSizeChange = (e: any) => {
       if (!multiline) return;
-      
+
       const newHeight = e.nativeEvent.contentSize.height;
       let calculatedHeight = newHeight + 32; // Add padding
 

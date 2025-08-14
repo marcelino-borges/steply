@@ -47,6 +47,7 @@ export class PrismaFullUserAdapter {
         adaptedGeneralInterest.createdAt = interest.createdAt;
         adaptedGeneralInterest.updatedAt = interest.updatedAt;
         adaptedGeneralInterest.name = interest.interestGeneral.name;
+        adaptedGeneralInterest.id = interest.interestGeneral.id;
 
         fullUser.generalInterests.push(adaptedGeneralInterest);
       }
@@ -59,6 +60,7 @@ export class PrismaFullUserAdapter {
         adaptedActivityInterest.createdAt = interest.createdAt;
         adaptedActivityInterest.updatedAt = interest.updatedAt;
         adaptedActivityInterest.name = interest.interestActivity.name;
+        adaptedActivityInterest.id = interest.interestActivity.id;
 
         fullUser.activityInterests.push(adaptedActivityInterest);
       }

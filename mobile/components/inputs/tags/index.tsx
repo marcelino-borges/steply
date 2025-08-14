@@ -1,19 +1,10 @@
-import React, { useState, useRef, useEffect, FC, ReactNode } from "react";
-import {
-  TextInput,
-  TextInputProps,
-  View,
-  Text,
-  Animated,
-  ScrollView,
-  TouchableOpacity,
-} from "react-native";
+import React, { useState, useRef, useEffect } from "react";
+import { TextInput, TextInputProps, View, Text, Animated } from "react-native";
 
 import { PropsWithFullwidth } from "@/types/abstractions/fullwidth";
 import Typography from "@/components/typography";
 import { COLORS } from "@/constants/colors";
 import { SPACING } from "@/constants/spacings";
-import { Mask } from "@react-input/mask";
 import { tagsfieldStyles } from "./styles";
 import ChallengeTag from "@/components/challenge-tag";
 

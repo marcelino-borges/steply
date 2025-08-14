@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Toast } from "toastify-react-native";
 
-import Button from "@/components/button";
+import Button from "@/components/buttons/button";
 import TextfieldFormControlled from "@/components/inputs/textfield-form-controlled";
 import Typography from "@/components/typography";
 import { COLORS } from "@/constants/colors";

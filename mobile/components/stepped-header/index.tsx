@@ -1,12 +1,12 @@
 import React from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View } from "react-native";
+import { ArrowLeftIcon } from "lucide-react-native";
 
 import { COLORS } from "@/constants/colors";
 import { SPACING } from "@/constants/spacings";
 import CircularProgress from "@/components/circular-progress";
-import Typography from "../typography";
+import Typography from "@/components/typography";
 import { Href, useRouter } from "expo-router";
-import { ArrowLeftIcon } from "lucide-react-native";
 
 interface SteppedHeaderProps {
   /** The title of the header */

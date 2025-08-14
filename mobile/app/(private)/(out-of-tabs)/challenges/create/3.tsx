@@ -14,7 +14,7 @@ import { useTranslation } from "react-i18next";
 import SteppedHeader from "@/components/stepped-header";
 import { COLORS } from "@/constants/colors";
 import { SPACING } from "@/constants/spacings";
-import Button from "@/components/button";
+import Button from "@/components/buttons/button";
 import { useCreateChallenge } from "@/hooks/challenges/create";
 import TextfieldFree from "@/components/inputs/textfield-free";
 import TextArea from "@/components/inputs/textarea";
@@ -22,18 +22,18 @@ import { formatDateByLocale } from "@/utils/string-masks";
 import { getLocales } from "expo-localization";
 import CalendarPicker, {
   CalendarChangedDate,
-} from "@/components/calendar-picker";
+} from "@/components/inputs/calendar-picker";
 import Typography from "@/components/typography";
 import { NonExistingActivityDto } from "@/types/api/activity";
 import BottomSheet from "@/components/sheet";
-import TabsHeader from "@/components/tabs-header";
-import { useGetSuggestedActivities } from "@/hooks/suggestions/get-activities";
+import TabsHeader from "@/components/headers/tabs-header";
+import { useGetChallengesSuggestedActivities } from "@/hooks/suggestions/get-activities";
 import { useGetUserActivities } from "@/hooks/users/get-activities";
 import { useUser } from "@/store/user";
 import { ChallengeCheckInTypeCode } from "@/types/api/challenges";
 import ChallengeActivityCard from "@/components/challenge-activity-card";
 import DebouncedTextfieldSearch from "@/components/inputs/debounced-search";
-import CheckboxGroup from "@/components/checkbox-group";
+import CheckboxGroup from "@/components/inputs/checkbox-group";
 import { CirclePlusIcon } from "lucide-react-native";
 
 enum AddActivityTab {
@@ -55,10 +55,8 @@ const CreateChallenge3: React.FC = () => {
     setActivities,
   } = useCreateChallenge();
 
-  const {
-    data: suggestedActivities,
-    isFetching: isFetchingSuggestedActivities,
-  } = useGetSuggestedActivities();
+  const { suggestedActivities, isLoadingActivities } =
+    useGetChallengesSuggestedActivities();
 
   const { user } = useUser();
   const { data: userActivities, isFetching: isFetchingUserActivities } =
@@ -251,7 +249,7 @@ const CreateChallenge3: React.FC = () => {
                     placeholder={t("challenge.searchActivities")}
                   />
 
-                  {isFetchingSuggestedActivities ? (
+                  {isLoadingActivities ? (
                     <Typography>{t("common.loading")}</Typography>
                   ) : (
                     <View style={{ marginTop: SPACING[4] }}>

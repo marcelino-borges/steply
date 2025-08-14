@@ -1,43 +1,39 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View, ActivityIndicator } from "react-native";
-import { useRouter } from "expo-router";
 import { Toast } from "toastify-react-native";
 
-import Button from "@/components/button";
-import CheckboxGroup from "@/components/checkbox-group";
+import Button from "@/components/buttons/button";
+import CheckboxGroup from "@/components/inputs/checkbox-group";
 import Typography from "@/components/typography";
 import { COLORS } from "@/constants/colors";
 import { SPACING } from "@/constants/spacings";
 import { useUser } from "@/store/user";
 import { UserRegistrationStep } from "@/types/api/user";
-import { useGetSuggestedActivities } from "@/hooks/suggestions/get-activities";
 import { useUpdateUser } from "@/hooks/users/update";
 import { useAddUserActivities } from "@/hooks/users/add-activities";
+import BackOnlyHeader from "@/components/headers/back-only-header";
+import { useGetInterestActivities } from "@/hooks/interests/get-activities";
+import { useRouter } from "expo-router";
 
 export default function InterestActivities() {
+  const router = useRouter();
   const { user, setUser } = useUser();
   const { t } = useTranslation();
-  const router = useRouter();
-  const updateUser = useUpdateUser();
-  const { mutateAsync: addUserActivities, isPending: isAddingUserActivities } =
-    useAddUserActivities();
-  const {
-    data: suggestedActivities,
-    isLoading: isLoadingActivities,
-    error,
-  } = useGetSuggestedActivities();
+  const { updateUser, isUpdating } = useUpdateUser();
+  const { addActivities, isAddingActivities } = useAddUserActivities();
+  const { activities, isLoadingActivities } = useGetInterestActivities();
   const [selectedActivities, setSelectedActivities] = useState<string[]>([]);
   const maxSelections = 3;
 
   useEffect(() => {
-    if (user?.activityInterests && suggestedActivities) {
+    if (user?.activityInterests && activities) {
       const selectedIds = user.activityInterests.map((interest) =>
         interest.id.toString()
       );
       setSelectedActivities(selectedIds);
     }
-  }, [user, suggestedActivities]);
+  }, [user, activities]);
 
   const handleToggle = (value: string) => {
     setSelectedActivities((prev) => {
@@ -55,10 +51,8 @@ export default function InterestActivities() {
     try {
       // First, add the selected activities to the user
       if (selectedActivities.length > 0) {
-        console.log("--------- selectedActivities", selectedActivities);
         const activityIds = selectedActivities.map((id) => parseInt(id, 10));
-        console.log("--------- activityIds", activityIds);
-        await addUserActivities({
+        await addActivities({
           userId: user.id,
           activityIds,
         });
@@ -70,7 +64,7 @@ export default function InterestActivities() {
 
     try {
       // Then update the user to the next registration step
-      const updatedUser = await updateUser.mutateAsync({
+      const updatedUser = await updateUser({
         id: user.id,
         name: user.name,
         email: user.email,
@@ -85,7 +79,7 @@ export default function InterestActivities() {
       });
 
       setUser(updatedUser);
-      // router.replace("/(private)/(out-of-tabs)/onboarding/6-fingerprint-access");
+      router.replace("/(private)/(tabs)/home");
     } catch (error) {
       Toast.error((error as Error).message);
       console.error("Error updating activity interests:", error);
@@ -94,6 +88,7 @@ export default function InterestActivities() {
 
   return (
     <View style={styles.container}>
+      <BackOnlyHeader backTo="/(private)/(out-of-tabs)/onboarding/(steps)/4-main-goal-level" />
       <View style={styles.content}>
         <Typography
           weight="medium"
@@ -124,9 +119,8 @@ export default function InterestActivities() {
         ) : (
           <CheckboxGroup
             items={
-              suggestedActivities?.map((activity) => ({
-                label: activity.title,
-                subLabel: activity.description || undefined,
+              activities?.map((activity) => ({
+                label: activity.name,
                 value: activity.id.toString(),
               })) || []
             }
@@ -141,9 +135,9 @@ export default function InterestActivities() {
       <View style={styles.bottomView}>
         <Button
           onPress={handleContinue}
-          loading={updateUser.isPending || isAddingUserActivities}
+          loading={isUpdating || isAddingActivities}
         >
-          {t("user.createAccount")}
+          {t("common.finish")}
         </Button>
       </View>
     </View>
@@ -157,7 +151,7 @@ const styles = StyleSheet.create({
     minHeight: "100%",
   },
   content: {
-    marginTop: 175,
+    justifyContent: "center",
   },
   bottomView: {
     paddingBottom: SPACING[14],

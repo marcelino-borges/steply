@@ -7,7 +7,7 @@ import TextfieldFormControlled from "@/components/inputs/textfield-form-controll
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SignUpForm, signUpSchema } from "@/utils/schemas/signup";
-import Button from "@/components/button";
+import Button from "@/components/buttons/button";
 import Typography from "@/components/typography";
 import { COLORS } from "@/constants/colors";
 import { FONT_SIZE, FONT_WEIGHT } from "@/constants/fonts";

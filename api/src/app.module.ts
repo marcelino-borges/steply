@@ -11,6 +11,7 @@ import { GenderModule } from "@/modules/genders/gender.module";
 import { UserGoalModule } from "@/modules/user-goals/user-goal.module";
 import { UserMainGoalLevelModule } from "@/modules/user-main-goal-levels/user-main-goal-level.module";
 import { SuggestionsModule } from "@/modules/suggestions/suggestions.module";
+import { InterestsModule } from "@/modules/interests/interests.module";
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { SuggestionsModule } from "@/modules/suggestions/suggestions.module";
     UserGoalModule,
     UserMainGoalLevelModule,
     SuggestionsModule,
+    InterestsModule,
     CoreModule,
   ],
   providers: [

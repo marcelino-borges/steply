@@ -6,12 +6,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Toast } from "toastify-react-native";
 
-import Button from "@/components/button";
+import Button from "@/components/buttons/button";
 import TextfieldFormControlled from "@/components/inputs/textfield-form-controlled";
 import { SigninForm, signinSchema } from "@/utils/schemas/signin";
 import Typography from "@/components/typography";
 import { COLORS } from "@/constants/colors";
-import { FONT_WEIGHT } from "@/constants/fonts";
 import { SPACING } from "@/constants/spacings";
 import { handleClerkErrorMessage } from "@/utils/clerk-error";
 import { useTranslation } from "react-i18next";
@@ -50,29 +49,32 @@ export default function SignInScreen() {
 
     setIsSigningIn(true);
 
+    const emailLowerCase = email.toLowerCase();
+
     try {
       const signInAttempt =
         hasCredentials && useLocal
           ? await authenticate()
           : await signIn.create({
-              identifier: email,
+              identifier: emailLowerCase,
               password,
             });
 
       if (signInAttempt.status === "complete") {
         try {
-          const userData = await fetchUser({ email });
+          const userData = await fetchUser({ email: emailLowerCase });
           setUser(userData);
         } catch (fetchError) {
           console.error("Error fetching user data:", fetchError);
           Toast.error((fetchError as Error).message);
+          return;
         }
 
         await setActive({ session: signInAttempt.createdSessionId });
 
         if (!useLocal) {
           await setCredentials({
-            identifier: email,
+            identifier: emailLowerCase,
             password,
           });
         }

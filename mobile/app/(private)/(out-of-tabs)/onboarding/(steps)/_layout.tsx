@@ -1,8 +1,8 @@
-import { COLORS } from "@/constants/colors";
-import { SPACING } from "@/constants/spacings";
 import { Slot } from "expo-router";
 import React from "react";
 import { SafeAreaView, ScrollView, StyleSheet } from "react-native";
+import { COLORS } from "@/constants/colors";
+import { SPACING } from "@/constants/spacings";
 
 export default function OnboardingScreenLayout() {
   return (

@@ -1,12 +1,18 @@
-import React, { useState, useRef, useEffect, useMemo, useCallback } from "react";
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useMemo,
+  useCallback,
+} from "react";
 import { View, TextInput, Pressable } from "react-native";
-import Button from "@/components/button";
+import Button from "@/components/buttons/button";
 import TextfieldFree from "../textfield-free";
-import { styles } from "./styles";
 import Typography from "@/components/typography";
 import { useTranslation } from "react-i18next";
 import { SPACING } from "@/constants/spacings";
 import { COLORS } from "@/constants/colors";
+import { styles } from "./styles";
 
 interface OTPInputProps {
   onSubmit: (code: string) => void;
@@ -95,30 +101,33 @@ export default function OTPInput({
 
   const isSubmitDisabled = otp.some((digit) => digit === "") || isLoading;
 
-  const retrySection = useMemo(() => (
-    <View
-      style={{
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "baseline",
-        gap: SPACING[1],
-        flexWrap: "wrap",
-      }}
-    >
-      <Typography>{t("forms.didNotReceiveOtp")}</Typography>
-      <Pressable onPress={handleRetry} disabled={retryCountdown > 0}>
-        <Typography
-          underline={retryCountdown === 0}
-          color={retryCountdown > 0 ? COLORS.gray : undefined}
-        >
-          {retryCountdown > 0
-            ? `Envie novamente em ${retryCountdown}s`
-            : t("common.sendAnother")}
-        </Typography>
-      </Pressable>
-    </View>
-  ), [retryCountdown, handleRetry, t]);
+  const retrySection = useMemo(
+    () => (
+      <View
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "baseline",
+          gap: SPACING[1],
+          flexWrap: "wrap",
+        }}
+      >
+        <Typography>{t("forms.didNotReceiveOtp")}</Typography>
+        <Pressable onPress={handleRetry} disabled={retryCountdown > 0}>
+          <Typography
+            underline={retryCountdown === 0}
+            color={retryCountdown > 0 ? COLORS.gray : undefined}
+          >
+            {retryCountdown > 0
+              ? `Envie novamente em ${retryCountdown}s`
+              : t("common.sendAnother")}
+          </Typography>
+        </Pressable>
+      </View>
+    ),
+    [retryCountdown, handleRetry, t]
+  );
 
   return (
     <View style={styles.container}>

@@ -10,13 +10,18 @@ import * as DocumentPicker from "expo-document-picker";
 import SteppedHeader from "@/components/stepped-header";
 import { COLORS } from "@/constants/colors";
 import { SPACING } from "@/constants/spacings";
-import Button from "@/components/button";
+import Button from "@/components/buttons/button";
 import { useCreateChallenge } from "@/hooks/challenges/create";
 import TextfieldFree from "@/components/inputs/textfield-free";
-import AttachButton from "@/components/attach-button";
+import AttachButton from "@/components/buttons/attach-button";
 import Typography from "@/components/typography";
 import { RADIUS } from "@/constants/radius";
-import { PaperclipIcon, Trash2Icon } from "lucide-react-native";
+import {
+  ImageIcon,
+  PaperclipIcon,
+  Trash2Icon,
+  UploadIcon,
+} from "lucide-react-native";
 
 const CreateChallenge5: React.FC = () => {
   const router = useRouter();
@@ -147,7 +152,7 @@ const CreateChallenge5: React.FC = () => {
               {t("challenge.rewardImageSubLabel")}
             </Typography>
             {!rewardImage?.uri ? (
-              <AttachButton leftIcon="image" onPress={pickRewardImage}>
+              <AttachButton leftIcon={ImageIcon} onPress={pickRewardImage}>
                 {t("challenge.addBannerFromLibrary")}
               </AttachButton>
             ) : (
@@ -175,7 +180,7 @@ const CreateChallenge5: React.FC = () => {
             <Typography size="xs" color={COLORS.gray}>
               {t("challenge.rewardDocumentsSubLabel")}
             </Typography>
-            <AttachButton leftIcon="upload" onPress={pickRewardDocuments}>
+            <AttachButton leftIcon={UploadIcon} onPress={pickRewardDocuments}>
               {t("challenge.addBannerFromLibrary")}
             </AttachButton>
             {rewardFiles?.map((file) => (

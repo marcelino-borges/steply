@@ -1,8 +1,11 @@
 import React from "react";
 import { TextInput } from "react-native";
-import TextfieldFree, { TextfieldFreeProps } from "../textfield-free";
+import TextfieldFree, {
+  TextfieldFreeProps,
+} from "@/components/inputs/textfield-free";
 
-export interface TextAreaProps extends Omit<TextfieldFreeProps, "multiline" | "type"> {
+export interface TextAreaProps
+  extends Omit<TextfieldFreeProps, "multiline" | "type"> {
   rows?: number;
 }
 

@@ -8,9 +8,9 @@ import { useTranslation } from "react-i18next";
 import SteppedHeader from "@/components/stepped-header";
 import { COLORS } from "@/constants/colors";
 import { SPACING } from "@/constants/spacings";
-import Button from "@/components/button";
+import Button from "@/components/buttons/button";
 import { useCreateChallenge } from "@/hooks/challenges/create";
-import RadioGroup from "@/components/radio-group";
+import RadioGroup from "@/components/inputs/radio-group";
 import { JoinMethod } from "@/types/api/challenges";
 
 const CreateChallenge6: React.FC = () => {

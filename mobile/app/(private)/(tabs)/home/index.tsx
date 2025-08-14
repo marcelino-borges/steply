@@ -1,7 +1,7 @@
 import { StyleSheet, View } from "react-native";
 import { Link, useRouter } from "expo-router";
 
-import Button from "@/components/button";
+import Button from "@/components/buttons/button";
 import { COLORS } from "@/constants/colors";
 import { SPACING } from "@/constants/spacings";
 import { useAuth } from "@clerk/clerk-expo";

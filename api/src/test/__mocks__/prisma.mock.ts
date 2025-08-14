@@ -70,4 +70,10 @@ export const PRISMA_MOCK = {
     createMany: jest.fn(),
     deleteMany: jest.fn(),
   },
+  interestActivity: {
+    findMany: jest.fn(),
+  },
+  interestGeneral: {
+    findMany: jest.fn(),
+  },
 };

@@ -4,8 +4,8 @@ import { StyleSheet, View, ActivityIndicator } from "react-native";
 import { useRouter } from "expo-router";
 import { Toast } from "toastify-react-native";
 
-import Button from "@/components/button";
-import RadioGroup from "@/components/radio-group";
+import Button from "@/components/buttons/button";
+import RadioGroup from "@/components/inputs/radio-group";
 import Typography from "@/components/typography";
 import { COLORS } from "@/constants/colors";
 import { SPACING } from "@/constants/spacings";
@@ -13,12 +13,13 @@ import { useUser } from "@/store/user";
 import { UserRegistrationStep } from "@/types/api/user";
 import { useGetUserMainGoalLevelsList } from "@/hooks/user-main-goal-levels/get-list";
 import { useUpdateUser } from "@/hooks/users/update";
+import BackOnlyHeader from "@/components/headers/back-only-header";
 
 export default function MainGoalLevel() {
   const { user, setUser } = useUser();
   const { t } = useTranslation();
   const router = useRouter();
-  const updateUser = useUpdateUser();
+  const { updateUser, isUpdating } = useUpdateUser();
   const {
     data: userMainGoalLevels,
     isLoading: isLoadingLevels,
@@ -36,7 +37,7 @@ export default function MainGoalLevel() {
     if (!selectedLevel || !user) return;
 
     try {
-      const updatedUser = await updateUser.mutateAsync({
+      const updatedUser = await updateUser({
         id: user.id,
         name: user.name,
         email: user.email,
@@ -62,6 +63,7 @@ export default function MainGoalLevel() {
 
   return (
     <View style={styles.container}>
+      <BackOnlyHeader backTo="/(private)/(out-of-tabs)/onboarding/(steps)/3-main-goal" />
       <View style={styles.content}>
         <Typography
           weight="medium"
@@ -92,15 +94,15 @@ export default function MainGoalLevel() {
             onSelect={(value) => setSelectedLevel(value)}
             selectedValue={selectedLevel}
             fullWidth
-            variant="outlineOnlySelected"
+            variant="outlineAll"
           />
         )}
       </View>
       <View style={styles.bottomView}>
         <Button
           onPress={handleContinue}
-          loading={updateUser.isPending}
-          disabled={!selectedLevel || updateUser.isPending}
+          loading={isUpdating}
+          disabled={!selectedLevel || isUpdating}
         >
           {t("common.continue")}
         </Button>
@@ -116,7 +118,7 @@ const styles = StyleSheet.create({
     minHeight: "100%",
   },
   content: {
-    marginTop: 175,
+    justifyContent: "center",
   },
   bottomView: {
     paddingBottom: SPACING[14],

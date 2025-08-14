@@ -1,5 +1,3 @@
-import { FULL_USER_CHALLENGE_INCLUDES } from "./full-user-challenge-includes.constant";
-
 export const FULL_USER_INCLUDES = {
   organization: {
     select: {
@@ -19,6 +17,7 @@ export const FULL_USER_INCLUDES = {
     include: {
       interestActivity: {
         select: {
+          id: true,
           name: true,
         },
       },
@@ -38,6 +37,7 @@ export const FULL_USER_INCLUDES = {
     include: {
       interestGeneral: {
         select: {
+          id: true,
           name: true,
         },
       },

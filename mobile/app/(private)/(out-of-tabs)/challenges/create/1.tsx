@@ -22,15 +22,15 @@ import SteppedHeader from "@/components/stepped-header";
 import Typography from "@/components/typography";
 import { COLORS } from "@/constants/colors";
 import { SPACING } from "@/constants/spacings";
-import Button from "@/components/button";
+import Button from "@/components/buttons/button";
 import TextfieldFree from "@/components/inputs/textfield-free";
-import AttachButton from "@/components/attach-button";
+import AttachButton from "@/components/buttons/attach-button";
 import { useCreateChallenge } from "@/hooks/challenges/create";
 import { DEFAULT_TIMEZONE } from "@/constants/timezone";
 import TagsField from "@/components/inputs/tags";
 import { formatDateByLocale } from "@/utils/string-masks";
 import { RADIUS } from "@/constants/radius";
-import { Trash2Icon } from "lucide-react-native";
+import { Trash2Icon, UploadIcon } from "lucide-react-native";
 
 const CreateChallenge1: React.FC = () => {
   const router = useRouter();
@@ -228,7 +228,7 @@ const CreateChallenge1: React.FC = () => {
               {t("challenge.addBannerDescription")}
             </Typography>
             {!banner?.uri.length ? (
-              <AttachButton leftIcon="upload" onPress={pickBanner}>
+              <AttachButton leftIcon={UploadIcon} onPress={pickBanner}>
                 {t("challenge.addBannerFromLibrary")}
               </AttachButton>
             ) : (

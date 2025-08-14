@@ -14,7 +14,11 @@ interface AddUserActivitiesParams {
 export const useAddUserActivities = () => {
   const { t } = useTranslation();
 
-  return useMutation<void, AxiosError, AddUserActivitiesParams>({
+  const { mutateAsync, isPending } = useMutation<
+    void,
+    AxiosError,
+    AddUserActivitiesParams
+  >({
     mutationFn: async ({ userId, activityIds }: AddUserActivitiesParams) => {
       try {
         await api.post(
@@ -36,4 +40,6 @@ export const useAddUserActivities = () => {
       }
     },
   });
+
+  return { addActivities: mutateAsync, isAddingActivities: isPending };
 };

@@ -3,6 +3,7 @@ import { StyleSheet } from "react-native";
 import { COLORS } from "@/constants/colors";
 import { FONT_SIZE } from "@/constants/fonts";
 import { SPACING } from "@/constants/spacings";
+import { BORDER_WIDTH } from "@/constants/borders";
 
 const textfieldStyles = StyleSheet.create({
   container: {
@@ -10,7 +11,7 @@ const textfieldStyles = StyleSheet.create({
   },
   input: {
     height: SPACING[14],
-    borderWidth: SPACING["1/2"],
+    borderWidth: BORDER_WIDTH.input,
     borderColor: COLORS.inputBorder,
     borderRadius: SPACING.sm,
     paddingHorizontal: SPACING.md,

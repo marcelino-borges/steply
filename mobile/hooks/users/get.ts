@@ -13,9 +13,14 @@ export const useGetUser = (param: FindParam, enabled: boolean = true) => {
     ? ["user", "email", param.email]
     : ["user", "id", param.userId];
 
-  return useQuery<FullUserResponseDto, AxiosError>({
+  const { data, isLoading } = useQuery<FullUserResponseDto, AxiosError>({
     queryKey,
     queryFn: () => fetchUser(param),
     enabled,
   });
+
+  return {
+    userData: data,
+    isLoadingUser: isLoading,
+  };
 };

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDebounceValue } from "usehooks-ts";
-import TextfieldFree from "../textfield-free";
+import TextfieldFree from "@/components/inputs/textfield-free";
 
 interface DebouncedTextfieldSearchProps {
   delayMs?: number;

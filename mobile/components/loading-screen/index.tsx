@@ -1,7 +1,7 @@
 import React from "react";
 import { SafeAreaView, StyleSheet, ActivityIndicator } from "react-native";
 import { COLORS } from "@/constants/colors";
-import Typography from "../typography";
+import Typography from "@/components/typography";
 import { useTranslation } from "react-i18next";
 
 export const LoadingScreen: React.FC = () => {

@@ -51,6 +51,24 @@ export const SPACING = {
   16: BASE_SPACING * 16,
   /** 64 pt */
   xl: BASE_SPACING * 16,
+  /** 68 pt */
+  17: BASE_SPACING * 17,
+  /** 72 pt */
+  18: BASE_SPACING * 18,
+  /** 76 pt */
+  19: BASE_SPACING * 19,
+  /** 80 pt */
+  20: BASE_SPACING * 20,
+  /** 84 pt */
+  21: BASE_SPACING * 21,
+  /** 100 pt */
+  25: BASE_SPACING * 25,
+  /** 108 pt */
+  27: BASE_SPACING * 27,
+  /** 112 pt */
+  28: BASE_SPACING * 28,
+  /** 116 pt */
+  29: BASE_SPACING * 29,
   /** 128 pt */
   32: BASE_SPACING * 32,
   /** 128 pt */

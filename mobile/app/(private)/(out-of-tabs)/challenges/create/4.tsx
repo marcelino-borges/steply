@@ -13,13 +13,12 @@ import { useTranslation } from "react-i18next";
 import SteppedHeader from "@/components/stepped-header";
 import { COLORS } from "@/constants/colors";
 import { SPACING } from "@/constants/spacings";
-import Button from "@/components/button";
+import Button from "@/components/buttons/button";
 import { useCreateChallenge } from "@/hooks/challenges/create";
 import { useGetRewardTypes } from "@/hooks/challenges/get-reward-types";
-import Typography from "@/components/typography";
-import RadioGroup from "@/components/radio-group";
+import RadioGroup from "@/components/inputs/radio-group";
 import Skeleton from "@/components/base-skeleton";
-import Switch from "@/components/switch";
+import Switch from "@/components/inputs/switch";
 
 const CreateChallenge4: React.FC = () => {
   const router = useRouter();

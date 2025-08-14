@@ -4,8 +4,8 @@ import { StyleSheet, View, ActivityIndicator } from "react-native";
 import { useRouter } from "expo-router";
 import { Toast } from "toastify-react-native";
 
-import Button from "@/components/button";
-import RadioGroup from "@/components/radio-group";
+import Button from "@/components/buttons/button";
+import RadioGroup from "@/components/inputs/radio-group";
 import Typography from "@/components/typography";
 import { COLORS } from "@/constants/colors";
 import { SPACING } from "@/constants/spacings";
@@ -13,12 +13,13 @@ import { useUser } from "@/store/user";
 import { UserRegistrationStep } from "@/types/api/user";
 import { useGetGendersList } from "@/hooks/genders/get-list";
 import { useUpdateUser } from "@/hooks/users/update";
+import BackOnlyHeader from "@/components/headers/back-only-header";
 
 export default function Gender() {
   const { user, setUser } = useUser();
   const { t } = useTranslation();
   const router = useRouter();
-  const updateUser = useUpdateUser();
+  const { updateUser, isUpdating } = useUpdateUser();
   const { data: genders, isLoading: isLoadingGenders } = useGetGendersList();
   const [selectedGender, setSelectedGender] = useState("");
 
@@ -33,7 +34,7 @@ export default function Gender() {
     if (!selectedGender || !user) return;
 
     try {
-      const updatedUser = await updateUser.mutateAsync({
+      const updatedUser = await updateUser({
         id: user.id,
         name: user.name,
         email: user.email,
@@ -55,6 +56,7 @@ export default function Gender() {
 
   return (
     <View style={styles.container}>
+      <BackOnlyHeader backTo="/(private)/(out-of-tabs)/onboarding/(steps)/1-personalization" />
       <View style={styles.content}>
         <Typography
           weight="medium"
@@ -84,15 +86,15 @@ export default function Gender() {
             onSelect={(value) => setSelectedGender(value)}
             selectedValue={selectedGender}
             fullWidth
-            variant="outlineOnlySelected"
+            variant="outlineAll"
           />
         )}
       </View>
       <View style={styles.bottomView}>
         <Button
           onPress={handleContinue}
-          loading={updateUser.isPending}
-          disabled={!selectedGender || updateUser.isPending}
+          loading={isUpdating}
+          disabled={!selectedGender || isUpdating}
         >
           {t("common.continue")}
         </Button>
@@ -108,7 +110,7 @@ const styles = StyleSheet.create({
     minHeight: "100%",
   },
   content: {
-    marginTop: 175,
+    justifyContent: "center",
   },
   bottomView: {
     paddingBottom: SPACING[14],

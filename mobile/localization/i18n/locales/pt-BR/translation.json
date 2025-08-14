@@ -15,7 +15,8 @@
     "notNow": "Agora não",
     "clear": "Limpar",
     "sharingNotAvailable": "Seu dispositivo não permite compartilhamento",
-    "userMustBeLoggedIn": "Usuário precisa estar logado"
+    "userMustBeLoggedIn": "Usuário precisa estar logado",
+    "finish": "Finalizar"
   },
   "forms": {
     "fieldRequired": "Campo obrigatório",
@@ -141,7 +142,7 @@
     "signupError": "Erro ao criar conta",
     "email": "E-mail",
     "forgotPassword": {
-      "link": "Esqueceu sua senha?",
+      "link": "Esqueci minha senha",
       "title": "Recuperar senha",
       "resetPasswordTitle": "Redefinir senha",
       "subtitle": "Digite seu e-mail para receber um código de verificação",
@@ -173,8 +174,7 @@
     "addActivitiesError": "Erro ao adicionar atividades"
   },
   "biometric": {
-    "signInWithFaceId": "Entrar com reconhecimento facial",
-    "signInWithFingerprint": "Entrar com impressão digital"
+    "signInWithBiometrics": "Entrar com biometria"
   },
   "calendar": {
     "months": {

@@ -1,10 +1,10 @@
 import * as React from "react";
 import { View } from "react-native";
+import { CheckIcon, XIcon } from "lucide-react-native";
 import { useTranslation } from "react-i18next";
-import Typography from "../typography";
+import Typography from "@/components/typography";
 import { COLORS } from "@/constants/colors";
 import { styles } from "./styles";
-import { CheckIcon, XIcon } from "lucide-react-native";
 
 interface PasswordRequirementProps {
   text: string;

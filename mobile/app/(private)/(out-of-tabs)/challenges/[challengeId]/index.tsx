@@ -1,5 +1,5 @@
-import ChallengeDetailsHeader from "@/components/challenge-details-header";
-import TabsHeader from "@/components/tabs-header";
+import ChallengeDetailsHeader from "@/components/headers/challenge-details-header";
+import TabsHeader from "@/components/headers/tabs-header";
 import Typography from "@/components/typography";
 import { COLORS } from "@/constants/colors";
 import { RADIUS } from "@/constants/radius";

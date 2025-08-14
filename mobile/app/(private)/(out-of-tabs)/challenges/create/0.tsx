@@ -8,7 +8,7 @@ import SteppedHeader from "@/components/stepped-header";
 import Typography from "@/components/typography";
 import { COLORS } from "@/constants/colors";
 import { SPACING } from "@/constants/spacings";
-import Button from "@/components/button";
+import Button from "@/components/buttons/button";
 import { ASYNC_STORAGE_KEYS } from "@/constants/async-storage";
 import { LoadingScreen } from "@/components/loading-screen";
 import { useTranslation } from "react-i18next";

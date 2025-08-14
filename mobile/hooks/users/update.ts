@@ -10,7 +10,11 @@ import { adaptAxiosErrorToApiErrorMessage } from "@/adapters/api-error";
 export const useUpdateUser = () => {
   const { t } = useTranslation();
 
-  return useMutation<FullUserResponseDto, AxiosError, UpdateUserRequestDto>({
+  const { mutateAsync, isPending } = useMutation<
+    FullUserResponseDto,
+    AxiosError,
+    UpdateUserRequestDto
+  >({
     mutationFn: async (userData: UpdateUserRequestDto) => {
       try {
         const { id, ...updateData } = userData;
@@ -28,10 +32,15 @@ export const useUpdateUser = () => {
         const errorMessage = adaptAxiosErrorToApiErrorMessage(
           error as AxiosError
         );
-        console.log("------------- [ERROR] User update failed", error);
+        console.log(
+          "------------- [ERROR] User update failed",
+          JSON.stringify(error, null, 2)
+        );
 
         throw new Error(errorMessage ?? t("user.updateError"));
       }
     },
   });
+
+  return { updateUser: mutateAsync, isUpdating: isPending };
 };
