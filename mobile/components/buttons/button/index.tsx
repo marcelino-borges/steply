@@ -95,7 +95,7 @@ const Button: React.FC<ButtonProps> = ({
           color={getFontColor()}
           letterSpacing={0.1}
           lineHeight={SPACING[5]}
-          weight={!boldFont ? "normal" : "semibold"}
+          weight={!boldFont ? "normal" : "medium"}
           size="sm"
         >
           {children}

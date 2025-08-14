@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Platform } from "react-native";
 import { useSignIn } from "@clerk/clerk-expo";
 import { Link, useRouter } from "expo-router";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Toast } from "toastify-react-native";
+import { FingerprintIcon, ScanFaceIcon } from "lucide-react-native";
 
 import Button from "@/components/buttons/button";
 import TextfieldFormControlled from "@/components/inputs/textfield-form-controlled";
@@ -95,22 +96,22 @@ export default function SignInScreen() {
 
   return (
     <View style={authStyles.screenContainer}>
-      <AppIcon />
-      <View style={authStyles.contentContainer}>
-        <Typography weight="bold" size="2xl">
-          Entrar
-        </Typography>
-        <View style={authStyles.inputsContainer}>
-          <TextfieldFormControlled
-            fullWidth
-            required
-            control={control}
-            keyboardType="email-address"
-            name="email"
-            placeholder="E-mail"
-            error={errors.email?.message}
-          />
-          <View>
+      <View style={authStyles.mainContent}>
+        <AppIcon />
+        <View style={authStyles.contentContainer}>
+          <Typography weight="medium" size="2xl">
+            Entrar
+          </Typography>
+          <View style={authStyles.inputsContainer}>
+            <TextfieldFormControlled
+              fullWidth
+              required
+              control={control}
+              keyboardType="email-address"
+              name="email"
+              placeholder="E-mail"
+              error={errors.email?.message}
+            />
             <TextfieldFormControlled
               fullWidth
               required
@@ -120,44 +121,51 @@ export default function SignInScreen() {
               name="password"
               error={errors.password?.message}
             />
-            <Link
-              href="/(auth)/forgot-password"
-              style={authStyles.forgotPasswordLink}
+          </View>
+          <View style={authStyles.buttonsView}>
+            <Button
+              fullWidth
+              variant="outlined"
+              onPress={() => router.push("/(auth)/forgot-password")}
             >
-              <Typography color={COLORS.primary} weight="semibold" size="sm">
-                {t("auth.forgotPassword.link")}
-              </Typography>
-            </Link>
+              {t("auth.forgotPassword.link")}
+            </Button>
+            <Button
+              fullWidth
+              onPress={handleSubmit((data) => onSignInPress(data, false))}
+              loading={isSigningIn}
+            >
+              Entrar
+            </Button>
+          </View>
+
+          <View style={authStyles.biometricSection}>
+            {Platform.OS === "ios" ? (
+              <ScanFaceIcon size={24} color={COLORS.primary} />
+            ) : (
+              <FingerprintIcon size={24} color={COLORS.primary} />
+            )}
+            <Typography color={COLORS.primary}>
+              {t("biometric.signInWithBiometrics")}
+            </Typography>
           </View>
         </View>
-        <View style={authStyles.buttonsView}>
-          <Button
-            fullWidth
-            onPress={handleSubmit((data) => onSignInPress(data, false))}
-            loading={isSigningIn}
-          >
-            Entrar
-          </Button>
-          <Button
-            fullWidth
-            onPress={handleSubmit((data) => onSignInPress(data, true))}
-            loading={isSigningIn}
-            variant="outlined"
-          >
-            {biometricType === "face-recognition"
-              ? t("biometric.signInWithFaceId")
-              : t("biometric.signInWithFingerprint")}
-          </Button>
-        </View>
+      </View>
 
-        <View style={authStyles.bottomRedirect}>
-          <Typography size="sm">Não possui conta?</Typography>
-          <Link href="/signup">
-            <Typography color={COLORS.primary} weight="semibold" size="sm">
-              Cadastre-se
-            </Typography>
-          </Link>
-        </View>
+      <View style={authStyles.bottomRedirect}>
+        <Typography size="sm" color={COLORS.primary} weight="medium">
+          {t("auth.doesntHaveAnAccount")}
+        </Typography>
+        <Link href="/signup">
+          <Typography
+            color={COLORS.primary}
+            weight="medium"
+            size="sm"
+            underline
+          >
+            {t("auth.createAnAccountNow")}
+          </Typography>
+        </Link>
       </View>
     </View>
   );
@@ -165,10 +173,16 @@ export default function SignInScreen() {
 
 const authStyles = StyleSheet.create({
   screenContainer: {
-    width: "100%",
-    gap: 96,
-    alignItems: "center",
+    flex: 1,
     backgroundColor: COLORS.bgWhite,
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  mainContent: {
+    flex: 1,
+    width: "100%",
+    gap: SPACING[25],
+    alignItems: "center",
   },
   contentContainer: {
     width: "100%",
@@ -180,19 +194,19 @@ const authStyles = StyleSheet.create({
     width: "100%",
     gap: SPACING[4],
   },
-  bottomRedirect: {
-    display: "flex",
-    flexDirection: "row",
-    gap: SPACING[1],
-    marginTop: 16,
-    justifyContent: "center",
-  },
   buttonsView: {
     gap: SPACING[4],
     width: "100%",
   },
-  forgotPasswordLink: {
-    alignSelf: "flex-end",
-    marginTop: SPACING[2],
+  biometricSection: {
+    alignItems: "center",
+    gap: SPACING[2],
+  },
+  bottomRedirect: {
+    display: "flex",
+    flexDirection: "row",
+    gap: SPACING[1],
+    justifyContent: "center",
+    paddingBottom: SPACING[8],
   },
 });

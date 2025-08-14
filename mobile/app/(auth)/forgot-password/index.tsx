@@ -10,7 +10,6 @@ import Button from "@/components/buttons/button";
 import TextfieldFormControlled from "@/components/inputs/textfield-form-controlled";
 import Typography from "@/components/typography";
 import { COLORS } from "@/constants/colors";
-import { FONT_WEIGHT } from "@/constants/fonts";
 import { SPACING } from "@/constants/spacings";
 import { handleClerkErrorMessage } from "@/utils/clerk-error";
 import { useTranslation } from "react-i18next";
@@ -136,7 +135,7 @@ export default function ForgotPasswordScreen() {
       <View style={styles.screenContainer}>
         <AppIcon />
         <View style={styles.contentContainer}>
-          <Typography weight="bold" size="2xl">
+          <Typography weight="medium" size="2xl">
             {t("auth.forgotPassword.resetPasswordTitle")}
           </Typography>
 
@@ -186,15 +185,14 @@ export default function ForgotPasswordScreen() {
     <View style={styles.screenContainer}>
       <AppIcon />
       <View style={styles.contentContainer}>
-        <Typography weight="bold" size="2xl">
+        <Typography weight="medium" size="2xl">
           {t("auth.forgotPassword.title")}
         </Typography>
 
-        <Typography color={COLORS.gray} style={styles.subtitle}>
-          {t("auth.forgotPassword.subtitle")}
-        </Typography>
-
         <View style={styles.inputsContainer}>
+          <Typography color={COLORS.gray} style={styles.subtitle}>
+            {t("auth.forgotPassword.subtitle")}
+          </Typography>
           <TextfieldFormControlled
             fullWidth
             required
@@ -205,27 +203,21 @@ export default function ForgotPasswordScreen() {
             error={forgotForm.formState.errors.email?.message}
           />
         </View>
+      </View>
 
-        <View style={styles.buttonsView}>
-          <Button
-            fullWidth
-            onPress={forgotForm.handleSubmit(handleSendResetEmail)}
-            loading={isLoading}
-          >
-            {t("auth.forgotPassword.sendResetEmail")}
-          </Button>
-        </View>
-
-        <View style={styles.bottomRedirect}>
-          <Typography size="sm">
-            {t("auth.forgotPassword.rememberPassword")}
+      <View style={styles.buttonsView}>
+        <Link href="/(auth)/signin">
+          <Typography color={COLORS.primary} weight="medium" size="sm">
+            {t("auth.forgotPassword.backToSignIn")}
           </Typography>
-          <Link href="/(auth)/signin">
-            <Typography color={COLORS.primary} weight="semibold" size="sm">
-              {t("auth.forgotPassword.backToSignIn")}
-            </Typography>
-          </Link>
-        </View>
+        </Link>
+        <Button
+          fullWidth
+          onPress={forgotForm.handleSubmit(handleSendResetEmail)}
+          loading={isLoading}
+        >
+          {t("auth.forgotPassword.sendResetEmail")}
+        </Button>
       </View>
     </View>
   );
@@ -237,12 +229,17 @@ const styles = StyleSheet.create({
     gap: 96,
     alignItems: "center",
     backgroundColor: COLORS.bgWhite,
+    justifyContent: "space-between",
+    flex: 1,
+    paddingBottom: SPACING[8],
   },
   contentContainer: {
     width: "100%",
     gap: SPACING[8],
     alignItems: "center",
+    justifyContent: "center",
     backgroundColor: COLORS.bgWhite,
+    flex: 1,
   },
   subtitle: {
     textAlign: "center",
@@ -250,7 +247,6 @@ const styles = StyleSheet.create({
   },
   inputsContainer: {
     width: "100%",
-    gap: SPACING[4],
   },
   bottomRedirect: {
     display: "flex",
@@ -262,5 +258,6 @@ const styles = StyleSheet.create({
   buttonsView: {
     gap: SPACING[4],
     width: "100%",
+    alignItems: "center",
   },
 });

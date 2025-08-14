@@ -157,7 +157,9 @@
       "backToSignIn": "Voltar ao login",
       "codeSent": "Código enviado com sucesso!",
       "passwordResetSuccess": "Senha redefinida com sucesso!"
-    }
+    },
+    "doesntHaveAnAccount": "Não tem uma conta?",
+    "createAnAccountNow": "Criar uma agora"
   },
   "user": {
     "updateError": "Erro ao atualizar usuário",
