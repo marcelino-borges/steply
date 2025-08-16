@@ -47,7 +47,8 @@
       "pendingStep": "Detectamos que há alguma pendência no seu cadastro, entre em contato com nosso suporte",
       "signupMissingSteps": "Existe alguma pendência no seu cadastro, por favor entre em contato com nosso suporte",
       "form_code_incorrect": "Código incorreto",
-      "form_indentifier_exists": "Você já possui conta"
+      "form_indentifier_exists": "Você já possui conta",
+      "generic": "Erro do provedor de identidade"
     }
   },
   "challenge": {
@@ -91,6 +92,7 @@
     "activityDescription": "Descrição da atividade",
     "addActivity": "Adicionar atividade",
     "addActivityBeforeContinue": "Adicione ao menos uma atividade para continuar",
+    "updateActivity": "Atualizar atividade",
     "rewardType": "Formato do desafio",
     "selectRewardType": "Selecione o tipo de recompensa",
     "multipleCheckInsLabel": "Múltiplos check-ins por dia?",
@@ -131,7 +133,9 @@
     "engagement": "Engajamento",
     "checkInsToday": "Check-ins hoje",
     "checkInsTotal": "Check-ins totais",
-    "mediasCount": "Mídias"
+    "mediasCount": "Mídias",
+    "checkInAtEndOfDay": "Para completar o dia",
+    "checkInAtEndOfDayDescription": "Os participantes precisam concluir todas as atividades do dia para fazer o check-in. Se desmarcado, completar uma atividade já será suficiente para o check-in."
   },
   "files": {
     "invalidFile": "Arquivo inválido",

@@ -1,11 +1,11 @@
 import { AxiosError } from "axios";
 import { useMutation } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { getLocales } from "expo-localization";
 
 import { api } from "@/config/axios";
 import { FullUserResponseDto, SignUpRequestDto } from "@/types/api/user";
 import { adaptAxiosErrorToApiErrorMessage } from "@/adapters/api-error";
+import { getUserLocale } from "@/utils/locales";
 
 export const useCreateUser = () => {
   const { t } = useTranslation();
@@ -18,7 +18,7 @@ export const useCreateUser = () => {
           signupData,
           {
             headers: {
-              lang: getLocales()[0].languageCode,
+              lang: getUserLocale(),
             },
           }
         );

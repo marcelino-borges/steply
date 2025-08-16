@@ -1,9 +1,9 @@
 import { AxiosError } from "axios";
 import { useQuery } from "@tanstack/react-query";
-import { getLocales } from "expo-localization";
 
 import { api } from "@/config/axios";
 import { ChallengeSummaryDto } from "@/types/api/challenges";
+import { getUserLocale } from "@/utils/locales";
 
 export const useGetChallengeSummary = (challengeId: number | undefined) => {
   return useQuery<ChallengeSummaryDto, AxiosError>({
@@ -17,7 +17,7 @@ export const useGetChallengeSummary = (challengeId: number | undefined) => {
         `/challenges/${challengeId}/summary`,
         {
           headers: {
-            lang: getLocales()[0].languageCode,
+            lang: getUserLocale(),
           },
         }
       );

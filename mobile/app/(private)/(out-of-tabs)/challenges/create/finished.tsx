@@ -1,5 +1,5 @@
 import { useRouter } from "expo-router";
-import { SendHorizonalIcon } from "lucide-react-native";
+import { PartyPopperIcon, SendHorizonalIcon } from "lucide-react-native";
 import { useTranslation } from "react-i18next";
 import { Share } from "react-native";
 import { Toast } from "toastify-react-native";
@@ -20,7 +20,7 @@ export default function ChallengeCreated() {
     const challengeId = createdChallenge.id;
     clearAllStates();
 
-    router.replace(`/challenges/${challengeId}`);
+    router.replace(`/challenges/${challengeId}/dashboard`);
   };
 
   const share = async () => {
@@ -51,6 +51,12 @@ export default function ChallengeCreated() {
     <HighlightedMessageAction
       content={
         <>
+          <PartyPopperIcon
+            color="white"
+            size={84}
+            strokeWidth={0.7}
+            style={{ marginBottom: SPACING[10] }}
+          />
           <Typography
             size="3xl"
             weight="semibold"

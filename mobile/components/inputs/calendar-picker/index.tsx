@@ -1,14 +1,16 @@
-import { COLORS } from "@/constants/colors";
-import { FONT_SIZE } from "@/constants/fonts";
+import { Pressable, View } from "react-native";
 import { addYears, isAfter, isBefore, isSameDay } from "date-fns";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import BaseCalendarPicker from "react-native-calendar-picker";
-import { END_CONTAINER, START_CONTAINER } from "./constants";
-import { View } from "react-native";
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react-native";
+
+import { COLORS } from "@/constants/colors";
+import { FONT_SIZE } from "@/constants/fonts";
 import Typography from "@/components/typography";
 import { SPACING } from "@/constants/spacings";
-import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react-native";
+
+import { END_CONTAINER, START_CONTAINER } from "./constants";
 
 const YEARS_THRESHOLD = 5;
 export type CalendarChangedDate = "START_DATE" | "END_DATE" | "CLEAR";
@@ -19,6 +21,8 @@ interface CalendarPickerProps {
   disabled?: boolean;
   selectedStartDate?: Date;
   selectedEndDate?: Date;
+  minDate?: Date;
+  maxDate?: Date;
 }
 
 export default function CalendarPicker({
@@ -27,22 +31,28 @@ export default function CalendarPicker({
   disabled,
   selectedStartDate,
   selectedEndDate,
+  minDate,
+  maxDate,
 }: CalendarPickerProps) {
   const { t } = useTranslation();
 
-  const maxDate = useMemo(() => addYears(new Date(), YEARS_THRESHOLD), []);
+  const defaultMaxDate = useMemo(
+    () => addYears(new Date(), YEARS_THRESHOLD),
+    []
+  );
 
   return (
     <View>
       <BaseCalendarPicker
-        startFromMonday={true}
-        allowRangeSelection={true}
+        startFromMonday
+        allowRangeSelection
+        horizontal
+        allowBackwardRangeSelect
         enableDateChange={!loading && !disabled}
         selectedStartDate={selectedStartDate}
         selectedEndDate={selectedEndDate}
-        minDate={new Date()}
-        maxDate={maxDate}
-        // todayBackgroundColor={`${COLORS.primary}10`}
+        minDate={minDate ?? new Date()}
+        maxDate={maxDate ?? defaultMaxDate}
         customDayHeaderStyles={() => ({
           textStyle: {
             fontSize: FONT_SIZE.lg,
@@ -88,7 +98,6 @@ export default function CalendarPicker({
           backgroundColor: `transparent`,
         }}
         onDateChange={onDateChange}
-        horizontal
         previousComponent={<ChevronLeftIcon size={24} />}
         nextComponent={<ChevronRightIcon size={24} />}
         months={[
@@ -121,16 +130,18 @@ export default function CalendarPicker({
           borderBottomWidth: 0,
         }}
       />
-      <Typography
-        style={{
-          marginTop: SPACING[4],
-          marginLeft: SPACING[4],
-        }}
-        color={COLORS.primary}
-        weight="medium"
-      >
-        {t("common.clear")}
-      </Typography>
+      <Pressable onPress={() => onDateChange(new Date(), "CLEAR")}>
+        <Typography
+          style={{
+            marginTop: SPACING[4],
+            marginLeft: SPACING[4],
+          }}
+          color={COLORS.primary}
+          weight="medium"
+        >
+          {t("common.clear")}
+        </Typography>
+      </Pressable>
     </View>
   );
 }

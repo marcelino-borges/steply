@@ -9,14 +9,13 @@ import {
   NonExistingChallengeDto,
 } from "@/types/api/challenges";
 import { useTranslation } from "react-i18next";
-import { getLocales } from "expo-localization";
 import { adaptAxiosErrorToApiErrorMessage } from "@/adapters/api-error";
 import { useFileStorage } from "@/hooks/s3";
-import { Toast } from "toastify-react-native";
 import { NonExistingActivityDto } from "@/types/api/activity";
 import { RewardTypeDto } from "@/types/api/reward-type";
 import { NonExistingRewardDto } from "@/types/api/reward";
 import { useUser } from "@/store/user";
+import { getUserLocale } from "@/utils/locales";
 
 const defaultChallenge: NonExistingChallengeDto = {
   title: "",
@@ -129,7 +128,7 @@ export const CreateChallengeProvider: React.FC<React.PropsWithChildren> = ({
           _newChallenge,
           {
             headers: {
-              lang: getLocales()[0].languageCode,
+              lang: getUserLocale(),
             },
           }
         );
@@ -290,8 +289,6 @@ export const CreateChallengeProvider: React.FC<React.PropsWithChildren> = ({
         organizationId: user.organizationId || undefined,
         ownerUserId: !user.organizationId ? user.id : undefined,
       };
-
-      console.log("---- newChallenge", JSON.stringify(newChallenge, null, 2));
 
       const challengeCreated = await createChallenge(newChallenge);
 

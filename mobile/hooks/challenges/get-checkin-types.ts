@@ -1,9 +1,9 @@
 import { AxiosError } from "axios";
 import { useQuery } from "@tanstack/react-query";
-import { getLocales } from "expo-localization";
 
 import { api } from "@/config/axios";
 import { ChallengeCheckInTypeDto } from "@/types/api/challenges";
+import { getUserLocale } from "@/utils/locales";
 
 export const useGetChallengeCheckInTypes = () => {
   return useQuery<ChallengeCheckInTypeDto[], AxiosError>({
@@ -13,7 +13,7 @@ export const useGetChallengeCheckInTypes = () => {
         "/challenge-checkin-types",
         {
           headers: {
-            lang: getLocales()[0].languageCode,
+            lang: getUserLocale(),
           },
         }
       );

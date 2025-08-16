@@ -28,7 +28,9 @@ export default function TabHomeScreen() {
       >
         Criar desafio
       </Button>
-      <Link href={`/(private)/(out-of-tabs)/challenges/11`}>
+      <Link
+        href={`/(private)/(out-of-tabs)/onboarding/(steps)/1-personalization`}
+      >
         Marcelino's challenge
       </Link>
       <Button onPress={handleSignOut} fullWidth>

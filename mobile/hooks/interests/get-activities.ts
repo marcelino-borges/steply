@@ -1,13 +1,11 @@
 import { AxiosError } from "axios";
 import { useQuery } from "@tanstack/react-query";
-import { getLocales } from "expo-localization";
 
 import { api } from "@/config/axios";
 import { InterestActivityDto } from "@/types/api/interest-activity";
+import { getUserLocale } from "@/utils/locales";
 
 export const useGetInterestActivities = () => {
-  const lang = getLocales()[0].languageCode;
-
   const { data, isLoading } = useQuery<InterestActivityDto[], AxiosError>({
     queryKey: ["interest-activities"],
     queryFn: async () => {
@@ -15,7 +13,7 @@ export const useGetInterestActivities = () => {
         "/interests/activities",
         {
           headers: {
-            lang,
+            lang: getUserLocale(),
           },
         }
       );

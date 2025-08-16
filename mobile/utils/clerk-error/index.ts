@@ -8,5 +8,5 @@ export const handleClerkErrorMessage = (
 
   const code = error.errors[0].code;
 
-  return t(`errors.clerk.${code}`) ?? "Erro do provedor de identidade";
+  return t(`errors.clerk.${code}`) ?? t("errors.clerk.generic");
 };

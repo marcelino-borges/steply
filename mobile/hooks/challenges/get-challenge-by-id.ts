@@ -4,6 +4,7 @@ import { getLocales } from "expo-localization";
 
 import { api } from "@/config/axios";
 import { FullChallengeDto } from "@/types/api/challenges";
+import { getUserLocale } from "@/utils/locales";
 
 export const useGetChallengeById = (challengeId: number | undefined) => {
   return useQuery<FullChallengeDto, AxiosError>({
@@ -17,7 +18,7 @@ export const useGetChallengeById = (challengeId: number | undefined) => {
         `/challenges/${challengeId}`,
         {
           headers: {
-            lang: getLocales()[0].languageCode,
+            lang: getUserLocale(),
           },
         }
       );

@@ -1,13 +1,11 @@
 import { AxiosError } from "axios";
 import { useQuery } from "@tanstack/react-query";
-import { getLocales } from "expo-localization";
 
 import { api } from "@/config/axios";
 import { UserMainGoalLevelDto } from "@/types/api/user-main-goal-level";
+import { getUserLocale } from "@/utils/locales";
 
 export const useGetUserMainGoalLevelsList = () => {
-  const lang = getLocales()[0].languageCode;
-
   return useQuery<UserMainGoalLevelDto[], AxiosError>({
     queryKey: ["user-main-goal-levels"],
     queryFn: async () => {
@@ -15,7 +13,7 @@ export const useGetUserMainGoalLevelsList = () => {
         "/user-main-goal-levels",
         {
           headers: {
-            lang,
+            lang: getUserLocale(),
           },
         }
       );

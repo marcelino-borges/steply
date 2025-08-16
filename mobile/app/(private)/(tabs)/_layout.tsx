@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
-import { Tabs, useRouter } from "expo-router";
+import { Href, Tabs, useRouter } from "expo-router";
 import { useAuth } from "@clerk/clerk-expo";
 
 import { COLORS } from "@/constants/colors";
 import { useUser } from "@/store/user";
 import TabBarLabel from "@/components/tab-bar";
 import { HomeIcon } from "lucide-react-native";
+import { UserRegistrationStep } from "@/types/api/user";
 
 export default function TabLayout() {
   const router = useRouter();
@@ -17,6 +18,19 @@ export default function TabLayout() {
       if (!user) signOut();
       router.replace("/(auth)/signin");
       return;
+    }
+
+    if (user.wantsAccountPersonalization) {
+      const nextOnboardingStep = user.nextRegistrationStep;
+
+      if (
+        nextOnboardingStep &&
+        nextOnboardingStep < UserRegistrationStep.ONBOARDING_COMPLETE
+      ) {
+        router.replace(
+          `/(private)/(out-of-tabs)/onboarding/(steps)/${user.nextRegistrationStep}` as Href
+        );
+      }
     }
   }, [isSignedIn, user]);
 

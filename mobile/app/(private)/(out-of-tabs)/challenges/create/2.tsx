@@ -100,10 +100,8 @@ const CreateChallenge2: React.FC = () => {
                 checkInEndOfDay: newState,
               });
             }}
-            label={"Para completar o dia"}
-            subLabel={
-              "Os participantes precisão concluir todas as atividades do dia para fazer o check-in. Se desmarcado, completar uma atividade já será suficiente para o check-in."
-            }
+            label={t("challenge.checkInAtEndOfDay")}
+            subLabel={t("challenge.checkInAtEndOfDayDescription")}
           />
         </View>
       </ScrollView>

@@ -1,7 +1,7 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
-import { getLocales } from "expo-localization";
 import translationPt from "./locales/pt-BR/translation.json";
+import { getUserLocale } from "@/utils/locales";
 
 const resources = {
   "pt-BR": { translation: translationPt },
@@ -9,7 +9,7 @@ const resources = {
 
 const languageDetector = {
   type: "languageDetector",
-  detect: (callback: any) => callback(getLocales()[0].languageCode),
+  detect: (callback: any) => callback(getUserLocale()),
   init: () => {},
   cacheUserLanguage: () => {},
 } as const;

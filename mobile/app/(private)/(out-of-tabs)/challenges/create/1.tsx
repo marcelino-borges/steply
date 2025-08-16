@@ -6,6 +6,7 @@ import {
   Image,
   Pressable,
   Platform,
+  useWindowDimensions,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
@@ -14,9 +15,9 @@ import { Toast } from "toastify-react-native";
 import RNDateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
-import { getCalendars, getLocales } from "expo-localization";
 import { differenceInCalendarDays } from "date-fns";
 import { useTranslation } from "react-i18next";
+import { Trash2Icon, UploadIcon } from "lucide-react-native";
 
 import SteppedHeader from "@/components/stepped-header";
 import Typography from "@/components/typography";
@@ -26,16 +27,16 @@ import Button from "@/components/buttons/button";
 import TextfieldFree from "@/components/inputs/textfield-free";
 import AttachButton from "@/components/buttons/attach-button";
 import { useCreateChallenge } from "@/hooks/challenges/create";
-import { DEFAULT_TIMEZONE } from "@/constants/timezone";
 import TagsField from "@/components/inputs/tags";
-import { formatDateByLocale } from "@/utils/string-masks";
 import { RADIUS } from "@/constants/radius";
-import { Trash2Icon, UploadIcon } from "lucide-react-native";
+import TextArea from "@/components/inputs/textarea";
+import { formatDateByLocale, getUserTimezone } from "@/utils/locales";
 
 const CreateChallenge1: React.FC = () => {
   const router = useRouter();
-  const timezone = getCalendars()[0].timeZone ?? DEFAULT_TIMEZONE;
+  const timezone = getUserTimezone();
   const { t } = useTranslation();
+  const { height: windowHeight } = useWindowDimensions();
 
   const [openStartDatePicker, setOpenStartDatePicker] = useState(false);
   const [openEndDatePicker, setOpenEndDatePicker] = useState(false);
@@ -152,7 +153,7 @@ const CreateChallenge1: React.FC = () => {
               setChallenge({ ...challenge, title })
             }
           />
-          <TextfieldFree
+          <TextArea
             fullWidth
             required
             placeholder={t("challenge.description")}
@@ -160,6 +161,9 @@ const CreateChallenge1: React.FC = () => {
             onChangeText={(description: string) =>
               setChallenge({ ...challenge, description })
             }
+            rows={3}
+            maxHeight={windowHeight * 0.6}
+            maxLength={20000}
           />
           <TagsField
             tags={challenge.tags}
@@ -177,10 +181,7 @@ const CreateChallenge1: React.FC = () => {
               required
               readOnly
               placeholder={t("challenge.startAt")}
-              value={formatDateByLocale(
-                getLocales()[0].languageCode ?? "en",
-                challenge.startAt
-              )}
+              value={formatDateByLocale(challenge.startAt)}
             />
             {openStartDatePicker && (
               <RNDateTimePicker
@@ -203,10 +204,7 @@ const CreateChallenge1: React.FC = () => {
               required
               readOnly
               placeholder={t("challenge.endAt")}
-              value={formatDateByLocale(
-                getLocales()[0].languageCode ?? "en",
-                challenge.endAt
-              )}
+              value={formatDateByLocale(challenge.endAt)}
               rightElement={<DaysBox />}
             />
             {openEndDatePicker && (
